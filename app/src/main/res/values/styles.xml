@@ -8,6 +8,43 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+
+
+    <style name="FullscreenTheme" parent="AppTheme">
+
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowBackground">@drawable/blur</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:textColorPrimary">#FFFFFF</item>
+
+        <item name="colorButtonNormal">#039BE5</item>
+        <item name="colorControlNormal">#FFFFFF</item>
+
+
+        <item name="colorAccent">#039BE5</item>
+
+
+
+    </style>
+
+    <style name="FirebaseUI.EditText">
+        <item name="android:paddingBottom">14dp</item>
+        <item name="android:paddingTop">14dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="colorControlActivated">#FFFFFF</item>
+        <item name="colorControlHighlight">#FFFFFF</item>
+
+        <item name="android:textColorHint">#FFFFFF</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+    <style name="FirebaseUI.Text.TextInputLayout" parent="@style/FirebaseUI.EditText" />
+
+    <style name="FirebaseUI.Text.HintText" parent="@style/FirebaseUI.EditText" />
+
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
