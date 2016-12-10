@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
+                    Toast.makeText(getApplicationContext(),"Welcome "+user.getDisplayName(),Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
                 } else {
 
@@ -73,17 +74,26 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     @Override
-    public void onStart() {
-        super.onStart();
+    protected void onResume() {
+        super.onResume();
         mAuth.addAuthStateListener(mAuthListener);
     }
+
+
 
 
     @Override
     public void onStop() {
         super.onStop();
+        if (mAuthListener != null) {
+            mAuth.removeAuthStateListener(mAuthListener);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
         if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
