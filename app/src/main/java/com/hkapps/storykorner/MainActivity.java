@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView mBottomNav;
     private Fragment fragment;
     private FragmentManager fragmentManager;
+    private FragmentTransaction transaction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,9 @@ public class MainActivity extends AppCompatActivity {
 
         fragmentManager = getSupportFragmentManager();
         mAuth = FirebaseAuth.getInstance();
+
+         transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.main_container, new StoriesFragment()).commit();
 
         mBottomNav = (BottomNavigationView) findViewById(R.id.navigation);
 
@@ -59,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                         fragment = new NotificationFragment();
                         break;
 
-                    case R.id.menu_home:
+                    case R.id.menu_stories:
                         fragment = new StoriesFragment();
                         break;
 
