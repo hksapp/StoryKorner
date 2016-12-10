@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -22,6 +25,9 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private BottomNavigationView mBottomNav;
+    private Fragment fragment;
+    private FragmentManager fragmentManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
+        fragmentManager = getSupportFragmentManager();
         mAuth = FirebaseAuth.getInstance();
 
         mBottomNav = (BottomNavigationView) findViewById(R.id.navigation);
@@ -41,8 +47,39 @@ public class MainActivity extends AppCompatActivity {
                 // One possibility of action is to replace the contents above the nav bar
                 // return true if you want the item to be displayed as the selected item
 
+                switch (item.getItemId()) {
 
+
+
+                    case R.id.menu_search:
+                        fragment = new SearchFragment();
+                        break;
+
+                    case R.id.menu_notifications:
+                        fragment = new NotificationFragment();
+                        break;
+
+                    case R.id.menu_home:
+                        fragment = new StoriesFragment();
+                        break;
+
+                    case R.id.menu_create:
+                        fragment = new CreateFragment();
+                        break;
+
+
+                    case R.id.menu_profile:
+                        fragment = new ProfileFragment();
+                        break;
+
+                    default: fragment = new StoriesFragment();
+                        break;
+                }
+
+                final FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.main_container, fragment).commit();
                 return true;
+
             }
         });
 
