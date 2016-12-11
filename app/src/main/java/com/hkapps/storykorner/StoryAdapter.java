@@ -39,5 +39,17 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
                 context.startActivity(i);
             }
         });
+
+
+        viewHolder.title_ui.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent i = new Intent(context,StoryDescription.class);
+                i.putExtra("intent_title",model.getTitle());
+                i.putExtra("intent_story",model.getStory());
+                context.startActivity(i);
+            }
+        });
     }
 }
