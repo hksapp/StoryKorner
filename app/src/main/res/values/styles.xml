@@ -9,7 +9,6 @@
     </style>
 
 
-
     <style name="FullscreenTheme" parent="AppTheme">
 
         <item name="android:windowActionBarOverlay">true</item>
@@ -23,7 +22,6 @@
 
 
         <item name="colorAccent">#039BE5</item>
-
 
 
     </style>
@@ -40,6 +38,7 @@
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">#FFFFFF</item>
     </style>
+
     <style name="FirebaseUI.Text.TextInputLayout" parent="@style/FirebaseUI.EditText" />
 
     <style name="FirebaseUI.Text.HintText" parent="@style/FirebaseUI.EditText" />

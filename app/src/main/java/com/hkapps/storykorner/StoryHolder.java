@@ -19,5 +19,7 @@ public class StoryHolder extends RecyclerView.ViewHolder {
 
         title_ui = (TextView) itemView.findViewById(R.id.title_ui);
         story_ui = (TextView) itemView.findViewById(R.id.story_ui);
+
+
     }
 }
