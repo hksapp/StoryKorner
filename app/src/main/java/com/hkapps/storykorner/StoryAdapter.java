@@ -28,6 +28,8 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
 
         viewHolder.title_ui.setText(model.getTitle());
         viewHolder.story_ui.setText(model.getStory());
+        viewHolder.username.setText(model.getUsername());
+
 
         viewHolder.story_ui.setOnClickListener(new View.OnClickListener() {
             @Override

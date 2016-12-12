@@ -41,7 +41,7 @@ public class StoriesFragment extends Fragment {
         storyRecyclerview.setHasFixedSize(true);
 
         mDatabaseRef = FirebaseDatabase.getInstance().getReference();
-        childRef = mDatabaseRef.child("StoryKornerStories");
+        childRef = mDatabaseRef.child("Posted_Stories");
 
         mStoryAdapter = new StoryAdapter(StoryObject.class,R.layout.story_custom_ui,StoryHolder.class ,childRef,getContext());
         storyRecyclerview.setLayoutManager(linearLayoutManager);

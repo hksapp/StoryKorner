@@ -13,12 +13,15 @@ public class StoryHolder extends RecyclerView.ViewHolder {
     private static final String TAG = StoryHolder.class.getSimpleName();
     public TextView title_ui;
     public TextView story_ui;
+    public TextView username;
+
 
     public StoryHolder(View itemView) {
         super(itemView);
 
         title_ui = (TextView) itemView.findViewById(R.id.title_ui);
         story_ui = (TextView) itemView.findViewById(R.id.story_ui);
+        username = (TextView) itemView.findViewById(R.id.username);
 
 
     }
