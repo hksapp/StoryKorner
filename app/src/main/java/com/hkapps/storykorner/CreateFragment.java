@@ -57,6 +57,10 @@ public class CreateFragment extends Fragment {
 
                 post_stories.push().setValue(postdata);
 
+                getFragmentManager().beginTransaction().replace(R.id.main_container, new StoriesFragment()).commit();
+
+
+
 
             }
         });
