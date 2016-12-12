@@ -39,7 +39,8 @@ public class StoriesFragment extends Fragment {
         linearLayoutManager = new LinearLayoutManager(getActivity());
         storyRecyclerview = (RecyclerView) rootview.findViewById(R.id.story_recycler_view);
         storyRecyclerview.setHasFixedSize(true);
-
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
         mDatabaseRef = FirebaseDatabase.getInstance().getReference();
         childRef = mDatabaseRef.child("Posted_Stories");
 
