@@ -25,6 +25,8 @@ public class CreateFragment extends Fragment {
         View rootview = inflater.inflate(R.layout.fragment_create, container, false);
 
 
+
+
         return rootview;
     }
 

@@ -1,13 +1,77 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.hkapps.storykorner.CreateFragment">
+
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textSize="40sp"
-        android:text="Create" />
-</FrameLayout>
+       android:orientation="vertical"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="4">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+
+                android:padding="8dp">
+
+                <EditText
+                    android:id="@+id/create_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:paddingBottom="16dp"
+                    android:hint="Story Title"
+                    android:background="@null"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+
+                    />
+
+
+                <EditText
+                    android:id="@+id/create_story"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="16dp"
+                    android:background="@null"
+
+                    android:hint="Tap here to write story....."
+                    android:paddingLeft="16dp"
+                    android:textSize="18sp"
+
+                    />
+
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_gravity="bottom">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_margin="12dp"
+                android:text="Save"
+                android:id="@+id/save_story"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_margin="12dp"
+                android:text="Publish"
+                android:id="@+id/publish_story"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </LinearLayout>
+
+
