@@ -3,6 +3,7 @@ package com.hkapps.storykorner;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,9 +24,9 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
 
 
     private static final String TAG = StoryAdapter.class.getSimpleName();
-    private DatabaseReference postRef;
+    private DatabaseReference postRef, commentRef;
     private Context context;
-    private boolean mProcessLike;
+    private boolean mProcessLike, mComment;
 
     public StoryAdapter(Class<StoryObject> modelClass, int modelLayout, Class<StoryHolder> viewHolderClass, DatabaseReference ref, Context context) {
         super(modelClass, modelLayout, viewHolderClass, ref);
@@ -47,6 +48,16 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
         String tym = formatter.format(date);
 
         viewHolder.timestamp.setText(tym);
+
+
+        //Get Comments
+
+
+        String post_key = getRef(position).getKey().toString();
+        commentRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(post_key).child("Comments");
+
+
+        //Story
 
 
         viewHolder.story_ui.setOnClickListener(new View.OnClickListener() {
@@ -145,25 +156,36 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
 
         viewHolder.send_comment.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(final View view) {
 
-
+                mComment = true;
                 final String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
                 final String uname = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
                 String post_key = getRef(position).getKey().toString();
-                postRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(post_key).child("Comments").child(userid);
+                postRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(post_key).child("Comments");
 
 
                 final String cmt = viewHolder.type_comment.getText().toString();
 
 
-                postRef.addValueEventListener(new ValueEventListener() {
+                postRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
-                        postRef.child(cmt).setValue(uname);
-                        viewHolder.type_comment.setVisibility(View.GONE);
-                        viewHolder.send_comment.setVisibility(View.GONE);
+                        if (mComment) {
+
+                            postRef.child(postRef.push().getKey()).child(userid).setValue(cmt);
+                            viewHolder.type_comment.setVisibility(View.GONE);
+                            viewHolder.send_comment.setVisibility(View.GONE);
+                            //Close KeyBoard
+
+                            InputMethodManager imm = (InputMethodManager) view.getContext()
+                                    .getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+                            mComment = false;
+
+                        }
 
                     }
 
@@ -172,12 +194,6 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
 
                     }
                 });
-
-
-
-
-
-
 
 
             }
