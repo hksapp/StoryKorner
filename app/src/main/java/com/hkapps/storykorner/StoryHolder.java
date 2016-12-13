@@ -21,6 +21,7 @@ public class StoryHolder extends RecyclerView.ViewHolder {
     public ImageButton comment;
     public EditText type_comment;
     public ImageButton send_comment;
+    public TextView show_comment;
 
 
 
@@ -35,6 +36,7 @@ public class StoryHolder extends RecyclerView.ViewHolder {
         comment = (ImageButton) itemView.findViewById(R.id.comment);
         type_comment = (EditText) itemView.findViewById(R.id.type_comment);
         send_comment = (ImageButton) itemView.findViewById(R.id.send_comment);
+        show_comment = (TextView) itemView.findViewById(R.id.show_comment);
 
 
     }
