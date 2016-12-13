@@ -100,11 +100,37 @@
             android:src="@drawable/ic_vertical_align_bottom_black_24dp" />
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/fab_margin"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/type_comment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/fab_margin"
+            android:layout_weight="4"
+            android:text="jslok"
+            android:visibility="gone" />
+
+        <ImageButton
+            android:id="@+id/send_comment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/fab_margin"
+            android:layout_weight="1"
+            android:src="@drawable/ic_send_black_24dp"
+            android:visibility="gone" />
+    </LinearLayout>
+
     <TextView
         android:id="@+id/timestamp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
+        android:layout_marginLeft="@dimen/fab_margin"
+        android:layout_marginTop="@dimen/fab_margin"
         android:text="timestamp"
         android:textColor="#000000" />
 

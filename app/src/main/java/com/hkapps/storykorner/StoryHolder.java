@@ -2,6 +2,7 @@ package com.hkapps.storykorner;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -17,6 +18,10 @@ public class StoryHolder extends RecyclerView.ViewHolder {
     public TextView username;
     public TextView timestamp;
     public ImageButton like;
+    public ImageButton comment;
+    public EditText type_comment;
+    public ImageButton send_comment;
+
 
 
     public StoryHolder(View itemView) {
@@ -27,6 +32,9 @@ public class StoryHolder extends RecyclerView.ViewHolder {
         username = (TextView) itemView.findViewById(R.id.username);
         timestamp = (TextView) itemView.findViewById(R.id.timestamp);
         like = (ImageButton) itemView.findViewById(R.id.like);
+        comment = (ImageButton) itemView.findViewById(R.id.comment);
+        type_comment = (EditText) itemView.findViewById(R.id.type_comment);
+        send_comment = (ImageButton) itemView.findViewById(R.id.send_comment);
 
 
     }

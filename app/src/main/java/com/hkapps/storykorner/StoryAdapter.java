@@ -19,7 +19,7 @@ import java.util.Date;
  * Created by kamal on 11-12-2016.
  */
 
-public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHolder> {
+public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHolder> {
 
 
     private static final String TAG = StoryAdapter.class.getSimpleName();
@@ -35,8 +35,6 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
 
     @Override
     protected void populateViewHolder(final StoryHolder viewHolder, final StoryObject model, final int position) {
-
-
 
 
         viewHolder.title_ui.setText(model.getTitle());
@@ -55,25 +53,29 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
             @Override
             public void onClick(View view) {
 
-                Intent i = new Intent(context,StoryDescription.class);
-                i.putExtra("intent_title",model.getTitle());
-                i.putExtra("intent_story",model.getStory());
+                Intent i = new Intent(context, StoryDescription.class);
+                i.putExtra("intent_title", model.getTitle());
+                i.putExtra("intent_story", model.getStory());
                 context.startActivity(i);
             }
         });
 
+
+        //title
 
         viewHolder.title_ui.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                Intent i = new Intent(context,StoryDescription.class);
-                i.putExtra("intent_title",model.getTitle());
-                i.putExtra("intent_story",model.getStory());
+                Intent i = new Intent(context, StoryDescription.class);
+                i.putExtra("intent_title", model.getTitle());
+                i.putExtra("intent_story", model.getStory());
                 context.startActivity(i);
             }
         });
 
+
+        //Like Functionality
 
         viewHolder.like.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,6 +124,54 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
                 });
 
 
+            }
+        });
+
+
+        //Comment Functionality
+
+        viewHolder.comment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                viewHolder.type_comment.setVisibility(View.VISIBLE);
+                viewHolder.send_comment.setVisibility(View.VISIBLE);
+                viewHolder.type_comment.setFocusable(true);
+
+
+            }
+        });
+
+
+        viewHolder.send_comment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                final String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                final String uname = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+                String post_key = getRef(position).getKey().toString();
+                postRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(post_key).child("Comments").child(userid);
+
+
+                final String cmt = viewHolder.type_comment.getText().toString();
+
+
+                postRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        postRef.child(cmt).setValue(uname);
+                        viewHolder.type_comment.setVisibility(View.GONE);
+                        viewHolder.send_comment.setVisibility(View.GONE);
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
 
 
 
@@ -132,8 +182,6 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
 
             }
         });
-
-
 
 
     }
