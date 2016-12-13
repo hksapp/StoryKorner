@@ -24,7 +24,7 @@ import java.util.Map;
 public class CreateFragment extends Fragment {
 
 
-    DatabaseReference post_stories;
+    private DatabaseReference post_stories;
 
     public CreateFragment() {
         // Required empty public constructor

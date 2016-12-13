@@ -2,6 +2,7 @@ package com.hkapps.storykorner;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 /**
@@ -15,6 +16,7 @@ public class StoryHolder extends RecyclerView.ViewHolder {
     public TextView story_ui;
     public TextView username;
     public TextView timestamp;
+    public ImageButton like;
 
 
     public StoryHolder(View itemView) {
@@ -24,6 +26,7 @@ public class StoryHolder extends RecyclerView.ViewHolder {
         story_ui = (TextView) itemView.findViewById(R.id.story_ui);
         username = (TextView) itemView.findViewById(R.id.username);
         timestamp = (TextView) itemView.findViewById(R.id.timestamp);
+        like = (ImageButton) itemView.findViewById(R.id.like);
 
 
     }
