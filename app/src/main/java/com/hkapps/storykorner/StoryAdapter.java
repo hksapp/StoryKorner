@@ -7,6 +7,9 @@ import android.view.View;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by kamal on 11-12-2016.
  */
@@ -30,6 +33,12 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
         viewHolder.story_ui.setText(model.getStory());
         viewHolder.username.setText(model.getUsername());
 
+        long tmp = model.getTimestamp();
+        Date date = new Date(tmp);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+        String tym = formatter.format(date);
+
+        viewHolder.timestamp.setText(tym);
 
         viewHolder.story_ui.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -12,6 +12,7 @@ import android.widget.EditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -54,6 +55,7 @@ public class CreateFragment extends Fragment {
                 postdata.put("story",create_story.getText().toString());
                 postdata.put("userid", FirebaseAuth.getInstance().getCurrentUser().getUid());
                 postdata.put("username", FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+                postdata.put("timestamp", ServerValue.TIMESTAMP);
 
                 post_stories.push().setValue(postdata);
 

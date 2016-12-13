@@ -14,6 +14,7 @@ public class StoryHolder extends RecyclerView.ViewHolder {
     public TextView title_ui;
     public TextView story_ui;
     public TextView username;
+    public TextView timestamp;
 
 
     public StoryHolder(View itemView) {
@@ -22,6 +23,7 @@ public class StoryHolder extends RecyclerView.ViewHolder {
         title_ui = (TextView) itemView.findViewById(R.id.title_ui);
         story_ui = (TextView) itemView.findViewById(R.id.story_ui);
         username = (TextView) itemView.findViewById(R.id.username);
+        timestamp = (TextView) itemView.findViewById(R.id.timestamp);
 
 
     }
