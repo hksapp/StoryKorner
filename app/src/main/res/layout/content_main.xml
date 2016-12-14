@@ -8,19 +8,18 @@
     android:layout_height="match_parent"
 
 
-
+    android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.hkapps.storykorner.MainActivity"
-    tools:showIn="@layout/activity_main"
 
-    android:orientation="vertical">
+    tools:showIn="@layout/activity_main">
 
 <FrameLayout
+    android:id="@+id/main_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_alignParentTop="true"
     android:layout_above="@+id/navigation"
-    android:id="@+id/main_container"></FrameLayout>
+    android:layout_alignParentTop="true"></FrameLayout>
 
 
     <android.support.design.widget.BottomNavigationView
@@ -28,9 +27,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:focusable="true"
-        android:paddingRight="@dimen/activity_horizontal_margin"
         android:layout_gravity="start"
+        android:focusable="true"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
         app:menu="@menu/bottom_nav_items" />
 </RelativeLayout>

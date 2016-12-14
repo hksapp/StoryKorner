@@ -1,6 +1,8 @@
 package com.hkapps.storykorner;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -44,12 +46,49 @@ public class MainActivity extends AppCompatActivity {
 
         mBottomNav = (BottomNavigationView) findViewById(R.id.navigation);
 
+// BottomNavView Colors
+        int[][] state = new int[][]{
+                new int[]{-android.R.attr.state_enabled}, // disabled
+                new int[]{android.R.attr.state_enabled}, // enabled
+                new int[]{-android.R.attr.state_checked}, // unchecked
+                new int[]{android.R.attr.state_pressed}  // pressed
+
+        };
+
+        int[] color = new int[]{
+                Color.WHITE,
+                Color.WHITE,
+                Color.WHITE,
+                Color.WHITE
+        };
+
+        final ColorStateList csl = new ColorStateList(state, color);
+
+        int[][] states = new int[][]{
+                new int[]{-android.R.attr.state_enabled}, // disabled
+                new int[]{android.R.attr.state_enabled}, // enabled
+                new int[]{-android.R.attr.state_checked}, // unchecked
+                new int[]{android.R.attr.state_pressed}  // pressed
+
+        };
+
+        final int[] colors = new int[]{
+                Color.WHITE,
+                Color.WHITE,
+                Color.WHITE,
+                Color.WHITE
+        };
+
+        final ColorStateList csl2 = new ColorStateList(states, colors);
+
+
         mBottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 // handle desired action here
                 // One possibility of action is to replace the contents above the nav bar
                 // return true if you want the item to be displayed as the selected item
+
 
                 switch (item.getItemId()) {
 
@@ -74,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.menu_profile:
                         fragment = new ProfileFragment();
+
                         break;
 
                     default: fragment = new StoriesFragment();
