@@ -1,8 +1,6 @@
 package com.hkapps.storykorner;
 
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -38,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
         fragmentManager = getSupportFragmentManager();
         mAuth = FirebaseAuth.getInstance();
 
@@ -46,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
         mBottomNav = (BottomNavigationView) findViewById(R.id.navigation);
 
-// BottomNavView Colors
+/* BottomNavView Colors
         int[][] state = new int[][]{
                 new int[]{-android.R.attr.state_enabled}, // disabled
                 new int[]{android.R.attr.state_enabled}, // enabled
@@ -79,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
                 Color.WHITE
         };
 
-        final ColorStateList csl2 = new ColorStateList(states, colors);
+        final ColorStateList csl2 = new ColorStateList(states, colors); */
 
 
         mBottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -113,7 +112,9 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.menu_profile:
                         fragment = new ProfileFragment();
-
+                        //    mBottomNav.setItemBackgroundResource(R.color.nav_profile_color);
+                        //  mBottomNav.setItemIconTintList(csl);
+                        // mBottomNav.setItemTextColor(csl);
                         break;
 
                     default: fragment = new StoriesFragment();
