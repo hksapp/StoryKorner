@@ -30,10 +30,10 @@
                 android:src="@drawable/bestfrnds" />
 
             <TextView
+                android:id="@+id/prof_uname"
                 android:layout_width="match_parent"
+
                 android:layout_height="wrap_content"
-
-
                 android:layout_margin="@dimen/fab_margin"
                 android:fontFamily="cursive"
                 android:gravity="center"
@@ -65,7 +65,7 @@
                     android:src="@drawable/ic_import_contacts_white_24dp" />
 
                 <TextView
-                    android:id="@+id/prof_uname"
+
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/fab_margin"
@@ -90,6 +90,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="0.8dp"
+                android:layout_marginLeft="@dimen/fab_margin"
+                android:layout_marginRight="@dimen/fab_margin"
                 android:background="#EEEEEE" />
 
 
@@ -131,6 +133,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="0.8dp"
+                android:layout_marginLeft="@dimen/fab_margin"
+                android:layout_marginRight="@dimen/fab_margin"
                 android:background="#EEEEEE" />
 
 
@@ -172,6 +176,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="0.8dp"
+                android:layout_marginLeft="@dimen/fab_margin"
+                android:layout_marginRight="@dimen/fab_margin"
                 android:background="#EEEEEE" />
 
 
