@@ -6,10 +6,13 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +42,7 @@ public class ProfileFragment extends Fragment {
     private StorageReference mStorageRef;
     private ProgressDialog mProgressDialog;
     private DatabaseReference mDatabaseRef;
+    private LinearLayout prof_stories;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -52,7 +56,7 @@ public class ProfileFragment extends Fragment {
 
         mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
-
+        prof_stories = (LinearLayout) rootview.findViewById(R.id.prof_stories);
 
 
         uname = (TextView) rootview.findViewById(R.id.prof_uname);
@@ -93,8 +97,21 @@ public class ProfileFragment extends Fragment {
         });
 
 
+        prof_stories.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
 
+                Fragment fragment = new StoriesFragment();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.main_container, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+
+
+            }
+        });
 
 
 
