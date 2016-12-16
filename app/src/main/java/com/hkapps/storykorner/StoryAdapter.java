@@ -4,10 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,14 +39,36 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
     @Override
     protected void populateViewHolder(final StoryHolder viewHolder, final StoryObject model, final int position) {
 
+
         //
         sharedPreference = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean chk = sharedPreference.getBoolean("profile", false);
+        String storyuserid = sharedPreference.getString("storyuserid", model.getUserid());
 
+        boolean chk = sharedPreference.getBoolean("profile", false);
         mFireRef = FirebaseDatabase.getInstance().getReference().child("Users");
 
+        viewHolder.userproflink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-        if (model.getUserid().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()) && chk) {
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+                SharedPreferences.Editor edit = sp.edit();
+                edit.putString("profile_id", model.getUserid());
+                edit.commit();
+
+                Fragment fragment = new ProfileFragment();
+                FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.main_container, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+
+
+            }
+        });
+
+
+        if (model.getUserid().equals(storyuserid)) {
 
             mFireRef.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -88,7 +113,7 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
                 }
             });
         }
-        if (!chk) {
+        if (chk) {
 
 
             mFireRef.addValueEventListener(new ValueEventListener() {

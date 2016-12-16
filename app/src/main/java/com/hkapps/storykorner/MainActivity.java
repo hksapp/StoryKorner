@@ -20,6 +20,8 @@ import android.widget.Toast;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private Fragment fragment;
     private FragmentManager fragmentManager;
     private FragmentTransaction transaction;
+    private DatabaseReference mUserRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         SharedPreferences.Editor edit = sp.edit();
-        edit.putBoolean("profile", false);
+        edit.putBoolean("profile", true);
         edit.commit();
 
          transaction = fragmentManager.beginTransaction();
@@ -114,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
 
                         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                         SharedPreferences.Editor edit = sp.edit();
-                        edit.putBoolean("profile", false);
+                        edit.putBoolean("profile", true);
                         edit.commit();
                         fragment = new StoriesFragment();
                         break;
@@ -125,6 +128,13 @@ public class MainActivity extends AppCompatActivity {
 
 
                     case R.id.menu_profile:
+
+                        SharedPreferences prof = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                        SharedPreferences.Editor profedit = prof.edit();
+                        profedit.putString("profile_id", FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
+                        profedit.commit();
+
+
                         fragment = new ProfileFragment();
                         //    mBottomNav.setItemBackgroundResource(R.color.nav_profile_color);
                         //  mBottomNav.setItemIconTintList(csl);
@@ -151,16 +161,25 @@ public class MainActivity extends AppCompatActivity {
                 if (user != null) {
                     // User is signed in
 
-                    
+
                     //Email Verificatiom
                     if(user.isEmailVerified())
                     Toast.makeText(getApplicationContext(),"Welcome "+user.getDisplayName(),Toast.LENGTH_SHORT).show();
+
+
                     else
                     {
                         user.sendEmailVerification();
                         Toast.makeText(getApplicationContext(),"Check your Email",Toast.LENGTH_SHORT).show();
                     }
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+
+                    //Send Uname & UID to Firebase!
+
+                    mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("uname");
+                    mUserRef.setValue(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+
+
                 } else {
 
                    startActivityForResult(
@@ -180,6 +199,7 @@ public class MainActivity extends AppCompatActivity {
                 // ...
             }
         };
+
 
     }
 

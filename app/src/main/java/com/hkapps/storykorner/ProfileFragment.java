@@ -41,13 +41,13 @@ public class ProfileFragment extends Fragment {
     public static final String MyPREFERENCES = "profile";
     private static final int GALLERY_INTENT = 2;
     public SharedPreferences sharedPreferences;
+    String checkingid = "";
     private TextView uname;
     private ImageButton prof_image;
     private StorageReference mStorageRef;
     private ProgressDialog mProgressDialog;
     private DatabaseReference mDatabaseRef;
     private LinearLayout prof_stories;
-
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -59,35 +59,42 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootview = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        SharedPreferences sharedPreference = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        checkingid = sharedPreference.getString("profile_id", userid);
+
+
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("Users").child(checkingid);
 
         prof_stories = (LinearLayout) rootview.findViewById(R.id.prof_stories);
-
+        prof_image = (ImageButton) rootview.findViewById(R.id.prof_image);
 
         uname = (TextView) rootview.findViewById(R.id.prof_uname);
-        uname.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
-
-        prof_image = (ImageButton) rootview.findViewById(R.id.prof_image);
 
         mProgressDialog = new ProgressDialog(getActivity());
 
 
-        prof_image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        if (checkingid.equals(userid)) {
 
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"), GALLERY_INTENT);
+            prof_image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
-            }
-        });
+                    Intent intent = new Intent();
+                    intent.setType("image/*");
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    startActivityForResult(Intent.createChooser(intent, "Select Picture"), GALLERY_INTENT);
 
+                }
+            });
+        }
 
         mDatabaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
+                uname.setText(dataSnapshot.child("uname").getValue().toString());
 
                 if (dataSnapshot.child("photolink").exists()) {
                     String photo = dataSnapshot.child("photolink").getValue().toString();
@@ -109,7 +116,7 @@ public class ProfileFragment extends Fragment {
 
                 SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
                 SharedPreferences.Editor edit = sp.edit();
-                edit.putBoolean("profile", true);
+                edit.putString("storyuserid", checkingid);
                 edit.commit();
 
                 Fragment fragment = new StoriesFragment();
@@ -124,7 +131,10 @@ public class ProfileFragment extends Fragment {
         });
 
 
-
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        SharedPreferences.Editor edit = sp.edit();
+        edit.putBoolean("profile", false);
+        edit.commit();
 
 
 

@@ -3,6 +3,7 @@ package com.hkapps.storykorner;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /**
@@ -16,6 +17,7 @@ public class StoryHolder extends RecyclerView.ViewHolder {
     public TextView story_ui;
     public TextView username;
     public ImageView userimage;
+    public LinearLayout userproflink;
 
     public StoryHolder(View itemView) {
         super(itemView);
@@ -24,6 +26,7 @@ public class StoryHolder extends RecyclerView.ViewHolder {
         story_ui = (TextView) itemView.findViewById(R.id.story_ui);
         username = (TextView) itemView.findViewById(R.id.username);
         userimage = (ImageView) itemView.findViewById(R.id.userimage);
+        userproflink = (LinearLayout) itemView.findViewById(R.id.userproflink);
 
 
     }
