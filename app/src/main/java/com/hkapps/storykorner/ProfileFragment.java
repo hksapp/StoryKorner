@@ -3,8 +3,10 @@ package com.hkapps.storykorner;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -36,13 +38,16 @@ import static android.app.Activity.RESULT_OK;
  */
 public class ProfileFragment extends Fragment {
 
+    public static final String MyPREFERENCES = "profile";
     private static final int GALLERY_INTENT = 2;
+    public SharedPreferences sharedPreferences;
     private TextView uname;
     private ImageButton prof_image;
     private StorageReference mStorageRef;
     private ProgressDialog mProgressDialog;
     private DatabaseReference mDatabaseRef;
     private LinearLayout prof_stories;
+
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -102,6 +107,11 @@ public class ProfileFragment extends Fragment {
             public void onClick(View view) {
 
 
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                SharedPreferences.Editor edit = sp.edit();
+                edit.putBoolean("profile", true);
+                edit.commit();
+
                 Fragment fragment = new StoriesFragment();
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -112,6 +122,7 @@ public class ProfileFragment extends Fragment {
 
             }
         });
+
 
 
 

@@ -21,7 +21,7 @@ public class StoriesFragment extends Fragment {
 
     private RecyclerView storyRecyclerview;
     private LinearLayoutManager linearLayoutManager;
-    private DatabaseReference mDatabaseRef;
+    private DatabaseReference mDatabaseRef, mProfStoriesRef;
     private DatabaseReference childRef;
 
     private StoryAdapter mStoryAdapter;
@@ -48,6 +48,7 @@ public class StoriesFragment extends Fragment {
         linearLayoutManager.setStackFromEnd(true);
         mDatabaseRef = FirebaseDatabase.getInstance().getReference();
         childRef = mDatabaseRef.child("Posted_Stories");
+
 
         mStoryAdapter = new StoryAdapter(StoryObject.class,R.layout.story_custom_ui,StoryHolder.class ,childRef,getContext());
         storyRecyclerview.setLayoutManager(linearLayoutManager);

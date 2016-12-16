@@ -1,8 +1,10 @@
 package com.hkapps.storykorner;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -40,6 +42,12 @@ public class MainActivity extends AppCompatActivity {
 
         fragmentManager = getSupportFragmentManager();
         mAuth = FirebaseAuth.getInstance();
+
+
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor edit = sp.edit();
+        edit.putBoolean("profile", false);
+        edit.commit();
 
          transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.main_container, new StoriesFragment()).commit();
@@ -103,6 +111,11 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     case R.id.menu_stories:
+
+                        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                        SharedPreferences.Editor edit = sp.edit();
+                        edit.putBoolean("profile", false);
+                        edit.commit();
                         fragment = new StoriesFragment();
                         break;
 
