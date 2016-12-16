@@ -162,15 +162,14 @@ public class MainActivity extends AppCompatActivity {
                     // User is signed in
 
 
-                    //Email Verificatiom
+                    // Email Verificatiom
                     if(user.isEmailVerified())
                     Toast.makeText(getApplicationContext(),"Welcome "+user.getDisplayName(),Toast.LENGTH_SHORT).show();
-
-
                     else
                     {
                         user.sendEmailVerification();
                         Toast.makeText(getApplicationContext(),"Check your Email",Toast.LENGTH_SHORT).show();
+
                     }
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
 

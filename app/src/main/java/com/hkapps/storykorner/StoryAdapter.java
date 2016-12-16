@@ -40,7 +40,7 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
     protected void populateViewHolder(final StoryHolder viewHolder, final StoryObject model, final int position) {
 
 
-        //
+
         sharedPreference = PreferenceManager.getDefaultSharedPreferences(context);
         String storyuserid = sharedPreference.getString("storyuserid", model.getUserid());
 
@@ -73,7 +73,7 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
             mFireRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.child(model.getUserid()).exists()) {
+                    if (dataSnapshot.child(model.getUserid()).child("photolink").exists()) {
                         String photo = dataSnapshot.child(model.getUserid()).child("photolink").getValue().toString();
                         Picasso.with(context).load(photo).fit().centerCrop().into(viewHolder.userimage);
                     }
@@ -119,7 +119,7 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
             mFireRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.child(model.getUserid()).exists()) {
+                    if (dataSnapshot.child(model.getUserid()).child("photolink").exists()) {
                         String photo = dataSnapshot.child(model.getUserid()).child("photolink").getValue().toString();
                         Picasso.with(context).load(photo).fit().centerCrop().into(viewHolder.userimage);
                     }

@@ -93,7 +93,7 @@ public class ProfileFragment extends Fragment {
         mDatabaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
+                if (dataSnapshot.child("uname").exists())
                 uname.setText(dataSnapshot.child("uname").getValue().toString());
 
                 if (dataSnapshot.child("photolink").exists()) {

@@ -1,7 +1,9 @@
 package com.hkapps.storykorner;
 
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,6 +58,12 @@ public class CreateFragment extends Fragment {
                 postdata.put("username", FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
 
                 post_stories.push().setValue(postdata);
+
+
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                SharedPreferences.Editor edit = sp.edit();
+                edit.putBoolean("profile", true);
+                edit.commit();
 
                 getFragmentManager().beginTransaction().replace(R.id.main_container, new StoriesFragment()).commit();
 
