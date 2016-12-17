@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,6 +33,7 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
     public SharedPreferences sharedPreference;
     private Context context;
     private DatabaseReference mFireRef, mLikeRef;
+    private boolean liked;
 
     public StoryAdapter(Class<StoryObject> modelClass, int modelLayout, Class<StoryHolder> viewHolderClass, DatabaseReference ref, Context context) {
         super(modelClass, modelLayout, viewHolderClass, ref);
@@ -42,7 +44,7 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
     @Override
     protected void populateViewHolder(final StoryHolder viewHolder, final StoryObject model, final int position) {
 
-        long tmp = model.getTimestamp();
+        final long tmp = model.getTimestamp();
         Date date = new Date(tmp);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm");
         String tym = formatter.format(date);
@@ -58,9 +60,52 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
 
         mFireRef = FirebaseDatabase.getInstance().getReference().child("Users");
 
-        //LIKES
-        String post_key = getRef(position).getKey().toString();
-        mLikeRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(post_key).child("likes");
+
+        viewHolder.like.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+                String post_key = getRef(position).getKey().toString();
+                mLikeRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(post_key).child("likes");
+                //   mLikeRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+
+                liked = true;
+
+                mLikeRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        if (liked) {
+                            if (dataSnapshot.hasChild(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                                mLikeRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).removeValue();
+                                // Toast.makeText(context, "HIIII", Toast.LENGTH_SHORT).show();
+                                viewHolder.like.setImageResource(R.drawable.ic_sentiment_satisfied_black_24dp);
+                                liked = false;
+
+
+                            } else {
+                                mLikeRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+                                viewHolder.like.setImageResource(R.drawable.ic_mood_black_24dp);
+                                liked = false;
+                            }
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+
+            }
+
+        });
+
+
+
 
 
 
