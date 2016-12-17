@@ -21,6 +21,7 @@ public class StoryHolder extends RecyclerView.ViewHolder {
     public LinearLayout userproflink;
     public TextView timestamp;
     public ImageButton like;
+    public TextView likecount;
 
     public StoryHolder(View itemView) {
         super(itemView);
@@ -32,6 +33,7 @@ public class StoryHolder extends RecyclerView.ViewHolder {
         userproflink = (LinearLayout) itemView.findViewById(R.id.userproflink);
         timestamp = (TextView) itemView.findViewById(R.id.timestamp);
         like = (ImageButton) itemView.findViewById(R.id.like);
+        likecount = (TextView) itemView.findViewById(R.id.likecount);
 
 
 

@@ -51,7 +51,8 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
 
         viewHolder.timestamp.setText(tym);
 
-
+        String post_key = getRef(position).getKey().toString();
+        mLikeRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(post_key).child("likes");
 
         sharedPreference = PreferenceManager.getDefaultSharedPreferences(context);
         String storyuserid = sharedPreference.getString("storyuserid", model.getUserid());
@@ -60,15 +61,15 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
 
         mFireRef = FirebaseDatabase.getInstance().getReference().child("Users");
 
-        String post_key = getRef(position).getKey().toString();
-        mLikeRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(post_key).child("likes");
+
 
         viewHolder.like.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
 
-
+                String post_key = getRef(position).getKey().toString();
+                mLikeRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(post_key).child("likes");
                 //   mLikeRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
 
                 liked = true;
@@ -92,6 +93,9 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
                             }
                         }
 
+                        viewHolder.likecount.setText(String.valueOf(dataSnapshot.getChildrenCount()) + " Likes");
+
+
                     }
 
                     @Override
@@ -108,12 +112,16 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
         mLikeRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
+
                 if (dataSnapshot.hasChild(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
 
                     viewHolder.like.setImageResource(R.drawable.ic_mood_black_24dp);
                 } else {
                     viewHolder.like.setImageResource(R.drawable.ic_sentiment_satisfied_black_24dp);
                 }
+
+                viewHolder.likecount.setText(String.valueOf(dataSnapshot.getChildrenCount()) + " Likes");
             }
 
             @Override
