@@ -18,6 +18,7 @@ public class StoryHolder extends RecyclerView.ViewHolder {
     public TextView username;
     public ImageView userimage;
     public LinearLayout userproflink;
+    public TextView timestamp;
 
     public StoryHolder(View itemView) {
         super(itemView);
@@ -27,7 +28,7 @@ public class StoryHolder extends RecyclerView.ViewHolder {
         username = (TextView) itemView.findViewById(R.id.username);
         userimage = (ImageView) itemView.findViewById(R.id.userimage);
         userproflink = (LinearLayout) itemView.findViewById(R.id.userproflink);
-
+        timestamp = (TextView) itemView.findViewById(R.id.timestamp);
 
     }
 }

@@ -18,6 +18,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by kamal on 11-12-2016.
  */
@@ -28,7 +31,7 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
     private static final String TAG = StoryAdapter.class.getSimpleName();
     public SharedPreferences sharedPreference;
     private Context context;
-    private DatabaseReference mFireRef;
+    private DatabaseReference mFireRef, mLikeRef;
 
     public StoryAdapter(Class<StoryObject> modelClass, int modelLayout, Class<StoryHolder> viewHolderClass, DatabaseReference ref, Context context) {
         super(modelClass, modelLayout, viewHolderClass, ref);
@@ -39,13 +42,27 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
     @Override
     protected void populateViewHolder(final StoryHolder viewHolder, final StoryObject model, final int position) {
 
+        long tmp = model.getTimestamp();
+        Date date = new Date(tmp);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+        String tym = formatter.format(date);
+
+        viewHolder.timestamp.setText(tym);
+
 
 
         sharedPreference = PreferenceManager.getDefaultSharedPreferences(context);
         String storyuserid = sharedPreference.getString("storyuserid", model.getUserid());
 
         boolean chk = sharedPreference.getBoolean("profile", false);
+
         mFireRef = FirebaseDatabase.getInstance().getReference().child("Users");
+
+        //LIKES
+        String post_key = getRef(position).getKey().toString();
+        mLikeRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(post_key).child("likes");
+
+
 
         viewHolder.userproflink.setOnClickListener(new View.OnClickListener() {
             @Override

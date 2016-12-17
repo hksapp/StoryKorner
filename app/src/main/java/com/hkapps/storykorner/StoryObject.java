@@ -10,17 +10,20 @@ public class StoryObject {
     private String story;
     private String username;
     private String userid;
+    private long timestamp;
+
 
     public StoryObject(){
 
 
     }
 
-    public StoryObject(String title , String story , String username , String userid){
+    public StoryObject(String title, String story, String username, String userid, long timestamp) {
         this.title = title;
         this.story = story;
         this.username = username;
         this.userid = userid;
+        this.timestamp = timestamp;
     }
 
     public String getTitle() { return title;}
@@ -41,5 +44,13 @@ public class StoryObject {
 
     public void setUserid(String userid) { this.userid = userid; }
 
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
 
 }
