@@ -32,7 +32,7 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
     private static final String TAG = StoryAdapter.class.getSimpleName();
     public SharedPreferences sharedPreference;
     private Context context;
-    private DatabaseReference mFireRef, mLikeRef;
+    private DatabaseReference mFireRef, mLikeRef, mCommentRef;
     private boolean liked;
 
     public StoryAdapter(Class<StoryObject> modelClass, int modelLayout, Class<StoryHolder> viewHolderClass, DatabaseReference ref, Context context) {
@@ -53,6 +53,8 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
 
         String post_key = getRef(position).getKey().toString();
         mLikeRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(post_key).child("likes");
+        mCommentRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(post_key).child("comments");
+
 
         sharedPreference = PreferenceManager.getDefaultSharedPreferences(context);
         String storyuserid = sharedPreference.getString("storyuserid", model.getUserid());
@@ -131,7 +133,50 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
         });
 
 
+        //COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS
 
+        viewHolder.comment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewHolder.type_comment.setVisibility(View.VISIBLE);
+                viewHolder.send_comment.setVisibility(View.VISIBLE);
+                viewHolder.type_comment.setFocusable(true);
+            }
+        });
+
+
+        viewHolder.send_comment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+
+                viewHolder.type_comment.setVisibility(View.INVISIBLE);
+                viewHolder.send_comment.setVisibility(View.INVISIBLE);
+                viewHolder.Lin_cmt.setVisibility(View.VISIBLE);
+
+                String post_key = getRef(position).getKey().toString();
+                mCommentRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(post_key).child("comments");
+
+                mCommentRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        String ct = viewHolder.type_comment.getText().toString();
+
+                        mCommentRef.child(mCommentRef.push().getKey()).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(ct);
+
+
+                        viewHolder.user_cmt.setText(ct);
+
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+            }
+        });
 
 
 
