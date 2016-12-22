@@ -1,5 +1,8 @@
 package com.hkapps.storykorner;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,6 +10,8 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -14,6 +19,7 @@ import android.widget.LinearLayout;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,7 +34,7 @@ import java.util.Date;
  * Created by kamal on 11-12-2016.
  */
 
-public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHolder> {
+public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHolder> {
 
     public static final String MyPREFERENCES = "profile";
     private static final String TAG = StoryAdapter.class.getSimpleName();
@@ -39,6 +45,7 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
     private boolean liked;
     private LinearLayout backgroundColor;
     private String[] bg = new String[6];
+
     public StoryAdapter(Class<StoryObject> modelClass, int modelLayout, Class<StoryHolder> viewHolderClass, DatabaseReference ref, Context context) {
         super(modelClass, modelLayout, viewHolderClass, ref);
         this.context = context;
@@ -106,9 +113,13 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
                             } else {
                                 mLikeRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
                                 viewHolder.like.setImageResource(R.drawable.ic_mood_black_24dp);
+
+
                                 liked = false;
+
+
                             }
-                            }
+                        }
 
                         viewHolder.likecount.setText(String.valueOf(dataSnapshot.getChildrenCount()) + " Likes");
 
@@ -126,6 +137,43 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
 
         });
 
+
+        mLikeRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                if (model.getUserid().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+
+
+                    showNotifications(dataSnapshot.getValue().toString());
+                }
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+
         mLikeRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -139,7 +187,7 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
                 }
 
                 viewHolder.likecount.setText(String.valueOf(dataSnapshot.getChildrenCount()) + " Likes");
-                }
+            }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -222,80 +270,80 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
                  }
 
                     */
-                    }
+                }
 
 
             }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-                }
-            });
+            }
+        });
 
 
         //COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS
 
 
         viewHolder.user_cmt.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
-                    Fragment fragment = new CommentFragment();
-                    FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.main_container, fragment);
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
+                Fragment fragment = new CommentFragment();
+                FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.main_container, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
 
-                }
-            });
+            }
+        });
 
 
         //LIKE FRAGMENT
 
         viewHolder.likecount.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
-                    String post_key = getRef(position).getKey().toString();
-                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-                    SharedPreferences.Editor edit = sp.edit();
-                    edit.putString("likes_post_key", post_key);
-                    edit.commit();
-
-
-                    Fragment fragment = new LikeFragment();
-                    FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.main_container, fragment);
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
+                String post_key = getRef(position).getKey().toString();
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+                SharedPreferences.Editor edit = sp.edit();
+                edit.putString("likes_post_key", post_key);
+                edit.commit();
 
 
-                }
-            });
+                Fragment fragment = new LikeFragment();
+                FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.main_container, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+
+
+            }
+        });
 
 
         viewHolder.userproflink.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
-                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-                    SharedPreferences.Editor edit = sp.edit();
-                    edit.putString("profile_id", model.getUserid());
-                    edit.commit();
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+                SharedPreferences.Editor edit = sp.edit();
+                edit.putString("profile_id", model.getUserid());
+                edit.commit();
 
-                    Fragment fragment = new ProfileFragment();
-                    FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.main_container, fragment);
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
+                Fragment fragment = new ProfileFragment();
+                FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.main_container, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
 
 
-                }
-            });
+            }
+        });
 
 
         if (model.getUserid().equals(storyuserid)) {
@@ -395,5 +443,49 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
         }
 
     }
+
+    private void showNotifications(String username) {
+
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context);
+
+        mBuilder.setSmallIcon(R.drawable.bestfrnds);
+        mBuilder.setContentTitle(username);
+        mBuilder.setContentText(username + " Liked your post");
+
+
+        mBuilder.setDefaults(Notification.DEFAULT_SOUND);
+        mBuilder.setAutoCancel(true);
+
+
+        Intent resultIntent = new Intent(context, StoryDescription.class);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+        stackBuilder.addParentStack(StoryDescription.class);
+
+// Adds the Intent that starts the Activity to the top of the stack
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.setContentIntent(resultPendingIntent);
+
+
+        mBuilder.setVibrate(new long[]{500, 500});
+
+       /* Notification note = mBuilder.build();
+        note.defaults |= Notification.DEFAULT_VIBRATE;
+        note.defaults |= Notification.DEFAULT_SOUND;
+*/
+
+        NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+// notificationID allows you to update the notification later on.
+        mNotificationManager.notify(0, mBuilder.build());
+
+
+
+
+
+
+
     }
+
+}
 
