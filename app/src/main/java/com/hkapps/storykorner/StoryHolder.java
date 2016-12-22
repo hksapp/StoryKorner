@@ -19,14 +19,15 @@ public class StoryHolder extends RecyclerView.ViewHolder {
     public TextView story_ui;
     public TextView username;
     public ImageView userimage;
-    public LinearLayout userproflink, Lin_cmt;
+    public LinearLayout userproflink, write_comment;
     public TextView timestamp;
     public ImageButton like;
     public TextView likecount;
     public EditText type_comment;
     public ImageButton send_comment;
     public ImageButton comment;
-    public TextView user_cmt_id, user_cmt;
+    public TextView user_cmt;
+    public LinearLayout backgroundColor;
 
 
     public StoryHolder(View itemView) {
@@ -43,9 +44,9 @@ public class StoryHolder extends RecyclerView.ViewHolder {
         type_comment = (EditText) itemView.findViewById(R.id.type_comment);
         send_comment = (ImageButton) itemView.findViewById(R.id.send_comment);
         comment = (ImageButton) itemView.findViewById(R.id.comment);
-        user_cmt_id = (TextView) itemView.findViewById(R.id.user_cmt_id);
         user_cmt = (TextView) itemView.findViewById(R.id.user_cmt);
-        Lin_cmt = (LinearLayout) itemView.findViewById(R.id.Lin_cmt);
+        write_comment = (LinearLayout) itemView.findViewById(R.id.write_comment);
+        backgroundColor = (LinearLayout) itemView.findViewById(R.id.backgroundColor);
 
 
 

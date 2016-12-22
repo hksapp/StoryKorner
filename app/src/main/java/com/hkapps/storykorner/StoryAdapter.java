@@ -9,6 +9,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.LinearLayout;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,10 +33,12 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
     public static final String MyPREFERENCES = "profile";
     private static final String TAG = StoryAdapter.class.getSimpleName();
     public SharedPreferences sharedPreference;
+    public int bgc = 1;
     private Context context;
-    private DatabaseReference mFireRef, mLikeRef, mCommentRef;
+    private DatabaseReference mFireRef, mLikeRef, mCommentRef, mCommentUpdateRef;
     private boolean liked;
-
+    private LinearLayout backgroundColor;
+    private String[] bg = new String[6];
     public StoryAdapter(Class<StoryObject> modelClass, int modelLayout, Class<StoryHolder> viewHolderClass, DatabaseReference ref, Context context) {
         super(modelClass, modelLayout, viewHolderClass, ref);
         this.context = context;
@@ -53,7 +57,9 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
 
         String post_key = getRef(position).getKey().toString();
         mLikeRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(post_key).child("likes");
+
         mCommentRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(post_key).child("comments");
+        mCommentUpdateRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(post_key);
 
 
         sharedPreference = PreferenceManager.getDefaultSharedPreferences(context);
@@ -62,7 +68,16 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
         boolean chk = sharedPreference.getBoolean("profile", false);
 
         mFireRef = FirebaseDatabase.getInstance().getReference().child("Users");
+        final int[] rainbow = context.getResources().getIntArray(R.array.bg);
+        // int postcount = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").get
+        //  for (int i = 0; i < l; i++) {
 
+        viewHolder.backgroundColor.setBackgroundColor(rainbow[position % 6]);
+
+
+        //  }
+        //bg ={"#2196f3",};
+        //  viewHolder.backgroundColor.setBackgroundColor(Color.parseColor("#E91E63"));
 
 
         viewHolder.like.setOnClickListener(new View.OnClickListener() {
@@ -93,7 +108,7 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
                                 viewHolder.like.setImageResource(R.drawable.ic_mood_black_24dp);
                                 liked = false;
                             }
-                        }
+                            }
 
                         viewHolder.likecount.setText(String.valueOf(dataSnapshot.getChildrenCount()) + " Likes");
 
@@ -124,7 +139,7 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
                 }
 
                 viewHolder.likecount.setText(String.valueOf(dataSnapshot.getChildrenCount()) + " Likes");
-            }
+                }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -140,7 +155,10 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
             public void onClick(View view) {
                 viewHolder.type_comment.setVisibility(View.VISIBLE);
                 viewHolder.send_comment.setVisibility(View.VISIBLE);
-                viewHolder.type_comment.setFocusable(true);
+                viewHolder.type_comment.requestFocus();
+                InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+
             }
         });
 
@@ -148,10 +166,15 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
         viewHolder.send_comment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
+                InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(),
+                        InputMethodManager.RESULT_UNCHANGED_SHOWN);
 
-                viewHolder.type_comment.setVisibility(View.INVISIBLE);
-                viewHolder.send_comment.setVisibility(View.INVISIBLE);
-                viewHolder.Lin_cmt.setVisibility(View.VISIBLE);
+
+                // viewHolder.type_comment.setVisibility(View.INVISIBLE);
+                // viewHolder.send_comment.setVisibility(View.INVISIBLE);
+                viewHolder.write_comment.setVisibility(View.GONE);
+
 
                 String post_key = getRef(position).getKey().toString();
                 mCommentRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(post_key).child("comments");
@@ -161,11 +184,13 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         String ct = viewHolder.type_comment.getText().toString();
 
-                        mCommentRef.child(mCommentRef.push().getKey()).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(ct);
+                        String key = mCommentRef.push().getKey();
+
+                        mCommentRef.child(key).child("cmt_user_id").setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                        mCommentRef.child(key).child("cmt").setValue(ct);
 
 
-                        viewHolder.user_cmt.setText(ct);
-
+                        viewHolder.user_cmt.setText(String.valueOf(dataSnapshot.child("comments").getChildrenCount()) + " Comments");
 
                     }
 
@@ -175,30 +200,102 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
                     }
                 });
 
+
             }
         });
 
+        mCommentUpdateRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if (dataSnapshot.hasChild("comments")) {
+
+
+                    viewHolder.user_cmt.setText(String.valueOf(dataSnapshot.child("comments").getChildrenCount()) + " Comments");
+
+          /*         Map mm = new HashMap();
+                for( DataSnapshot ds :   dataSnapshot.child("comments").getChildren()){
+
+               String cmt_user_id =  ds.child("cmt_user_id").getValue().toString();
+                 String cmt =   ds.child("cmt").getValue().toString();
+
+                 }
+
+                    */
+                    }
+
+
+            }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+
+        //COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS
+
+
+        viewHolder.user_cmt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    Fragment fragment = new CommentFragment();
+                    FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.main_container, fragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+
+                }
+            });
+
+
+        //LIKE FRAGMENT
+
+        viewHolder.likecount.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    String post_key = getRef(position).getKey().toString();
+                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+                    SharedPreferences.Editor edit = sp.edit();
+                    edit.putString("likes_post_key", post_key);
+                    edit.commit();
+
+
+                    Fragment fragment = new LikeFragment();
+                    FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.main_container, fragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+
+
+                }
+            });
 
 
         viewHolder.userproflink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                @Override
+                public void onClick(View view) {
 
-                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-                SharedPreferences.Editor edit = sp.edit();
-                edit.putString("profile_id", model.getUserid());
-                edit.commit();
+                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+                    SharedPreferences.Editor edit = sp.edit();
+                    edit.putString("profile_id", model.getUserid());
+                    edit.commit();
 
-                Fragment fragment = new ProfileFragment();
-                FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.main_container, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+                    Fragment fragment = new ProfileFragment();
+                    FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.main_container, fragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
 
 
-            }
-        });
+                }
+            });
 
 
         if (model.getUserid().equals(storyuserid)) {
@@ -218,7 +315,7 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
                 }
             });
 
-        viewHolder.title_ui.setText(model.getTitle());
+            viewHolder.title_ui.setText(model.getTitle());
             viewHolder.story_ui.setText(model.getStory());
             viewHolder.username.setText(model.getUsername());
 
@@ -230,6 +327,7 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
                     Intent i = new Intent(context, StoryDescription.class);
                     i.putExtra("intent_title", model.getTitle());
                     i.putExtra("intent_story", model.getStory());
+                    i.putExtra("position", position);
                     context.startActivity(i);
                 }
             });
@@ -242,6 +340,8 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
                     Intent i = new Intent(context, StoryDescription.class);
                     i.putExtra("intent_title", model.getTitle());
                     i.putExtra("intent_story", model.getStory());
+                    // i.putExtra("position",position);
+                    i.putExtra("position", position);
                     context.startActivity(i);
                 }
             });
@@ -295,4 +395,5 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
         }
 
     }
-}
+    }
+

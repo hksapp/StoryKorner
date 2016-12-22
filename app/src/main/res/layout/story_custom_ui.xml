@@ -2,179 +2,184 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="3dp"
-    android:background="#BDBDBD"
-    android:orientation="vertical"
-  android:paddingBottom="@dimen/fab_margin"
-  android:paddingTop="@dimen/fab_margin">
+    android:background="#9E9E9E"
+    android:orientation="vertical">
 
-
-    <LinearLayout
-        android:id="@+id/userproflink"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:gravity="center_vertical"
-        android:paddingLeft="16dp">
-
-        <ImageView
-            android:id="@+id/userimage"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginRight="@dimen/fab_margin"
-            android:src="@drawable/ic_account_circle_black_24dp" />
-
-        <TextView
-            android:id="@+id/username"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Username"
-            android:textColor="#000000"
-            android:textSize="16sp" />
-
-
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#9B26AF"
+        android:layout_marginBottom="1dp"
+        android:background="#FFFFFF"
         android:orientation="vertical"
-        android:padding="8dp">
+        android:paddingBottom="16dp"
+        android:paddingTop="16dp">
 
-        <TextView
-            android:id="@+id/title_ui"
+        <LinearLayout
+            android:id="@+id/userproflink"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="16dp">
+
+            <ImageView
+                android:id="@+id/userimage"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginRight="@dimen/fab_margin"
+                android:src="@drawable/ic_account_circle_black_24dp" />
+
+            <TextView
+                android:id="@+id/username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Username"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/backgroundColor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingBottom="16dp"
-            android:text="Story Title"
-            android:textColor="#ffffff"
-            android:textSize="24sp"
-            android:textStyle="bold"
 
-            />
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/title_ui"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingBottom="16dp"
+                android:text="Story Title"
+                android:textColor="#ffffff"
+                android:textSize="24sp"
+                android:textStyle="bold"
+
+                />
 
 
-        <TextView
-            android:id="@+id/story_ui"
+            <TextView
+                android:id="@+id/story_ui"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="10"
+                android:paddingBottom="16dp"
+                android:paddingLeft="16dp"
+                android:text="Story....."
+                android:textColor="#ffffff"
+                android:textSize="18sp"
+
+                />
+
+        </LinearLayout>
+
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLines="5"
-            android:paddingBottom="16dp"
-            android:paddingLeft="16dp"
-            android:text="Story....."
-            android:textColor="#ffffff"
-            android:textSize="18sp"
+            android:paddingLeft="16dp">
 
-            />
+            <ImageButton
+                android:id="@+id/like"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:padding="6dp"
+                android:src="@drawable/ic_sentiment_satisfied_black_24dp" />
 
-    </LinearLayout>
+            <ImageButton
+                android:id="@+id/comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/marigin"
+                android:layout_marginRight="@dimen/marigin"
+                android:background="@null"
+                android:padding="6dp"
+                android:src="@drawable/ic_create_black_24dp" />
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="16dp">
-
-        <ImageButton
-            android:id="@+id/like"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@null"
-            android:padding="6dp"
-            android:src="@drawable/ic_sentiment_satisfied_black_24dp" />
-
-        <ImageButton
-            android:id="@+id/comment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@null"
-            android:padding="6dp"
-            android:src="@drawable/ic_create_black_24dp" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@null"
-            android:padding="6dp"
-            android:src="@drawable/ic_vertical_align_bottom_black_24dp" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/likecount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/fab_margin"
-        android:layout_marginTop="@dimen/fab_margin"
-        android:fontFamily="cursive"
-        android:text=""
-        android:textColor="#000000" />
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:padding="6dp"
+                android:src="@drawable/ic_vertical_align_bottom_black_24dp" />
+        </LinearLayout>
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/fab_margin"
-        android:orientation="horizontal">
-
-
-        <EditText
-            android:id="@+id/type_comment"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/fab_margin"
-            android:layout_weight="4"
-            android:text="jslok"
-            android:visibility="gone" />
+            android:layout_marginTop="5dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-        <ImageButton
-            android:id="@+id/send_comment"
-            android:layout_width="0dp"
+
+            <TextView
+                android:id="@+id/likecount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="cursive"
+                android:text=""
+                android:textSize="18sp" />
+
+
+            <TextView
+                android:id="@+id/user_cmt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:fontFamily="cursive"
+                android:text=""
+                android:textSize="18sp" />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/write_comment"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/fab_margin"
-            android:layout_weight="1"
-            android:src="@drawable/ic_send_black_24dp"
-            android:visibility="gone" />
-    </LinearLayout>
+            android:orientation="horizontal">
 
-    <LinearLayout
-        android:id="@+id/Lin_cmt"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/fab_margin"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:visibility="gone">
+
+            <EditText
+                android:id="@+id/type_comment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/fab_margin"
+                android:layout_weight="4"
+                android:text=""
+                android:visibility="gone" />
+
+            <ImageButton
+                android:id="@+id/send_comment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/fab_margin"
+                android:layout_weight="1"
+                android:background="@null"
+                android:src="@drawable/ic_send_black_24dp"
+                android:visibility="gone" />
+        </LinearLayout>
+
 
         <TextView
-            android:id="@+id/user_cmt_id"
+            android:id="@+id/timestamp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="UserId"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/user_cmt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:fontFamily="cursive"
-            android:text="asdasd"
-            android:textSize="18sp" />
+            android:layout_marginLeft="@dimen/fab_margin"
+            android:layout_marginTop="@dimen/fab_margin"
+            android:text="timestamp"
+            android:textColor="#000000" />
 
 
     </LinearLayout>
-
-
-    <TextView
-        android:id="@+id/timestamp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/fab_margin"
-        android:layout_marginTop="@dimen/fab_margin"
-        android:text="timestamp"
-        android:textColor="#000000" />
 
 </LinearLayout>
