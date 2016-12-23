@@ -23,5 +23,8 @@
 
     </array>
 
+    <color name="profilebg1">#ff1744</color>
+    <color name="profilebg2">#2196F3</color>
+
 
 </resources>

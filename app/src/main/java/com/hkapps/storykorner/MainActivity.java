@@ -139,7 +139,6 @@ public class MainActivity extends AppCompatActivity {
                         //    mBottomNav.setItemBackgroundResource(R.color.nav_profile_color);
                         //  mBottomNav.setItemIconTintList(csl);
                         // mBottomNav.setItemTextColor(csl);
-                        toolbar.setBackgroundColor(Color.parseColor("#E91E63"));
                         break;
 
                     default: fragment = new StoriesFragment();
