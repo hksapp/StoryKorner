@@ -170,9 +170,9 @@ public class MainActivity extends AppCompatActivity {
 
                     //Send Uname & UID to Firebase!
 
-                    mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("uname");
-                    mUserRef.setValue(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
-
+                    mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                    mUserRef.child("uname").setValue(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+                    mUserRef.child("user_email").setValue(FirebaseAuth.getInstance().getCurrentUser().getEmail());
 
                 } else {
 

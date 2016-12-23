@@ -42,7 +42,7 @@ public class ProfileFragment extends Fragment {
     private static final int GALLERY_INTENT = 2;
     public SharedPreferences sharedPreferences;
     String checkingid = "";
-    private TextView uname;
+    private TextView uname, user_email;
     private ImageButton prof_image;
     private StorageReference mStorageRef;
     private ProgressDialog mProgressDialog;
@@ -70,6 +70,8 @@ public class ProfileFragment extends Fragment {
         prof_stories = (LinearLayout) rootview.findViewById(R.id.prof_stories);
         prof_image = (ImageButton) rootview.findViewById(R.id.prof_image);
 
+        user_email = (TextView) rootview.findViewById(R.id.user_email);
+
         uname = (TextView) rootview.findViewById(R.id.prof_uname);
 
         mProgressDialog = new ProgressDialog(getActivity());
@@ -95,6 +97,11 @@ public class ProfileFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.child("uname").exists())
                 uname.setText(dataSnapshot.child("uname").getValue().toString());
+
+
+                if (dataSnapshot.child("user_email").exists())
+                    user_email.setText(dataSnapshot.child("user_email").getValue().toString());
+
 
                 if (dataSnapshot.child("photolink").exists()) {
                     String photo = dataSnapshot.child("photolink").getValue().toString();
@@ -148,7 +155,7 @@ public class ProfileFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == GALLERY_INTENT && resultCode == RESULT_OK) {
-            mProgressDialog.setMessage("you fool wait na");
+            mProgressDialog.setMessage("Uploading...");
             mProgressDialog.show();
             Uri selectedImageUri = data.getData();
 
