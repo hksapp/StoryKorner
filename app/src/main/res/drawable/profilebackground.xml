@@ -5,7 +5,7 @@
         android:centerColor="@color/profilebg2"
         android:endColor="@color/profilebg1"
         android:startColor="@color/profilebg1" />
-    <corners android:radius="3dp" />
+
     <padding
         android:bottom="10dp"
         android:left="10dp"
