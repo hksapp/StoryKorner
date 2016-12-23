@@ -27,7 +27,7 @@
 
                 android:layout_gravity="center"
                 android:scaleType="centerCrop"
-                android:src="@drawable/bestfrnds" />
+                android:src="@drawable/defaultprofile" />
 
             <TextView
                 android:id="@+id/prof_uname"
@@ -38,7 +38,7 @@
                 android:layout_marginTop="@dimen/fab_margin"
                 android:fontFamily="cursive"
                 android:gravity="center"
-                android:text="Username"
+                android:text=""
                 android:textColor="#FFFFFF"
                 android:textSize="24sp"
                 android:textStyle="bold" />
@@ -60,7 +60,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:text="sdvsdsdv"
+                    android:text="email"
                     android:textColor="#ffffff" />
 
             </LinearLayout>
@@ -238,5 +238,15 @@
 
             </LinearLayout>
         </LinearLayout>
+
+        <Button
+            android:id="@+id/signout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/signout"
+            android:text="SignOut"
+            android:textColor="#ffffff" />
     </LinearLayout>
 </ScrollView>

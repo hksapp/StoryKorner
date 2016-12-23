@@ -13,11 +13,13 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -48,6 +50,7 @@ public class ProfileFragment extends Fragment {
     private ProgressDialog mProgressDialog;
     private DatabaseReference mDatabaseRef;
     private LinearLayout prof_stories;
+    private Button signout;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -57,7 +60,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootview = inflater.inflate(R.layout.fragment_profile, container, false);
+        final View rootview = inflater.inflate(R.layout.fragment_profile, container, false);
 
         String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -71,6 +74,7 @@ public class ProfileFragment extends Fragment {
         prof_image = (ImageButton) rootview.findViewById(R.id.prof_image);
 
         user_email = (TextView) rootview.findViewById(R.id.user_email);
+        signout = (Button) rootview.findViewById(R.id.signout);
 
         uname = (TextView) rootview.findViewById(R.id.prof_uname);
 
@@ -112,6 +116,14 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
+            }
+        });
+
+        signout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AuthUI.getInstance()
+                        .signOut(getActivity());
             }
         });
 
