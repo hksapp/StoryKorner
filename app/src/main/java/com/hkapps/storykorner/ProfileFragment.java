@@ -44,11 +44,12 @@ public class ProfileFragment extends Fragment {
     private static final int GALLERY_INTENT = 2;
     public SharedPreferences sharedPreferences;
     String checkingid = "";
+    String checking_name = "";
     private TextView uname, user_email;
     private ImageButton prof_image;
     private StorageReference mStorageRef;
     private ProgressDialog mProgressDialog;
-    private DatabaseReference mDatabaseRef;
+    private DatabaseReference mDatabaseRef, mFollowRef;
     private LinearLayout prof_stories;
     private Button signout, follow;
 
@@ -58,16 +59,16 @@ public class ProfileFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         final View rootview = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        final String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         SharedPreferences sharedPreference = PreferenceManager.getDefaultSharedPreferences(getActivity());
         checkingid = sharedPreference.getString("profile_id", userid);
 
-
+        mFollowRef = FirebaseDatabase.getInstance().getReference().child("Users");
         mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("Users").child(checkingid);
 
         prof_stories = (LinearLayout) rootview.findViewById(R.id.prof_stories);
@@ -109,9 +110,10 @@ public class ProfileFragment extends Fragment {
         mDatabaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.child("uname").exists())
-                uname.setText(dataSnapshot.child("uname").getValue().toString());
-
+                if (dataSnapshot.child("uname").exists()) {
+                    uname.setText(dataSnapshot.child("uname").getValue().toString());
+                    checking_name = dataSnapshot.child("uname").getValue().toString();
+                }
 
                 if (dataSnapshot.child("user_email").exists())
                     user_email.setText(dataSnapshot.child("user_email").getValue().toString());
@@ -121,6 +123,8 @@ public class ProfileFragment extends Fragment {
                     String photo = dataSnapshot.child("photolink").getValue().toString();
                     Picasso.with(getActivity()).load(photo).fit().centerCrop().into(prof_image);
                 }
+
+
             }
 
             @Override
@@ -158,6 +162,56 @@ public class ProfileFragment extends Fragment {
 
             }
         });
+
+
+        if (!checkingid.equals(userid)) {
+
+
+            follow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    mFollowRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+                            String str = "cool";
+
+                            if (dataSnapshot.child(checkingid).child("followers").hasChild(userid)) {
+
+                                mFollowRef.child(checkingid).child("followers").child(userid).removeValue();
+
+                                mFollowRef.child(userid).child("following_name").removeValue();
+                                mFollowRef.child(userid).child("following").child(checkingid).removeValue();
+
+                                follow.setText("Follow");
+                            } else {
+
+
+                                mFollowRef.child(checkingid).child("followers").child(userid).child("follower_id").setValue(userid);
+                                mFollowRef.child(checkingid).child("followers").child(userid).child("follower_name").setValue(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+
+
+                                mFollowRef.child(userid).child("following").child(checkingid).child("following_id").setValue(checkingid);
+                                mFollowRef.child(userid).child("following").child(checkingid).child("following_name").setValue(checking_name);
+
+                                follow.setText("Following");
+
+                            }
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+
+                }
+            });
+
+        }
 
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
