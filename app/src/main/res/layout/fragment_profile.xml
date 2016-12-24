@@ -64,6 +64,14 @@
                     android:textColor="#ffffff" />
 
             </LinearLayout>
+            wrap_content
+
+            <Button
+                android:id="@+id/follow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Follow" />
 
         </LinearLayout>
 
@@ -247,6 +255,7 @@
             android:layout_marginTop="24dp"
             android:background="@drawable/signout"
             android:text="SignOut"
-            android:textColor="#ffffff" />
+            android:textColor="#ffffff"
+            android:visibility="gone" />
     </LinearLayout>
 </ScrollView>

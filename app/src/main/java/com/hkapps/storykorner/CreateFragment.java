@@ -42,7 +42,7 @@ public class CreateFragment extends Fragment {
         final EditText create_story = (EditText) rootview.findViewById(R.id.create_story);
         final EditText create_title = (EditText) rootview.findViewById(R.id.create_title);
 
-        Button save_story = (Button) rootview.findViewById(R.id.save_story);
+        ///  Button save_story = (Button) rootview.findViewById(R.id.save_story);
         Button publish_story = (Button) rootview.findViewById(R.id.publish_story);
 
 

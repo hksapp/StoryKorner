@@ -50,7 +50,7 @@ public class ProfileFragment extends Fragment {
     private ProgressDialog mProgressDialog;
     private DatabaseReference mDatabaseRef;
     private LinearLayout prof_stories;
-    private Button signout;
+    private Button signout, follow;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -78,10 +78,20 @@ public class ProfileFragment extends Fragment {
 
         uname = (TextView) rootview.findViewById(R.id.prof_uname);
 
+        follow = (Button) rootview.findViewById(R.id.follow);
+
+
+
+
         mProgressDialog = new ProgressDialog(getActivity());
 
 
         if (checkingid.equals(userid)) {
+
+
+            follow.setVisibility(View.GONE);
+
+            signout.setVisibility(View.VISIBLE);
 
             prof_image.setOnClickListener(new View.OnClickListener() {
                 @Override
