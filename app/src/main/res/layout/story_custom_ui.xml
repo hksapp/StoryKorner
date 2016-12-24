@@ -2,15 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#9E9E9E"
     android:orientation="vertical">
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="1dp"
-        android:background="#FFFFFF"
+        android:background="@drawable/stroybackground"
         android:orientation="vertical"
         android:paddingBottom="16dp"
         android:paddingTop="16dp">
@@ -35,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Username"
-                android:textColor="#000000"
+                android:textColor="#ffffff"
                 android:textSize="16sp" />
 
 
@@ -90,7 +88,7 @@
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:padding="6dp"
-                android:src="@drawable/ic_sentiment_satisfied_black_24dp" />
+                android:src="@drawable/ic_sentiment_satisfied_white_24dp" />
 
             <ImageButton
                 android:id="@+id/comment"
@@ -100,14 +98,14 @@
                 android:layout_marginRight="@dimen/marigin"
                 android:background="@null"
                 android:padding="6dp"
-                android:src="@drawable/ic_create_black_24dp" />
+                android:src="@drawable/ic_create_white_24dp" />
 
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:padding="6dp"
-                android:src="@drawable/ic_vertical_align_bottom_black_24dp" />
+                android:src="@drawable/ic_file_download_white_24dp" />
         </LinearLayout>
 
 
@@ -126,6 +124,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="cursive"
                 android:text=""
+                android:textColor="#ffffff"
                 android:textSize="18sp" />
 
 
@@ -136,6 +135,7 @@
                 android:layout_marginLeft="10dp"
                 android:fontFamily="cursive"
                 android:text=""
+                android:textColor="#ffffff"
                 android:textSize="18sp" />
 
 
@@ -156,6 +156,7 @@
                 android:layout_marginLeft="@dimen/fab_margin"
                 android:layout_weight="4"
                 android:text=""
+                android:textColor="#ffffff"
                 android:visibility="gone" />
 
             <ImageButton
@@ -165,7 +166,7 @@
                 android:layout_marginRight="@dimen/fab_margin"
                 android:layout_weight="1"
                 android:background="@null"
-                android:src="@drawable/ic_send_black_24dp"
+                android:src="@drawable/ic_send_white_24dp"
                 android:visibility="gone" />
         </LinearLayout>
 
@@ -177,7 +178,7 @@
             android:layout_marginLeft="@dimen/fab_margin"
             android:layout_marginTop="@dimen/fab_margin"
             android:text="timestamp"
-            android:textColor="#000000" />
+            android:textColor="#ffffff" />
 
 
     </LinearLayout>

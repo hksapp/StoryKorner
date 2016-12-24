@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -34,9 +35,9 @@ public class CreateFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootview = inflater.inflate(R.layout.fragment_create, container, false);
+        final View rootview = inflater.inflate(R.layout.fragment_create, container, false);
 
         final EditText create_story = (EditText) rootview.findViewById(R.id.create_story);
         final EditText create_title = (EditText) rootview.findViewById(R.id.create_title);
@@ -52,27 +53,35 @@ public class CreateFragment extends Fragment {
         publish_story.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Map postdata = new HashMap();
-                postdata.put("title",create_title.getText().toString());
-                postdata.put("story",create_story.getText().toString());
-                postdata.put("userid", FirebaseAuth.getInstance().getCurrentUser().getUid());
-                postdata.put("username", FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
-                postdata.put("timestamp", ServerValue.TIMESTAMP);
 
-                post_stories.push().setValue(postdata);
+                if (create_title.getText().toString().trim().length() != 0 && create_story.getText().toString().trim().length() != 0) {
 
+                    Map postdata = new HashMap();
+                    postdata.put("title", create_title.getText().toString());
+                    postdata.put("story", create_story.getText().toString());
+                    postdata.put("userid", FirebaseAuth.getInstance().getCurrentUser().getUid());
+                    postdata.put("username", FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+                    postdata.put("timestamp", ServerValue.TIMESTAMP);
 
-                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                SharedPreferences.Editor edit = sp.edit();
-                edit.putBoolean("profile", true);
-                edit.commit();
-
-                getFragmentManager().beginTransaction().replace(R.id.main_container, new StoriesFragment()).commit();
+                    post_stories.push().setValue(postdata);
 
 
+                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                    SharedPreferences.Editor edit = sp.edit();
+                    edit.putBoolean("profile", true);
+                    edit.commit();
+
+                    getFragmentManager().beginTransaction().replace(R.id.main_container, new StoriesFragment()).commit();
 
 
+                } else {
+
+                    Toast.makeText(getActivity(), "Nothing to Post...!", Toast.LENGTH_SHORT).show();
+
+                }
             }
+
+
         });
 
 
