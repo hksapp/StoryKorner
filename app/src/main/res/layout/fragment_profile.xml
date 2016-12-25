@@ -108,6 +108,15 @@
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
+                <TextView
+                    android:id="@+id/stories_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/fab_margin"
+                    android:text="0"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp" />
+
                 <ImageView
                     android:layout_width="wrap_content"
 
@@ -150,6 +159,15 @@
                     android:textColor="#FFFFFF"
                     android:textSize="20sp"
                     android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/followers_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/fab_margin"
+                    android:text="0"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -194,6 +212,15 @@
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
+                <TextView
+                    android:id="@+id/following_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/fab_margin"
+                    android:text="0"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp" />
+
                 <ImageView
                     android:layout_width="wrap_content"
 
@@ -235,6 +262,15 @@
                     android:textColor="#FFFFFF"
                     android:textSize="20sp"
                     android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/saved_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/fab_margin"
+                    android:text="0"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp" />
 
                 <ImageView
                     android:layout_width="wrap_content"

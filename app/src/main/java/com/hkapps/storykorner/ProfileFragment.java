@@ -45,7 +45,7 @@ public class ProfileFragment extends Fragment {
     public SharedPreferences sharedPreferences;
     String checkingid = "";
     String checking_name = "";
-    private TextView uname, user_email;
+    private TextView uname, user_email, followers_count, following_count;
     private ImageButton prof_image;
     private StorageReference mStorageRef;
     private ProgressDialog mProgressDialog;
@@ -81,6 +81,9 @@ public class ProfileFragment extends Fragment {
 
         follow = (Button) rootview.findViewById(R.id.follow);
 
+        followers_count = (TextView) rootview.findViewById(R.id.followers_count);
+        following_count = (TextView) rootview.findViewById(R.id.following_count);
+
 
 
 
@@ -110,6 +113,11 @@ public class ProfileFragment extends Fragment {
         mDatabaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if (dataSnapshot.child("followers").child(userid).exists()) {
+                    follow.setText("Following");
+                }
+
                 if (dataSnapshot.child("uname").exists()) {
                     uname.setText(dataSnapshot.child("uname").getValue().toString());
                     checking_name = dataSnapshot.child("uname").getValue().toString();
@@ -123,6 +131,21 @@ public class ProfileFragment extends Fragment {
                     String photo = dataSnapshot.child("photolink").getValue().toString();
                     Picasso.with(getActivity()).load(photo).fit().centerCrop().into(prof_image);
                 }
+
+
+                if (dataSnapshot.child("followers").exists()) {
+
+                    followers_count.setText(String.valueOf(dataSnapshot.child("followers").getChildrenCount()));
+
+                }
+
+                if (dataSnapshot.child("following").exists()) {
+
+                    following_count.setText(String.valueOf(dataSnapshot.child("following").getChildrenCount()));
+
+                }
+
+
 
 
             }
@@ -177,6 +200,18 @@ public class ProfileFragment extends Fragment {
 
                             String str = "cool";
 
+                            if (dataSnapshot.child(checkingid).child("followers").exists()) {
+
+                                followers_count.setText(String.valueOf(dataSnapshot.child("followers").getChildrenCount()));
+
+                            }
+
+                            if (dataSnapshot.child(checkingid).child("following").exists()) {
+
+                                following_count.setText(String.valueOf(dataSnapshot.child("following").getChildrenCount()));
+
+                            }
+
                             if (dataSnapshot.child(checkingid).child("followers").hasChild(userid)) {
 
                                 mFollowRef.child(checkingid).child("followers").child(userid).removeValue();
@@ -194,6 +229,7 @@ public class ProfileFragment extends Fragment {
 
                                 mFollowRef.child(userid).child("following").child(checkingid).child("following_id").setValue(checkingid);
                                 mFollowRef.child(userid).child("following").child(checkingid).child("following_name").setValue(checking_name);
+
 
                                 follow.setText("Following");
 
