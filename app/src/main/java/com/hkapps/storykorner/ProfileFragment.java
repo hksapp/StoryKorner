@@ -50,7 +50,7 @@ public class ProfileFragment extends Fragment {
     private StorageReference mStorageRef;
     private ProgressDialog mProgressDialog;
     private DatabaseReference mDatabaseRef, mFollowRef;
-    private LinearLayout prof_stories;
+    private LinearLayout prof_stories, prof_followers, prof_following;
     private Button signout, follow;
 
     public ProfileFragment() {
@@ -72,6 +72,10 @@ public class ProfileFragment extends Fragment {
         mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("Users").child(checkingid);
 
         prof_stories = (LinearLayout) rootview.findViewById(R.id.prof_stories);
+        prof_followers = (LinearLayout) rootview.findViewById(R.id.prof_followers);
+        prof_following = (LinearLayout) rootview.findViewById(R.id.prof_following);
+
+
         prof_image = (ImageButton) rootview.findViewById(R.id.prof_image);
 
         user_email = (TextView) rootview.findViewById(R.id.user_email);
@@ -176,6 +180,50 @@ public class ProfileFragment extends Fragment {
                 edit.commit();
 
                 Fragment fragment = new StoriesFragment();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.main_container, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+
+
+            }
+        });
+
+
+        prof_followers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                SharedPreferences.Editor edit = sp.edit();
+                edit.putString("prof_followers_id", checkingid);
+                edit.putBoolean("follow_check", true);
+                edit.commit();
+
+                Fragment fragment = new FollowFragment();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.main_container, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+
+
+            }
+        });
+
+        prof_following.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                SharedPreferences.Editor edit = sp.edit();
+                edit.putString("prof_followers_id", checkingid);
+                edit.putBoolean("follow_check", false);
+                edit.commit();
+
+                Fragment fragment = new FollowFragment();
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.main_container, fragment);

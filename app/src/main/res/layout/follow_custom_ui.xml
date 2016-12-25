@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="65dp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="@dimen/fab_margin">
+
+    <ImageView
+        android:id="@+id/follow_imgview"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:src="@drawable/ic_account_circle_white_24dp" />
+
+
+    <TextView
+        android:id="@+id/follow_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:text="4536"
+        android:textSize="16sp"
+
+
+        />
+
+</LinearLayout>
