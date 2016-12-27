@@ -152,7 +152,7 @@ public class ProfileFragment extends Fragment {
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
         SharedPreferences.Editor edit = sp.edit();
-        edit.putBoolean("profile", false);
+        edit.putBoolean("profile", true);
         edit.commit();
 
 

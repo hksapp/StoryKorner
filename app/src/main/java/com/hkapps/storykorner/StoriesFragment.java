@@ -1,7 +1,9 @@
 package com.hkapps.storykorner;
 
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 
 /**
@@ -18,15 +21,24 @@ import com.google.firebase.database.FirebaseDatabase;
  */
 public class StoriesFragment extends Fragment {
 
+    public static StoryAdapter mStoryAdapter;
     private RecyclerView storyRecyclerview;
     private LinearLayoutManager linearLayoutManager;
     private DatabaseReference mDatabaseRef, mProfStoriesRef;
     private DatabaseReference childRef, mUserRef;
-
-    private StoryAdapter mStoryAdapter;
+    private SharedPreferences sharedPreference;
 
     public StoriesFragment() {
         // Required empty public constructor
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mStoryAdapter != null) {
+            mStoryAdapter.cleanup();
+        }
     }
 
 
@@ -36,7 +48,9 @@ public class StoriesFragment extends Fragment {
         View rootview = inflater.inflate(R.layout.fragment_stories, container, false);
 
 
-
+        sharedPreference = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String storyuserid = sharedPreference.getString("storyuserid", null);
+        boolean chk = sharedPreference.getBoolean("profile", false);
 
         linearLayoutManager = new LinearLayoutManager(getActivity());
         storyRecyclerview = (RecyclerView) rootview.findViewById(R.id.story_recycler_view);
@@ -46,7 +60,16 @@ public class StoriesFragment extends Fragment {
         mDatabaseRef = FirebaseDatabase.getInstance().getReference();
         childRef = mDatabaseRef.child("Posted_Stories");
 
-        mStoryAdapter = new StoryAdapter(StoryObject.class,R.layout.story_custom_ui,StoryHolder.class ,childRef,getContext());
+        if (chk) {
+
+            Query profRef = childRef.orderByChild("userid").equalTo(storyuserid);
+            mStoryAdapter = new StoryAdapter(StoryObject.class, R.layout.story_custom_ui, StoryHolder.class, profRef, getContext());
+
+        } else {
+
+            mStoryAdapter = new StoryAdapter(StoryObject.class, R.layout.story_custom_ui, StoryHolder.class, childRef, getContext());
+
+        }
         storyRecyclerview.setLayoutManager(linearLayoutManager);
         storyRecyclerview.setAdapter(mStoryAdapter);
 

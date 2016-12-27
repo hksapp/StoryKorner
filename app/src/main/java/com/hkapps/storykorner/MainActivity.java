@@ -39,16 +39,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        fragmentManager = getSupportFragmentManager();
+
         mAuth = FirebaseAuth.getInstance();
 
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         SharedPreferences.Editor edit = sp.edit();
-        edit.putBoolean("profile", true);
+        edit.putBoolean("profile", false);
         edit.commit();
 
-         transaction = fragmentManager.beginTransaction();
+        fragmentManager = getSupportFragmentManager();
+        transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.main_container, new StoriesFragment()).commit();
 
         mBottomNav = (BottomNavigationView) findViewById(R.id.navigation);
@@ -113,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
 
                         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                         SharedPreferences.Editor edit = sp.edit();
-                        edit.putBoolean("profile", true);
+                        edit.putBoolean("profile", false);
                         edit.commit();
                         fragment = new StoriesFragment();
                         break;
