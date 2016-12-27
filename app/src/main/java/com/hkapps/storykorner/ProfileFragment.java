@@ -2,11 +2,14 @@ package com.hkapps.storykorner;
 
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -31,6 +34,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
+
+import java.io.ByteArrayOutputStream;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -314,12 +319,28 @@ public class ProfileFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+
         if (requestCode == GALLERY_INTENT && resultCode == RESULT_OK) {
             mProgressDialog.setMessage("Uploading...");
             mProgressDialog.show();
             Uri selectedImageUri = data.getData();
+          /*  try {
 
+            InputStream imageStream = getContext().getContentResolver().openInputStream(selectedImageUri);
+            Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+
+            selectedImage = getResizedBitmap(selectedImage, 400);// 400 is for example, replace with desired size
+                selectedImageUri = getImageUri(getActivity(),selectedImage);
+                Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
+
+            }
+
+         catch (FileNotFoundException e) {
+            e.printStackTrace();
+             Toast.makeText(getContext(), "Exception Occured", Toast.LENGTH_SHORT).show();
+        }*/
             mStorageRef = FirebaseStorage.getInstance().getReference().child("User_Photos").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
 
             mStorageRef.putFile(selectedImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
@@ -347,4 +368,28 @@ public class ProfileFragment extends Fragment {
 
         }
     }
+
+    private Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "title", null);
+        return Uri.parse(path);
+    }
+
+    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        float bitmapRatio = (float) width / (float) height;
+        if (bitmapRatio > 1) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true);
+    }
+
+
 }

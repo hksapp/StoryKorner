@@ -24,7 +24,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class MainActivity extends AppCompatActivity {
 
     public static final int RC_SIGN_IN = 1;
-    public static final String TAG = "" ;
+    public static final String TAG = "";
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private BottomNavigationView mBottomNav;
@@ -32,14 +32,13 @@ public class MainActivity extends AppCompatActivity {
     private FragmentManager fragmentManager;
     private FragmentTransaction transaction;
     private DatabaseReference mUserRef;
-    private boolean welcome;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
 
         mAuth = FirebaseAuth.getInstance();
@@ -103,7 +102,6 @@ public class MainActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
 
 
-
                     case R.id.menu_search:
                         fragment = new SearchFragment();
                         break;
@@ -140,7 +138,8 @@ public class MainActivity extends AppCompatActivity {
                         // mBottomNav.setItemTextColor(csl);
                         break;
 
-                    default: fragment = new StoriesFragment();
+                    default:
+                        fragment = new StoriesFragment();
                         break;
                 }
 
@@ -161,15 +160,8 @@ public class MainActivity extends AppCompatActivity {
 
 
                     // Email Verificatiom
-                    if (user.isEmailVerified()) {
-                        if (welcome) {
-                            Toast.makeText(getApplicationContext(), "Welcome " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
-                        }
+                    if (!user.isEmailVerified()) {
 
-                        welcome = false;
-                    }
-                    else
-                    {
                         user.sendEmailVerification();
                         Toast.makeText(getApplicationContext(), "Verify your Account from Email", Toast.LENGTH_SHORT).show();
 
@@ -184,9 +176,8 @@ public class MainActivity extends AppCompatActivity {
 
                 } else {
 
-                    welcome = true;
 
-                   startActivityForResult(
+                    startActivityForResult(
                             AuthUI.getInstance()
                                     .createSignInIntentBuilder()
                                     .setIsSmartLockEnabled(false)
@@ -214,6 +205,8 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 // Sign-in succeeded, set up the UI
                 Toast.makeText(this, "Signed in!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Welcome " + FirebaseAuth.getInstance().getCurrentUser().getDisplayName(), Toast.LENGTH_SHORT).show();
+
             } else if (resultCode == RESULT_CANCELED) {
                 // Sign in was canceled by the user, finish the activity
                 Toast.makeText(this, "Sign in canceled", Toast.LENGTH_SHORT).show();
@@ -227,8 +220,6 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         mAuth.addAuthStateListener(mAuthListener);
     }
-
-
 
 
     @Override
