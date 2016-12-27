@@ -44,13 +44,14 @@ public class ProfileFragment extends Fragment {
     private static final int GALLERY_INTENT = 2;
     public SharedPreferences sharedPreferences;
     String checkingid = "";
-    private TextView uname, user_email;
+    String checking_name = "";
+    private TextView uname, user_email, followers_count, following_count;
     private ImageButton prof_image;
     private StorageReference mStorageRef;
     private ProgressDialog mProgressDialog;
-    private DatabaseReference mDatabaseRef;
-    private LinearLayout prof_stories;
-    private Button signout;
+    private DatabaseReference mDatabaseRef, mFollowRef;
+    private LinearLayout prof_stories, prof_followers, prof_following;
+    private Button signout, follow;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -58,19 +59,23 @@ public class ProfileFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         final View rootview = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        final String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         SharedPreferences sharedPreference = PreferenceManager.getDefaultSharedPreferences(getActivity());
         checkingid = sharedPreference.getString("profile_id", userid);
 
-
+        mFollowRef = FirebaseDatabase.getInstance().getReference().child("Users");
         mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("Users").child(checkingid);
 
         prof_stories = (LinearLayout) rootview.findViewById(R.id.prof_stories);
+        prof_followers = (LinearLayout) rootview.findViewById(R.id.prof_followers);
+        prof_following = (LinearLayout) rootview.findViewById(R.id.prof_following);
+
+
         prof_image = (ImageButton) rootview.findViewById(R.id.prof_image);
 
         user_email = (TextView) rootview.findViewById(R.id.user_email);
@@ -78,10 +83,23 @@ public class ProfileFragment extends Fragment {
 
         uname = (TextView) rootview.findViewById(R.id.prof_uname);
 
+        follow = (Button) rootview.findViewById(R.id.follow);
+
+        followers_count = (TextView) rootview.findViewById(R.id.followers_count);
+        following_count = (TextView) rootview.findViewById(R.id.following_count);
+
+
+
+
         mProgressDialog = new ProgressDialog(getActivity());
 
 
         if (checkingid.equals(userid)) {
+
+
+            follow.setVisibility(View.GONE);
+
+            signout.setVisibility(View.VISIBLE);
 
             prof_image.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -99,9 +117,15 @@ public class ProfileFragment extends Fragment {
         mDatabaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.child("uname").exists())
-                uname.setText(dataSnapshot.child("uname").getValue().toString());
 
+                if (dataSnapshot.child("followers").child(userid).exists()) {
+                    follow.setText("Following");
+                }
+
+                if (dataSnapshot.child("uname").exists()) {
+                    uname.setText(dataSnapshot.child("uname").getValue().toString());
+                    checking_name = dataSnapshot.child("uname").getValue().toString();
+                }
 
                 if (dataSnapshot.child("user_email").exists())
                     user_email.setText(dataSnapshot.child("user_email").getValue().toString());
@@ -111,6 +135,23 @@ public class ProfileFragment extends Fragment {
                     String photo = dataSnapshot.child("photolink").getValue().toString();
                     Picasso.with(getActivity()).load(photo).fit().centerCrop().into(prof_image);
                 }
+
+
+                if (dataSnapshot.child("followers").exists()) {
+
+                    followers_count.setText(String.valueOf(dataSnapshot.child("followers").getChildrenCount()));
+
+                }
+
+                if (dataSnapshot.child("following").exists()) {
+
+                    following_count.setText(String.valueOf(dataSnapshot.child("following").getChildrenCount()));
+
+                }
+
+
+
+
             }
 
             @Override
@@ -148,6 +189,113 @@ public class ProfileFragment extends Fragment {
 
             }
         });
+
+
+        prof_followers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                SharedPreferences.Editor edit = sp.edit();
+                edit.putString("prof_followers_id", checkingid);
+                edit.putBoolean("follow_check", true);
+                edit.commit();
+
+                Fragment fragment = new FollowFragment();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.main_container, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+
+
+            }
+        });
+
+        prof_following.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                SharedPreferences.Editor edit = sp.edit();
+                edit.putString("prof_followers_id", checkingid);
+                edit.putBoolean("follow_check", false);
+                edit.commit();
+
+                Fragment fragment = new FollowFragment();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.main_container, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+
+
+            }
+        });
+
+
+        if (!checkingid.equals(userid)) {
+
+
+            follow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    mFollowRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+                            String str = "cool";
+
+                            if (dataSnapshot.child(checkingid).child("followers").exists()) {
+
+                                followers_count.setText(String.valueOf(dataSnapshot.child("followers").getChildrenCount()));
+
+                            }
+
+                            if (dataSnapshot.child(checkingid).child("following").exists()) {
+
+                                following_count.setText(String.valueOf(dataSnapshot.child("following").getChildrenCount()));
+
+                            }
+
+                            if (dataSnapshot.child(checkingid).child("followers").hasChild(userid)) {
+
+                                mFollowRef.child(checkingid).child("followers").child(userid).removeValue();
+
+                                mFollowRef.child(userid).child("following_name").removeValue();
+                                mFollowRef.child(userid).child("following").child(checkingid).removeValue();
+
+                                follow.setText("Follow");
+                            } else {
+
+
+                                mFollowRef.child(checkingid).child("followers").child(userid).child("follower_id").setValue(userid);
+                                mFollowRef.child(checkingid).child("followers").child(userid).child("follower_name").setValue(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+
+
+                                mFollowRef.child(userid).child("following").child(checkingid).child("following_id").setValue(checkingid);
+                                mFollowRef.child(userid).child("following").child(checkingid).child("following_name").setValue(checking_name);
+
+
+                                follow.setText("Following");
+
+                            }
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+
+                }
+            });
+
+        }
 
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());

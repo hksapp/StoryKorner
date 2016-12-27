@@ -19,7 +19,7 @@ public class StoryHolder extends RecyclerView.ViewHolder {
     public TextView story_ui;
     public TextView username;
     public ImageView userimage;
-    public LinearLayout userproflink, write_comment;
+    public LinearLayout userproflink, write_comment, main_layout;
     public TextView timestamp;
     public ImageButton like;
     public TextView likecount;
@@ -47,6 +47,7 @@ public class StoryHolder extends RecyclerView.ViewHolder {
         user_cmt = (TextView) itemView.findViewById(R.id.user_cmt);
         write_comment = (LinearLayout) itemView.findViewById(R.id.write_comment);
         backgroundColor = (LinearLayout) itemView.findViewById(R.id.backgroundColor);
+        main_layout = (LinearLayout) itemView.findViewById(R.id.main_layout);
 
 
 

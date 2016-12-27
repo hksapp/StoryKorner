@@ -53,14 +53,14 @@ public class StoryDescription extends AppCompatActivity {
 
         //Intent i = getIntent();
         //Bundle bed = i.getExtras();
-        int pos = getIntent().getIntExtra("position", 5);
-        int[] rainbow = {R.color.first, R.color.sec, R.color.third, R.color.fourth, R.color.fifth, R.color.sixth};
+        //   int pos = getIntent().getIntExtra("position", 5);
+        //  int[] rainbow = {R.color.first, R.color.sec, R.color.third, R.color.fourth, R.color.fifth, R.color.sixth};
         //int[] rainbow = getApplication().getResources().getIntArray(R.array.bg);
         // int postcount = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").get
         //  for (int i = 0; i < l; i++) {
         // View.backgroundColor.setBackgroundColor(rainbow[poss]);
 
-        bbbg.setBackgroundColor(rainbow[pos]);
+//        bbbg.setBackgroundColor(rainbow[pos]);
 
 
     }

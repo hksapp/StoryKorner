@@ -32,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
     private FragmentManager fragmentManager;
     private FragmentTransaction transaction;
     private DatabaseReference mUserRef;
+    private boolean welcome;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-
+//To Open Stories Screen
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         SharedPreferences.Editor edit = sp.edit();
         edit.putBoolean("profile", false);
@@ -111,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     case R.id.menu_stories:
-
+                        //To open Stories Screen
                         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                         SharedPreferences.Editor edit = sp.edit();
                         edit.putBoolean("profile", false);
@@ -159,12 +161,17 @@ public class MainActivity extends AppCompatActivity {
 
 
                     // Email Verificatiom
-                    if(user.isEmailVerified())
-                    Toast.makeText(getApplicationContext(),"Welcome "+user.getDisplayName(),Toast.LENGTH_SHORT).show();
+                    if (user.isEmailVerified()) {
+                        if (welcome) {
+                            Toast.makeText(getApplicationContext(), "Welcome " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
+                        }
+
+                        welcome = false;
+                    }
                     else
                     {
                         user.sendEmailVerification();
-                        Toast.makeText(getApplicationContext(),"Check your Email",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Verify your Account from Email", Toast.LENGTH_SHORT).show();
 
                     }
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
@@ -176,6 +183,8 @@ public class MainActivity extends AppCompatActivity {
                     mUserRef.child("user_email").setValue(FirebaseAuth.getInstance().getCurrentUser().getEmail());
 
                 } else {
+
+                    welcome = true;
 
                    startActivityForResult(
                             AuthUI.getInstance()
@@ -238,7 +247,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
+/*    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
@@ -249,7 +258,7 @@ public class MainActivity extends AppCompatActivity {
                         .signOut(this);
         }
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
