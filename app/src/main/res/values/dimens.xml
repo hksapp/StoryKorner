@@ -4,4 +4,18 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="marigin">5dp</dimen>
+
+    <dimen name="title1">24sp</dimen>
+    <dimen name="story1">18sp</dimen>
+
+    <dimen name="title2">26sp</dimen>
+    <dimen name="story2">20sp</dimen>
+
+    <dimen name="title3">20sp</dimen>
+    <dimen name="story3">16sp</dimen>
+
+    <dimen name="title4">18sp</dimen>
+    <dimen name="story4">14sp</dimen>
+
+
 </resources>

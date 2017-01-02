@@ -33,4 +33,19 @@
     <color name="follow_background">#9E9E9E</color>
 
 
+
+    <color name="bg1">#cccf93</color>
+    <color name="txt1">#494949</color>
+
+    <color name="bg2">#ffffff</color>
+    <color name="txt2">#000000</color>
+
+    <color name="bg3">#000000</color>
+    <color name="txt3">#ffffff</color>
+
+    <color name="bg4">#757575</color>
+    <color name="txt4">#EEEEEE</color>
+
+
+
 </resources>
