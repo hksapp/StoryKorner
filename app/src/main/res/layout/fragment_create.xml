@@ -6,7 +6,8 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
+     android:layout_margin="3dp"
+        android:background="@drawable/createscreenborder"
         android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"

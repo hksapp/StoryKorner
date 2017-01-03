@@ -141,11 +141,7 @@ public class StoryDescription extends AppCompatActivity implements View.OnClickL
 
         }
 
-       /* Paint viewPaint = ((PaintDrawable) sview.getBackground()).getPaint();
-        int colorARGB = viewPaint.getColor();
-        //if(sview.getBackgroundColor == getResources().getColor(R.color.bg1))
-        if(colorARGB == getResources().getColor(R.color.bg1))
-        sview.setBackgroundColor(getResources().getColor(R.color.bg2));*/
+
     }
 
     public void sizeCheck(){

@@ -46,6 +46,6 @@
     <color name="bg4">#757575</color>
     <color name="txt4">#EEEEEE</color>
 
-
+<color name="createborder">#ff4f72</color>
 
 </resources>
