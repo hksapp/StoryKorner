@@ -86,6 +86,7 @@ public class StoryDescription extends AppCompatActivity implements View.OnClickL
         sview.setOnScrollChangeListener(new View.OnScrollChangeListener() {
             @Override
             public void onScrollChange(View view, int i, int i1, int i2, int i3) {
+
                 if (i1 > 0) {
                     hideFab();
                 } else if (i1 < 0) {
@@ -206,7 +207,22 @@ public class StoryDescription extends AppCompatActivity implements View.OnClickL
 
     private void hideFab() {
 
+
+        if (isFabOpen) {
+
+            fab.startAnimation(rotate_backward);
+            fab1.startAnimation(fab_close);
+            fab2.startAnimation(fab_close);
+            fab1.setClickable(false);
+            fab2.setClickable(false);
+            isFabOpen = false;
+
+        }
+
+
         if (isFabShowing) {
+
+
             isFabShowing = false;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
                 final Point point = new Point();
