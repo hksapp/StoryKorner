@@ -29,7 +29,7 @@ import java.util.Date;
  * Created by kamal on 11-12-2016.
  */
 
-public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHolder> {
+public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHolder> {
 
 
     public static final String MyPREFERENCES = "profile";
@@ -53,7 +53,6 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
         Date date = new Date(tmp);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm");
         String tym = formatter.format(date);
-
 
 
         String post_key = getRef(position).getKey().toString();
@@ -298,51 +297,51 @@ public class StoryAdapter extends FirebaseRecyclerAdapter <StoryObject, StoryHol
 
         // if (model.getUserid().equals(storyuserid)) {
 
-            mFireRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.child(model.getUserid()).child("photolink").exists()) {
-                        String photo = dataSnapshot.child(model.getUserid()).child("photolink").getValue().toString();
-                        Picasso.with(context).load(photo).fit().centerCrop().into(viewHolder.userimage);
+        mFireRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.child(model.getUserid()).child("photolink").exists()) {
+                    String photo = dataSnapshot.child(model.getUserid()).child("photolink").getValue().toString();
+                    Picasso.with(context).load(photo).fit().centerCrop().into(viewHolder.userimage);
                 }
-                }
+            }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-                }
-            });
+            }
+        });
 
-            viewHolder.title_ui.setText(model.getTitle());
-            viewHolder.story_ui.setText(model.getStory());
-            viewHolder.username.setText(model.getUsername());
-
-
-            viewHolder.story_ui.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    Intent i = new Intent(context, StoryDescription.class);
-                    i.putExtra("intent_title", model.getTitle());
-                    i.putExtra("intent_story", model.getStory());
-                    i.putExtra("position", position);
-                    context.startActivity(i);
-                }
-            });
+        viewHolder.title_ui.setText(model.getTitle());
+        viewHolder.story_ui.setText(model.getStory());
+        viewHolder.username.setText(model.getUsername());
 
 
-            viewHolder.title_ui.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+        viewHolder.story_ui.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-                    Intent i = new Intent(context, StoryDescription.class);
-                    i.putExtra("intent_title", model.getTitle());
-                    i.putExtra("intent_story", model.getStory());
-                    // i.putExtra("position",position);
-                    i.putExtra("position", position);
-                    context.startActivity(i);
-                }
-            });
+                Intent i = new Intent(context, StoryDescription.class);
+                i.putExtra("intent_title", model.getTitle());
+                i.putExtra("intent_story", model.getStory());
+                i.putExtra("position", position);
+                context.startActivity(i);
+            }
+        });
+
+
+        viewHolder.title_ui.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent i = new Intent(context, StoryDescription.class);
+                i.putExtra("intent_title", model.getTitle());
+                i.putExtra("intent_story", model.getStory());
+                // i.putExtra("position",position);
+                i.putExtra("position", position);
+                context.startActivity(i);
+            }
+        });
 
 
 

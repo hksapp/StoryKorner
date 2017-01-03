@@ -1,7 +1,10 @@
 package com.hkapps.storykorner;
 
+import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +25,7 @@ public class StoryDescription extends AppCompatActivity implements View.OnClickL
     private LinearLayout bbbg;
 
     private Boolean isFabOpen = false;
+    private Boolean isFabShowing = false;
     private FloatingActionButton fab,fab1,fab2;
     private Animation fab_open,fab_close,rotate_forward,rotate_backward;
 
@@ -34,6 +38,7 @@ public class StoryDescription extends AppCompatActivity implements View.OnClickL
     private int bgcolor;
 
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -58,6 +63,15 @@ public class StoryDescription extends AppCompatActivity implements View.OnClickL
 
         //bgcolor = sview.getSolidColor();
 
+
+        mStory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showFab();
+            }
+        });
+
+
         fab = (FloatingActionButton)findViewById(R.id.fab);
         fab1 = (FloatingActionButton)findViewById(R.id.bg);
         fab2 = (FloatingActionButton)findViewById(R.id.font);
@@ -68,6 +82,17 @@ public class StoryDescription extends AppCompatActivity implements View.OnClickL
         fab.setOnClickListener(this);
         fab1.setOnClickListener(this);
         fab2.setOnClickListener(this);
+
+        sview.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View view, int i, int i1, int i2, int i3) {
+                if (i1 > 0) {
+                    hideFab();
+                } else if (i1 < 0) {
+                    showFab();
+                }
+            }
+        });
 
 
     }
@@ -87,6 +112,7 @@ public class StoryDescription extends AppCompatActivity implements View.OnClickL
                 break;
         }
     }
+
 
     public void animateFAB(){
 
@@ -177,6 +203,73 @@ public class StoryDescription extends AppCompatActivity implements View.OnClickL
         }
 
     }
+
+    private void hideFab() {
+
+        if (isFabShowing) {
+            isFabShowing = false;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                final Point point = new Point();
+                getWindow().getWindowManager().getDefaultDisplay().getSize(point);
+                final float translation = fab.getY() - point.y;
+                fab.animate().translationYBy(-translation).start();
+            } else {
+                Animation animation = AnimationUtils.makeOutAnimation(getApplicationContext(), true);
+                animation.setFillAfter(true);
+
+                animation.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        fab.setClickable(false);
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+
+                fab.startAnimation(animation);
+            }
+        }
+    }
+
+    private void showFab() {
+        if (!isFabShowing) {
+            isFabShowing = true;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                fab.animate().translationY(0).start();
+            } else {
+                Animation animation = AnimationUtils.makeInAnimation(getApplicationContext(), false);
+                animation.setFillAfter(true);
+
+                animation.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        fab.setClickable(true);
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+
+                fab.startAnimation(animation);
+            }
+        }
+    }
+
 
 
 }

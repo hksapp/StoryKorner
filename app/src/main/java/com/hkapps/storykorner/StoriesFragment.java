@@ -67,6 +67,7 @@ public class StoriesFragment extends Fragment {
 
         } else {
 
+
             mStoryAdapter = new StoryAdapter(StoryObject.class, R.layout.story_custom_ui, StoryHolder.class, childRef, getContext());
 
         }
