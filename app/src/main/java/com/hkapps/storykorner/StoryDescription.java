@@ -87,7 +87,10 @@ public class StoryDescription extends AppCompatActivity implements View.OnClickL
             @Override
             public void onScrollChange(View view, int i, int i1, int i2, int i3) {
                 if (i1 > 0) {
-                    hideFab();
+                    if(!isFabOpen){
+                        hideFab();
+
+                    }
                 } else if (i1 < 0) {
                     showFab();
                 }
