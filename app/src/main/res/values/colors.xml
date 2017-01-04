@@ -12,6 +12,10 @@
     <color name="fourth">#9C27B0</color>
     <color name="fifth">#039BE5</color>
     <color name="sixth">#008080</color>
+    <color name="eight">#6200EA</color>
+    <color name="sev">#FF3D00</color>
+    <color name="ninth">#E91E63</color>
+    <color name="ten">#00796B</color>
     <array name="bg">
         <item>@color/first</item>
         <item>@color/sec</item>
