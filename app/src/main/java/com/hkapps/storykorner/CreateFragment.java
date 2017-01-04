@@ -8,8 +8,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,6 +31,21 @@ public class CreateFragment extends Fragment {
 
 
     DatabaseReference post_stories;
+
+    Spinner spnr;
+    String cat;
+
+    String[] celebrities = {
+            "None",
+            "Jennifer Lawrence",
+            "Jessica Alba",
+            "Brad Pitt",
+            "Tom Cruise",
+            "Johnny Depp",
+            "Megan Fox",
+            "Paul Walker",
+            "Vin Diesel"
+    };
 
     public CreateFragment() {
         // Required empty public constructor
@@ -50,6 +68,35 @@ public class CreateFragment extends Fragment {
 
 
 
+
+        spnr = (Spinner) rootview.findViewById(R.id.spinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                getActivity(), android.R.layout.simple_spinner_item, celebrities);
+
+        spnr.setAdapter(adapter);
+        spnr.setOnItemSelectedListener(
+                new AdapterView.OnItemSelectedListener() {
+
+                    @Override
+                    public void onItemSelected(AdapterView<?> arg0, View arg1,
+                                               int arg2, long arg3) {
+
+                        int position = spnr.getSelectedItemPosition();
+                         cat = celebrities[position];
+                        // TODO Auto-generated method stub
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> arg0) {
+                        // TODO Auto-generated method stub
+
+                    }
+
+                }
+        );
+
+
+
         publish_story.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -62,13 +109,14 @@ public class CreateFragment extends Fragment {
                     postdata.put("userid", FirebaseAuth.getInstance().getCurrentUser().getUid());
                     postdata.put("username", FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
                     postdata.put("timestamp", ServerValue.TIMESTAMP);
+                    postdata.put("category",cat);
 
                     post_stories.push().setValue(postdata);
 
 
                     SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
                     SharedPreferences.Editor edit = sp.edit();
-                    edit.putBoolean("profile", true);
+                    edit.putBoolean("profile", false);
                     edit.commit();
 
                     getFragmentManager().beginTransaction().replace(R.id.main_container, new StoriesFragment()).commit();
