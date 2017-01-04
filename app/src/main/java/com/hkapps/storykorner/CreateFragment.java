@@ -37,14 +37,18 @@ public class CreateFragment extends Fragment {
 
     String[] celebrities = {
             "None",
-            "Jennifer Lawrence",
-            "Jessica Alba",
-            "Brad Pitt",
-            "Tom Cruise",
-            "Johnny Depp",
-            "Megan Fox",
-            "Paul Walker",
-            "Vin Diesel"
+            "Love & Romance",
+            "Science Fiction",
+            "Horror",
+            "Humor",
+            "Drama",
+            "Satire",
+            "Adventure & Action",
+            "Mystery",
+            "Biography",
+            "Short Story"
+
+
     };
 
     public CreateFragment() {
