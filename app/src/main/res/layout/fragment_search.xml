@@ -3,13 +3,42 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
+
     tools:context="com.hkapps.storykorner.SearchFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
+        android:id="@+id/search_parent"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textSize="40sp"
-        android:text="Search" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_margin="16dp"
+        android:gravity="center">
+        <!--<ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+
+            android:src="@drawable/ic_search_black_24dp"
+          android:layout_gravity="left"
+            android:id="@+id/searchicon"/>-->
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:drawableLeft="@drawable/ic_search_black_24dp"
+            android:hint="Search"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+    <!-- &lt;!&ndash; TODO: Update blank fragment layout &ndash;&gt;
+     <android.support.v7.widget.SearchView
+         android:id="@+id/searchView1"
+         android:clickable="false"
+         android:background="@drawable/searchborder"
+         android:iconifiedByDefault="false"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_marginTop="16dp" />-->
+
 
 </FrameLayout>
