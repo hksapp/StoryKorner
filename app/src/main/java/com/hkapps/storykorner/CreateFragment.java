@@ -68,7 +68,8 @@ public class CreateFragment extends Fragment {
 
                     SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
                     SharedPreferences.Editor edit = sp.edit();
-                    edit.putBoolean("profile", true);
+                    edit.putBoolean("profile", false);
+                    edit.putBoolean("CategoryBoolean", false);
                     edit.commit();
 
                     getFragmentManager().beginTransaction().replace(R.id.main_container, new StoriesFragment()).commit();

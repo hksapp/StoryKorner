@@ -66,6 +66,18 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
         sharedPreference = PreferenceManager.getDefaultSharedPreferences(context);
         String storyuserid = sharedPreference.getString("storyuserid", model.getUserid());
 
+
+
+
+
+
+
+
+
+
+
+
+
         boolean chk = sharedPreference.getBoolean("profile", false);
 
         mFireRef = FirebaseDatabase.getInstance().getReference().child("Users");

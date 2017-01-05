@@ -307,6 +307,7 @@ public class ProfileFragment extends Fragment {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
         SharedPreferences.Editor edit = sp.edit();
         edit.putBoolean("profile", true);
+        edit.putBoolean("CategoryBoolean", false);
         edit.commit();
 
 
