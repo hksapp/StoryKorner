@@ -161,15 +161,14 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
             @Override
             public void onClick(View view) {
 
-                if(viewHolder.type_comment.getVisibility() == View.GONE){
+                if (viewHolder.type_comment.getVisibility() == View.GONE) {
                     viewHolder.type_comment.setVisibility(View.VISIBLE);
                     viewHolder.send_comment.setVisibility(View.VISIBLE);
                     viewHolder.type_comment.requestFocus();
                     InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
 
-                }
-                else if(viewHolder.type_comment.getVisibility() == View.VISIBLE){
+                } else if (viewHolder.type_comment.getVisibility() == View.VISIBLE) {
 
                     viewHolder.type_comment.setVisibility(View.GONE);
                     viewHolder.send_comment.setVisibility(View.GONE);

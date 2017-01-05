@@ -71,8 +71,6 @@ public class CreateFragment extends Fragment {
         post_stories = FirebaseDatabase.getInstance().getReference("Posted_Stories");
 
 
-
-
         spnr = (Spinner) rootview.findViewById(R.id.spinner);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 getActivity(), android.R.layout.simple_spinner_item, celebrities);
@@ -86,7 +84,7 @@ public class CreateFragment extends Fragment {
                                                int arg2, long arg3) {
 
                         int position = spnr.getSelectedItemPosition();
-                         cat = celebrities[position];
+                        cat = celebrities[position];
                         // TODO Auto-generated method stub
                     }
 
@@ -113,7 +111,7 @@ public class CreateFragment extends Fragment {
                     postdata.put("userid", FirebaseAuth.getInstance().getCurrentUser().getUid());
                     postdata.put("username", FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
                     postdata.put("timestamp", ServerValue.TIMESTAMP);
-                    postdata.put("category",cat);
+                    postdata.put("category", cat);
 
                     post_stories.push().setValue(postdata);
 
@@ -121,6 +119,8 @@ public class CreateFragment extends Fragment {
                     SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
                     SharedPreferences.Editor edit = sp.edit();
                     edit.putBoolean("profile", false);
+                    edit.putBoolean("CategoryBoolean", false);
+                    edit.putBoolean("storysearch_boolean", false);
                     edit.commit();
 
                     getFragmentManager().beginTransaction().replace(R.id.main_container, new StoriesFragment()).commit();

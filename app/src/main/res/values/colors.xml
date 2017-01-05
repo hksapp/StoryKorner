@@ -52,6 +52,7 @@
 
 
     <color name="searchborder">#0FECFF</color>
+    <color name="createborder">#ff4f72</color>
 
 
 </resources>

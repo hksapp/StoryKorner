@@ -90,7 +90,7 @@ public class StoryDescription extends AppCompatActivity implements View.OnClickL
             public void onScrollChange(View view, int i, int i1, int i2, int i3) {
 
                 if (i1 > 0) {
-                    if(!isFabOpen){
+                    if (!isFabOpen) {
                         hideFab();
 
                     }
@@ -104,8 +104,8 @@ public class StoryDescription extends AppCompatActivity implements View.OnClickL
             @Override
             public boolean onLongClick(View view) {
                 String text = mStory.getText().toString().trim();
-                if(text.length() > 0) {
-                    if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.HONEYCOMB) {
+                if (text.length() > 0) {
+                    if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.HONEYCOMB) {
                         android.text.ClipboardManager clipboardMgr = (android.text.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                         clipboardMgr.setText(text);
                     } else {
@@ -137,8 +137,6 @@ public class StoryDescription extends AppCompatActivity implements View.OnClickL
                 break;
         }
     }
-
-
 
 
     public void animateFAB(){

@@ -6,7 +6,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-     android:layout_margin="3dp"
+        android:layout_margin="3dp"
         android:background="@drawable/createscreenborder"
         android:orientation="vertical">
         <LinearLayout
@@ -15,9 +15,9 @@
             android:layout_weight="4">
 
             <Spinner
+                android:id="@+id/spinner2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/spinner2"
                 android:layout_weight="1" />
 
             <LinearLayout
@@ -38,10 +38,12 @@
                     android:textStyle="bold"
 
                     />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/caregoryspinnerborder">
+
                     <Spinner
                         android:id="@+id/spinner"
                         android:layout_width="match_parent"
