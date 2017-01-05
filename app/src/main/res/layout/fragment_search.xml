@@ -51,161 +51,161 @@
          android:layout_height="wrap_content"
          android:layout_marginTop="16dp" />-->
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/marigin"
-        android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_weight="1"
-            android:layout_marginBottom="@dimen/marigin"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/marigin"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                android:layout_marginBottom="@dimen/marigin"
 
-            android:orientation="horizontal">
-            <Button
-                android:layout_width="0dp"
-                android:id="@+id/loveAndRomance"
-                android:layout_height="match_parent"
-                android:text="Love And Romance"
-                android:layout_marginLeft="@dimen/marigin"
-                android:textAllCaps="false"
-                android:layout_marginRight="@dimen/marigin"
-                android:textColor="@android:color/white"
-                android:background="@drawable/category1"
-                android:layout_weight="1"/>
+                android:orientation="horizontal">
+                <Button
+                    android:layout_width="0dp"
+                    android:id="@+id/loveAndRomance"
+                    android:layout_height="match_parent"
+                    android:text="Love And Romance"
+                    android:layout_marginLeft="@dimen/marigin"
+                    android:textAllCaps="false"
+                    android:layout_marginRight="@dimen/marigin"
+                    android:textColor="@android:color/white"
+                    android:background="@drawable/category1"
+                    android:layout_weight="1"/>
 
-            <Button
-                android:id="@+id/horror"
-                android:layout_width="0dp"
-                android:background="@drawable/category2"
-                android:text="Horror"
-                android:textAllCaps="false"
-                android:layout_marginRight="@dimen/marigin"
-                android:textColor="@android:color/white"
-                android:layout_height="match_parent"
-                android:layout_weight="1"/>
+                <Button
+                    android:id="@+id/horror"
+                    android:layout_width="0dp"
+                    android:background="@drawable/category2"
+                    android:text="Horror"
+                    android:textAllCaps="false"
+                    android:layout_marginRight="@dimen/marigin"
+                    android:textColor="@android:color/white"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                android:layout_marginBottom="@dimen/marigin"
+
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/sciencefiction"
+                    android:layout_width="0dp"
+                    android:background="@drawable/category3"
+                    android:text="Science Fiction"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/marigin"
+                    android:layout_marginRight="@dimen/marigin"
+                    android:layout_weight="1"/>
+                <Button
+                    android:id="@+id/humor"
+                    android:layout_width="0dp"
+                    android:background="@drawable/category4"
+                    android:text="Humor"
+                    android:textAllCaps="false"
+                    android:layout_marginRight="@dimen/marigin"
+                    android:textColor="@android:color/white"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginBottom="@dimen/marigin"
+
+                android:layout_weight="1"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/drama"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/category5"
+                    android:text="Drama"
+                    android:textAllCaps="false"
+                    android:layout_marginLeft="@dimen/marigin"
+                    android:layout_marginRight="@dimen/marigin"
+                    android:textColor="@android:color/white"
+                    android:layout_weight="1"/>
+                <Button
+                    android:id="@+id/satire"
+                    android:layout_width="0dp"
+                    android:background="@drawable/category6"
+                    android:text="Satire"
+                    android:textAllCaps="false"
+                    android:layout_marginRight="@dimen/marigin"
+                    android:textColor="@android:color/white"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginBottom="@dimen/marigin"
+
+                android:layout_weight="1"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/adventureAndAction"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/category7"
+                    android:text="Adventure And Action"
+                    android:textAllCaps="false"
+                    android:layout_marginLeft="@dimen/marigin"
+                    android:layout_marginRight="@dimen/marigin"
+                    android:textColor="@android:color/white"
+                    android:layout_weight="1"/>
+                <Button
+                    android:id="@+id/mystery"
+                    android:layout_width="0dp"
+                    android:background="@drawable/category8"
+                    android:text="Mystery"
+                    android:textAllCaps="false"
+                    android:layout_marginRight="@dimen/marigin"
+                    android:textColor="@android:color/white"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginBottom="@dimen/marigin"
+
+                android:layout_weight="1"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/biography"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/category9"
+                    android:text="Biography"
+                    android:textAllCaps="false"
+                    android:layout_marginLeft="@dimen/marigin"
+                    android:layout_marginRight="@dimen/marigin"
+                    android:textColor="@android:color/white"
+                    android:layout_weight="1"/>
+                <Button
+                    android:id="@+id/shortStory"
+                    android:layout_width="0dp"
+                    android:background="@drawable/category10"
+                    android:text="Short Story"
+                    android:textAllCaps="false"
+                    android:layout_marginRight="@dimen/marigin"
+                    android:textColor="@android:color/white"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"/>
+            </LinearLayout>
         </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_weight="1"
-            android:layout_marginBottom="@dimen/marigin"
-
-            android:orientation="horizontal">
-            <Button
-                android:id="@+id/sciencefiction"
-                android:layout_width="0dp"
-                android:background="@drawable/category3"
-                android:text="Science Fiction"
-                android:textAllCaps="false"
-                android:textColor="@android:color/white"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/marigin"
-                android:layout_marginRight="@dimen/marigin"
-                android:layout_weight="1"/>
-            <Button
-                android:id="@+id/humor"
-                android:layout_width="0dp"
-                android:background="@drawable/category4"
-                android:text="Humor"
-                android:textAllCaps="false"
-                android:layout_marginRight="@dimen/marigin"
-                android:textColor="@android:color/white"
-                android:layout_height="match_parent"
-                android:layout_weight="1"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_marginBottom="@dimen/marigin"
-
-            android:layout_weight="1"
-            android:orientation="horizontal">
-            <Button
-                android:id="@+id/drama"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:background="@drawable/category5"
-                android:text="Drama"
-                android:textAllCaps="false"
-                android:layout_marginLeft="@dimen/marigin"
-                android:layout_marginRight="@dimen/marigin"
-                android:textColor="@android:color/white"
-                android:layout_weight="1"/>
-            <Button
-                android:id="@+id/satire"
-                android:layout_width="0dp"
-                android:background="@drawable/category6"
-                android:text="Satire"
-                android:textAllCaps="false"
-                android:layout_marginRight="@dimen/marigin"
-                android:textColor="@android:color/white"
-                android:layout_height="match_parent"
-                android:layout_weight="1"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_marginBottom="@dimen/marigin"
-
-            android:layout_weight="1"
-            android:orientation="horizontal">
-            <Button
-                android:id="@+id/adventureAndAction"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:background="@drawable/category7"
-                android:text="Adventure And Action"
-                android:textAllCaps="false"
-                android:layout_marginLeft="@dimen/marigin"
-                android:layout_marginRight="@dimen/marigin"
-                android:textColor="@android:color/white"
-                android:layout_weight="1"/>
-            <Button
-                android:id="@+id/mystery"
-                android:layout_width="0dp"
-                android:background="@drawable/category8"
-                android:text="Mystery"
-                android:textAllCaps="false"
-                android:layout_marginRight="@dimen/marigin"
-                android:textColor="@android:color/white"
-                android:layout_height="match_parent"
-                android:layout_weight="1"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_marginBottom="@dimen/marigin"
-
-            android:layout_weight="1"
-            android:orientation="horizontal">
-            <Button
-                android:id="@+id/biography"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:background="@drawable/category9"
-                android:text="Biography"
-                android:textAllCaps="false"
-                android:layout_marginLeft="@dimen/marigin"
-                android:layout_marginRight="@dimen/marigin"
-                android:textColor="@android:color/white"
-                android:layout_weight="1"/>
-            <Button
-                android:id="@+id/shortStory"
-                android:layout_width="0dp"
-                android:background="@drawable/category10"
-                android:text="Short Story"
-                android:textAllCaps="false"
-                android:layout_marginRight="@dimen/marigin"
-                android:textColor="@android:color/white"
-                android:layout_height="match_parent"
-                android:layout_weight="1"/>
-        </LinearLayout>
-    </LinearLayout>
 
     </LinearLayout>
 </ScrollView>
