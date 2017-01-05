@@ -34,6 +34,7 @@ public class SearchStoriesUserFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         View rootview = inflater.inflate(R.layout.fragment_search_user_stories, container, false);
 
         SearchView searchView = (SearchView) rootview.findViewById(R.id.searchview);
@@ -88,6 +89,7 @@ public class SearchStoriesUserFragment extends Fragment {
         TabLayout tabLayout = (TabLayout) rootview.findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("Stories"));
         tabLayout.addTab(tabLayout.newTab().setText("Users"));
+
 
         viewPager = (ViewPager) rootview.findViewById(R.id.pager);
         mAdapter = new TabPagerAdapter(getChildFragmentManager(), tabLayout.getTabCount());

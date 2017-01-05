@@ -29,7 +29,6 @@ public class TabPagerAdapter extends FragmentPagerAdapter {
                 // Username fragment activity
                 return new UserSearchFragment();
 
-
         }
 
         return null;
