@@ -1,5 +1,7 @@
 package com.hkapps.storykorner;
 
+import android.content.ClipData;
+import android.content.Context;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -88,10 +90,32 @@ public class StoryDescription extends AppCompatActivity implements View.OnClickL
             public void onScrollChange(View view, int i, int i1, int i2, int i3) {
 
                 if (i1 > 0) {
-                    hideFab();
+                    if(!isFabOpen){
+                        hideFab();
+
+                    }
                 } else if (i1 < 0) {
                     showFab();
                 }
+            }
+        });
+
+        sview.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                String text = mStory.getText().toString().trim();
+                if(text.length() > 0) {
+                    if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.HONEYCOMB) {
+                        android.text.ClipboardManager clipboardMgr = (android.text.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                        clipboardMgr.setText(text);
+                    } else {
+                        // this api requires SDK version 11 and above, so suppress warning for now
+                        android.content.ClipboardManager clipboardMgr = (android.content.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("Copied text", text);
+                        clipboardMgr.setPrimaryClip(clip);
+                    }
+                }
+                return false;
             }
         });
 
@@ -113,6 +137,8 @@ public class StoryDescription extends AppCompatActivity implements View.OnClickL
                 break;
         }
     }
+
+
 
 
     public void animateFAB(){
@@ -168,11 +194,7 @@ public class StoryDescription extends AppCompatActivity implements View.OnClickL
 
         }
 
-       /* Paint viewPaint = ((PaintDrawable) sview.getBackground()).getPaint();
-        int colorARGB = viewPaint.getColor();
-        //if(sview.getBackgroundColor == getResources().getColor(R.color.bg1))
-        if(colorARGB == getResources().getColor(R.color.bg1))
-        sview.setBackgroundColor(getResources().getColor(R.color.bg2));*/
+
     }
 
     public void sizeCheck(){
