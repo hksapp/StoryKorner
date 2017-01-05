@@ -54,36 +54,6 @@ public class SearchStoriesUserFragment extends Fragment {
         });
 
         //*** setOnQueryTextListener ***
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                // TODO Auto-generated method stub
-
-
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                // TODO Auto-generated method stub
-
-
-                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                SharedPreferences.Editor edit = sp.edit();
-                edit.putBoolean("storysearch_boolean", true);
-                edit.putString("storysearch", newText);
-                edit.commit();
-
-                Fragment fragment = new StoriesFragment();
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.stor, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-                return false;
-            }
-        });
 
 
         TabLayout tabLayout = (TabLayout) rootview.findViewById(R.id.tab_layout);
@@ -115,6 +85,39 @@ public class SearchStoriesUserFragment extends Fragment {
 
             }
         });
+
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // TODO Auto-generated method stub
+
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                // TODO Auto-generated method stub
+
+
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                SharedPreferences.Editor edit = sp.edit();
+                edit.putBoolean("storysearch_boolean", true);
+                edit.putString("storysearch", newText);
+                edit.commit();
+
+                Fragment fragment = new StoriesFragment();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.stor, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+                return false;
+            }
+        });
+
 
 
         return rootview;

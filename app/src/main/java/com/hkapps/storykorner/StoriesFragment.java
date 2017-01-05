@@ -54,7 +54,8 @@ public class StoriesFragment extends Fragment {
         boolean chk = sharedPreference.getBoolean("profile", false);
 
 
-
+        String storysearch = sharedPreference.getString("storysearch", "None");
+        Boolean storysearch_boolean = sharedPreference.getBoolean("storysearch_boolean", false);
 
         String Category = sharedPreference.getString("Category", "Humor");
         Boolean CategoryBoolean = sharedPreference.getBoolean("CategoryBoolean", false);
@@ -80,6 +81,14 @@ public class StoriesFragment extends Fragment {
             Query profRef = childRef.orderByChild("userid").equalTo(storyuserid);
             mStoryAdapter = new StoryAdapter(StoryObject.class, R.layout.story_custom_ui, StoryHolder.class, profRef, getContext());
 
+        } else if (storysearch_boolean) {
+
+            Query profRef = childRef.orderByChild("title").startAt(storysearch);
+            mStoryAdapter = new StoryAdapter(StoryObject.class, R.layout.story_custom_ui, StoryHolder.class, profRef, getContext());
+        } else if (CategoryBoolean) {
+
+            Query profRef = childRef.orderByChild("category").equalTo(Category);
+            mStoryAdapter = new StoryAdapter(StoryObject.class, R.layout.story_custom_ui, StoryHolder.class, profRef, getContext());
         } else {
 
 

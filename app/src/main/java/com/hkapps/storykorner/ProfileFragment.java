@@ -308,6 +308,7 @@ public class ProfileFragment extends Fragment {
         SharedPreferences.Editor edit = sp.edit();
         edit.putBoolean("profile", true);
         edit.putBoolean("CategoryBoolean", false);
+        edit.putBoolean("storysearch_boolean", false);
         edit.commit();
 
 

@@ -64,7 +64,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
             public void onClick(View view) {
 
                 Toast.makeText(getActivity(), "Hi", Toast.LENGTH_SHORT).show();
-                Fragment fragment = new SearchUserFragment();
+                Fragment fragment = new SearchStoriesUserFragment();
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.main_container, fragment);
@@ -83,6 +83,9 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
         SharedPreferences.Editor edit = sp.edit();
         edit.putBoolean("CategoryBoolean", true);
+        edit.putBoolean("profile", false);
+
+        edit.putBoolean("storysearch_boolean", false);
         edit.commit();
 
 

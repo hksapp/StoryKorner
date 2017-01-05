@@ -70,6 +70,7 @@ public class CreateFragment extends Fragment {
                     SharedPreferences.Editor edit = sp.edit();
                     edit.putBoolean("profile", false);
                     edit.putBoolean("CategoryBoolean", false);
+                    edit.putBoolean("storysearch_boolean", false);
                     edit.commit();
 
                     getFragmentManager().beginTransaction().replace(R.id.main_container, new StoriesFragment()).commit();
