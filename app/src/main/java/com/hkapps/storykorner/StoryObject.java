@@ -10,6 +10,7 @@ public class StoryObject {
     private String story;
     private String username;
     private String userid;
+    private String category;
     private long timestamp;
 
 
@@ -18,11 +19,12 @@ public class StoryObject {
 
     }
 
-    public StoryObject(String title, String story, String username, String userid, long timestamp) {
+    public StoryObject(String title, String story, String username, String userid, String category, long timestamp ) {
         this.title = title;
         this.story = story;
         this.username = username;
         this.userid = userid;
+        this.category = category;
         this.timestamp = timestamp;
     }
 
@@ -43,6 +45,11 @@ public class StoryObject {
     public String getUserid() { return userid;}
 
     public void setUserid(String userid) { this.userid = userid; }
+
+    public String getCategory() { return category;}
+
+    public void setCategory(String category) { this.category = category; }
+
 
 
     public long getTimestamp() {

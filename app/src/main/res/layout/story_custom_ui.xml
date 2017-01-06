@@ -16,7 +16,7 @@
 
         <LinearLayout
             android:id="@+id/userproflink"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:gravity="center_vertical"
@@ -25,17 +25,28 @@
             <ImageView
                 android:id="@+id/userimage"
                 android:layout_width="30dp"
+
                 android:layout_height="30dp"
                 android:layout_marginRight="@dimen/fab_margin"
                 android:src="@drawable/ic_account_circle_white_24dp" />
 
             <TextView
                 android:id="@+id/username"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="5"
                 android:layout_height="wrap_content"
                 android:text="Username"
                 android:textColor="#ffffff"
                 android:textSize="16sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:id="@+id/categoryname"
+                android:layout_height="match_parent"
+                android:background="@drawable/categorybgstoriesscreen"
+                android:text="Category"
+                android:gravity="center"
+                android:textSize="10sp"
+                android:textColor="#ffffff"/>
 
 
         </LinearLayout>

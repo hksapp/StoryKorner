@@ -27,6 +27,7 @@ public class StoryHolder extends RecyclerView.ViewHolder {
     public ImageButton send_comment;
     public ImageButton comment;
     public TextView user_cmt;
+    public TextView category;
     public LinearLayout backgroundColor;
 
 
@@ -48,6 +49,8 @@ public class StoryHolder extends RecyclerView.ViewHolder {
         write_comment = (LinearLayout) itemView.findViewById(R.id.write_comment);
         backgroundColor = (LinearLayout) itemView.findViewById(R.id.backgroundColor);
         main_layout = (LinearLayout) itemView.findViewById(R.id.main_layout);
+
+        category = (TextView) itemView.findViewById(R.id.categoryname);
 
 
 

@@ -29,6 +29,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -50,11 +51,11 @@ public class ProfileFragment extends Fragment {
     public SharedPreferences sharedPreferences;
     String checkingid = "";
     String checking_name = "";
-    private TextView uname, user_email, followers_count, following_count;
+    private TextView uname, user_email, followers_count, following_count,stories_count;
     private ImageButton prof_image;
     private StorageReference mStorageRef;
     private ProgressDialog mProgressDialog;
-    private DatabaseReference mDatabaseRef, mFollowRef;
+    private DatabaseReference mDatabaseRef, mFollowRef, mStoryCountRef;
     private LinearLayout prof_stories, prof_followers, prof_following;
     private Button signout, follow;
 
@@ -74,11 +75,22 @@ public class ProfileFragment extends Fragment {
         checkingid = sharedPreference.getString("profile_id", userid);
 
         mFollowRef = FirebaseDatabase.getInstance().getReference().child("Users");
+
+
+        mStoryCountRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories");
+        Query ref = mStoryCountRef.orderByChild("userid").equalTo(checkingid);
+
+
+
         mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("Users").child(checkingid);
 
         prof_stories = (LinearLayout) rootview.findViewById(R.id.prof_stories);
         prof_followers = (LinearLayout) rootview.findViewById(R.id.prof_followers);
         prof_following = (LinearLayout) rootview.findViewById(R.id.prof_following);
+
+
+
+
 
 
         prof_image = (ImageButton) rootview.findViewById(R.id.prof_image);
@@ -92,6 +104,7 @@ public class ProfileFragment extends Fragment {
 
         followers_count = (TextView) rootview.findViewById(R.id.followers_count);
         following_count = (TextView) rootview.findViewById(R.id.following_count);
+        stories_count = (TextView) rootview.findViewById(R.id.stories_count);
 
 
 
@@ -118,6 +131,21 @@ public class ProfileFragment extends Fragment {
                 }
             });
         }
+
+
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                stories_count.setText(String.valueOf(dataSnapshot.getChildrenCount()));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
 
         mDatabaseRef.addValueEventListener(new ValueEventListener() {
             @Override

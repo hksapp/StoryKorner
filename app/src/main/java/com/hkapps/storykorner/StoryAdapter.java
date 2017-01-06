@@ -343,6 +343,34 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
         viewHolder.username.setText(model.getUsername());
 
 
+
+        viewHolder.category.setText(model.getCategory());
+
+
+        viewHolder.category.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+                SharedPreferences.Editor edit = sp.edit();
+                edit.putBoolean("CategoryBoolean", true);
+                edit.putBoolean("profile", false);
+                edit.putString("Category", model.getCategory().toString());
+
+                edit.putBoolean("storysearch_boolean", false);
+                edit.commit();
+
+                Fragment fragment = new StoriesFragment();
+                FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.main_container, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+
+
+            }
+        });
+
+
         viewHolder.story_ui.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
