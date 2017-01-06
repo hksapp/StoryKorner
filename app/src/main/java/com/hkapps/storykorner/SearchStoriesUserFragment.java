@@ -57,8 +57,11 @@ public class SearchStoriesUserFragment extends Fragment {
 
 
         TabLayout tabLayout = (TabLayout) rootview.findViewById(R.id.tab_layout);
+        tabLayout.setTabTextColors(R.color.white,R.color.sec);
+
         tabLayout.addTab(tabLayout.newTab().setText("Stories"));
         tabLayout.addTab(tabLayout.newTab().setText("Users"));
+
 
 
         viewPager = (ViewPager) rootview.findViewById(R.id.pager);
