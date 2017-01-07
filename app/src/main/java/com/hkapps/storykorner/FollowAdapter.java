@@ -106,6 +106,27 @@ public class FollowAdapter extends FirebaseRecyclerAdapter<FollowObject, FollowH
             });
 
 
+
+
+            viewHolder.follow_profile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+                    SharedPreferences.Editor edit = sp.edit();
+                    edit.putString("profile_id", model.getFollowing_id());
+                    edit.commit();
+
+                    Fragment fragment = new ProfileFragment();
+                    FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.main_container, fragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                }
+            });
+
+
+
             viewHolder.follow_list.setText(model.getFollowing_name());
             mPhotoRef = FirebaseDatabase.getInstance().getReference().child("Users").child(model.getFollowing_id().toString());
 

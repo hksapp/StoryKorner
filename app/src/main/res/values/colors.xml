@@ -7,6 +7,13 @@
 
     <color name="white">#ffffff</color>
 
+
+    <color name="followbg1">#B3E5FC</color>
+    <color name="followbg2">#FFFFFF</color>
+    <color name="followbg3">#81D4FA
+    </color>
+
+
     <color name="first">#FF1744</color>
     <color name="sec">#2196F3</color>
     <color name="third">#C51162</color>

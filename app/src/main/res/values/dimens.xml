@@ -5,6 +5,9 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="marigin">5dp</dimen>
 
+    <dimen name="maargin">10dp</dimen>
+
+
     <dimen name="title1">24sp</dimen>
     <dimen name="story1">18sp</dimen>
 
@@ -16,6 +19,7 @@
 
     <dimen name="title4">18sp</dimen>
     <dimen name="story4">14sp</dimen>
+
 
 
 </resources>
