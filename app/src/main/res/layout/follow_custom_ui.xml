@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/follow_profile"
-
     android:layout_marginLeft="@dimen/marigin"
     android:layout_marginRight="@dimen/marigin"
     android:layout_marginBottom="@dimen/marigin"
