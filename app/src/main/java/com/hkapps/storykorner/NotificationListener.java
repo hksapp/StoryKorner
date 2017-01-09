@@ -27,6 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 public class NotificationListener extends Service {
 
     public static boolean isRunning;
+    private DatabaseReference notifying;
 
     @Nullable
     @Override
@@ -49,6 +50,7 @@ public class NotificationListener extends Service {
 
 
         DatabaseReference notif = FirebaseDatabase.getInstance().getReference().child("Posted_Stories");
+        notifying = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).child("Notifications");
 
         Query nRef = notif.orderByChild("userid").equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
 
@@ -65,6 +67,17 @@ public class NotificationListener extends Service {
                     ds.child("likes").getRef().addChildEventListener(new ChildEventListener() {
                         @Override
                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+
+                           /* Map postdata = new HashMap();
+                            postdata.put("liker_id",dataSnapshot.getKey().toString());
+                            postdata.put("liker_name", dataSnapshot.getValue().toString());
+
+                            postdata.put("post_id", dataSnapshot.getRef());
+                            postdata.put("timestamp", ServerValue.TIMESTAMP);
+*/
+
+                            notifying.push().setValue("Hi");
 
                             showNotifications(dataSnapshot.getValue().toString());
 
@@ -118,7 +131,8 @@ public class NotificationListener extends Service {
         mBuilder.setAutoCancel(true);
 
 
-        Intent resultIntent = new Intent(this, StoryDescription.class);
+        Intent resultIntent = new Intent(this, MainActivity.class);
+        resultIntent.putExtra("notif", true);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addParentStack(StoryDescription.class);
 
