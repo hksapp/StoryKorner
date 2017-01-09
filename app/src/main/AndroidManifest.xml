@@ -36,6 +36,8 @@
                 android:value="com.hkapps.storykorner.MainActivity" />
         </activity>
 
+        <service android:name=".NotificationListener" />
+
     </application>
 
 </manifest>
