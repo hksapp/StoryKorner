@@ -44,9 +44,6 @@ public class MainActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        //Dude u there?
-        //
-
 
 
 //To Open Stories Screen
