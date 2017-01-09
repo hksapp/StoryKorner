@@ -198,6 +198,7 @@ public class ProfileFragment extends Fragment {
             public void onClick(View view) {
                 AuthUI.getInstance()
                         .signOut(getActivity());
+
             }
         });
 

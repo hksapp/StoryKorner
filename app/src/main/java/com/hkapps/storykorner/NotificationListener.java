@@ -10,7 +10,6 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -48,7 +47,7 @@ public class NotificationListener extends Service {
 
         isRunning = true;
 
-        Toast.makeText(this, "Helloooo", Toast.LENGTH_SHORT).show();
+
         DatabaseReference notif = FirebaseDatabase.getInstance().getReference().child("Posted_Stories");
 
         Query nRef = notif.orderByChild("userid").equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
