@@ -47,7 +47,9 @@ public class MainActivity extends AppCompatActivity {
         //Dude u there?
         //
 
-
+        if (!NotificationListener.isRunning) {
+            startService(new Intent(this, NotificationListener.class));
+        }
 
 //To Open Stories Screen
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
