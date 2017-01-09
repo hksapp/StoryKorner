@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +43,11 @@ public class MainActivity extends AppCompatActivity {
 
 
         mAuth = FirebaseAuth.getInstance();
+
+        //Dude u there?
+        //
+
+
 
 //To Open Stories Screen
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -140,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
                         //    mBottomNav.setItemBackgroundResource(R.color.nav_profile_color);
                         //  mBottomNav.setItemIconTintList(csl);
                         // mBottomNav.setItemTextColor(csl);
+
                         break;
 
                     default:

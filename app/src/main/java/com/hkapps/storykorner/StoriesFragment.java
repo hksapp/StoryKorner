@@ -61,7 +61,6 @@ public class StoriesFragment extends Fragment {
         Boolean CategoryBoolean = sharedPreference.getBoolean("CategoryBoolean", false);
 
 
-
         if(CategoryBoolean.equals(true)){
 
             Toast.makeText(getContext(), Category, Toast.LENGTH_SHORT).show();
