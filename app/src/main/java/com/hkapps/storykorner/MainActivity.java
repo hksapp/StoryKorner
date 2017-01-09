@@ -47,9 +47,7 @@ public class MainActivity extends AppCompatActivity {
         //Dude u there?
         //
 
-        if (!NotificationListener.isRunning) {
-            startService(new Intent(this, NotificationListener.class));
-        }
+
 
 //To Open Stories Screen
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -168,8 +166,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
+
                 if (user != null) {
                     // User is signed in
+                    if (!NotificationListener.isRunning) {
+                        startService(new Intent(getApplicationContext(), NotificationListener.class));
+                    }
 
 
                     // Email Verificatiom
@@ -179,6 +181,8 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Verify your Account from Email", Toast.LENGTH_SHORT).show();
 
                     }
+
+
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
 
                     //Send Uname & UID to Firebase!
@@ -203,6 +207,8 @@ public class MainActivity extends AppCompatActivity {
                             RC_SIGN_IN);
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
+
+
                 }
                 // ...
             }
@@ -210,6 +216,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -219,6 +226,11 @@ public class MainActivity extends AppCompatActivity {
                 // Sign-in succeeded, set up the UI
                 Toast.makeText(this, "Signed in!", Toast.LENGTH_SHORT).show();
                 Toast.makeText(getApplicationContext(), "Welcome " + FirebaseAuth.getInstance().getCurrentUser().getDisplayName(), Toast.LENGTH_SHORT).show();
+
+
+                startService(new Intent(getApplicationContext(), NotificationListener.class));
+
+
 
             } else if (resultCode == RESULT_CANCELED) {
                 // Sign in was canceled by the user, finish the activity
