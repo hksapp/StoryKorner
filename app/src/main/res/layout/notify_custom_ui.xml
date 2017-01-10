@@ -36,13 +36,23 @@
             android:textSize="16sp"
 
 
+
             />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text=" liked your story
             " />
+
+        <TextView
+            android:id="@+id/notify_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:gravity="center_horizontal"
+            android:text="time" />
 
     </LinearLayout>
 
