@@ -1,6 +1,13 @@
 package com.hkapps.storykorner;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DataSnapshot;
@@ -9,6 +16,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by kamal on 10-01-2017.
@@ -23,7 +33,7 @@ public class NotifyAdapter extends FirebaseRecyclerAdapter<NotifyObject, NotifyH
     }
 
     @Override
-    protected void populateViewHolder(final NotifyHolder viewHolder, NotifyObject model, int position) {
+    protected void populateViewHolder(final NotifyHolder viewHolder, final NotifyObject model, int position) {
 
 
         viewHolder.liker_name.setText(model.getLiker_name());
@@ -42,6 +52,47 @@ public class NotifyAdapter extends FirebaseRecyclerAdapter<NotifyObject, NotifyH
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
+            }
+        });
+        final long tmp = model.getTimestamp();
+        Date date = new Date(tmp);
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
+        String tym = formatter.format(date);
+
+        viewHolder.notify_time.setText(tym);
+
+        viewHolder.liker_name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+                SharedPreferences.Editor edit = sp.edit();
+                edit.putString("profile_id", model.getLiker_id());
+                edit.commit();
+
+                Fragment fragment = new ProfileFragment();
+                FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.main_container, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
+
+
+        viewHolder.notify_imgview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+                SharedPreferences.Editor edit = sp.edit();
+                edit.putString("profile_id", model.getLiker_id());
+                edit.commit();
+
+                Fragment fragment = new ProfileFragment();
+                FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.main_container, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
             }
         });
 
