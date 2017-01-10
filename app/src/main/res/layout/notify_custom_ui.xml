@@ -3,15 +3,25 @@
     android:id="@+id/notify_ui"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/marigin"
-    android:layout_marginLeft="@dimen/marigin"
-    android:layout_marginRight="@dimen/marigin"
+
     android:orientation="vertical">
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+
+        android:background="@drawable/notification_bg"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
         android:gravity="center_vertical"
 
         android:orientation="horizontal">
@@ -25,26 +35,31 @@
             android:background="@drawable/signout"
             android:src="@drawable/ic_account_circle_white_24dp" />
 
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/liker_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:text="4536"
-            android:textColor="@android:color/black"
-            android:textSize="16sp"
+                <TextView
+                    android:id="@+id/liker_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="4536"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" liked your story"
+
+                    android:textColor="#EEEEEE" />
+            </LinearLayout>
 
 
 
-            />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text=" liked your story
-            " />
 
         <TextView
             android:id="@+id/notify_time"
@@ -52,13 +67,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:gravity="center_horizontal"
-            android:text="time" />
+            android:text="time"
+            android:textColor="#FFFFFF" />
 
     </LinearLayout>
+    </LinearLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#000000" />
 
 </LinearLayout>
