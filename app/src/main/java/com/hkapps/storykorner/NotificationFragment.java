@@ -47,7 +47,7 @@ public class NotificationFragment extends Fragment {
         mDatabaseRef = FirebaseDatabase.getInstance().getReference();
         childRef = mDatabaseRef.child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).child("Notifications");
 
-        mNotifyAdapter = new NotifyAdapter(NotifyObject.class, R.layout.notify_custom_ui, NotifyHolder.class, childRef);
+        mNotifyAdapter = new NotifyAdapter(NotifyObject.class, R.layout.notify_custom_ui, NotifyHolder.class, childRef, getContext());
         notifyRecyclerView.setLayoutManager(linearLayoutManager);
         notifyRecyclerView.setAdapter(mNotifyAdapter);
 
