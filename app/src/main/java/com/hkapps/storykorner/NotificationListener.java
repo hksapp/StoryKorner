@@ -12,13 +12,9 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
 /**
  * Created by kamal on 23-12-2016.
@@ -55,11 +51,11 @@ public class NotificationListener extends Service {
         Query nRef = notif.orderByChild("userid").equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
 
 
-        nRef.addListenerForSingleValueEvent(new ValueEventListener() {
+       /* nRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                for (final DataSnapshot ds : dataSnapshot.getChildren()) {
 
                     //   Toast.makeText(NotificationListener.this, ds.child("userid").getValue().toString(), Toast.LENGTH_SHORT).show();
 
@@ -69,15 +65,16 @@ public class NotificationListener extends Service {
                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
 
-                           /* Map postdata = new HashMap();
+                           *//* Map postdata = new HashMap();
                             postdata.put("liker_id",dataSnapshot.getKey().toString());
                             postdata.put("liker_name", dataSnapshot.getValue().toString());
 
+
                             postdata.put("post_id", dataSnapshot.getRef());
                             postdata.put("timestamp", ServerValue.TIMESTAMP);
-*/
+*//*
 
-                            notifying.push().setValue("Hi");
+                          *//*  notifying.push().setValue(ds.getKey().toString());*//*
 
                             showNotifications(dataSnapshot.getValue().toString());
 
@@ -112,7 +109,7 @@ public class NotificationListener extends Service {
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        });*/
 
 
         return START_STICKY;
