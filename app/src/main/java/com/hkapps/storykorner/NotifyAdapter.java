@@ -98,4 +98,6 @@ public class NotifyAdapter extends FirebaseRecyclerAdapter<NotifyObject, NotifyH
 
 
     }
+
+
 }
