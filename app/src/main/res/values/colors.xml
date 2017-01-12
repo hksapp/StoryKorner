@@ -6,6 +6,7 @@
     <color name="nav_profile_color">#F50057</color>
 
     <color name="white">#ffffff</color>
+<color name="textColorAlertDialogListItem">#000000</color>
 
 
     <color name="followbg1">#B3E5FC</color>
