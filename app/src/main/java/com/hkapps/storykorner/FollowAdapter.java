@@ -8,12 +8,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
@@ -26,10 +28,10 @@ public class FollowAdapter extends FirebaseRecyclerAdapter<FollowObject, FollowH
 
     private Context context;
     private SharedPreferences sharedPreferences;
-    private boolean follow_check;
+    private boolean follow_check, usersearch_boolean;
     private DatabaseReference mPhotoRef;
 
-    public FollowAdapter(Class<FollowObject> modelClass, int modelLayout, Class<FollowHolder> viewHolderClass, DatabaseReference ref, Context context) {
+    public FollowAdapter(Class<FollowObject> modelClass, int modelLayout, Class<FollowHolder> viewHolderClass, Query ref, Context context) {
         super(modelClass, modelLayout, viewHolderClass, ref);
 
 
@@ -42,79 +44,26 @@ public class FollowAdapter extends FirebaseRecyclerAdapter<FollowObject, FollowH
 
         SharedPreferences sharedPreference = PreferenceManager.getDefaultSharedPreferences(context);
         follow_check = sharedPreference.getBoolean("follow_check", false);
+        usersearch_boolean = sharedPreference.getBoolean("usersearch_boolean", false);
 
 
-        if (follow_check) {
+        if (usersearch_boolean) {
 
-            viewHolder.follow_list.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-                    SharedPreferences.Editor edit = sp.edit();
-                    edit.putString("profile_id", model.getFollower_id());
-                    edit.commit();
+            Picasso.with(context).load(model.getPhotolink()).fit().centerCrop().into(viewHolder.follow_imgview);
 
-                    Fragment fragment = new ProfileFragment();
-                    FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.main_container, fragment);
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
-                }
-            });
-
-            viewHolder.follow_list.setText(model.getFollower_name());
-
-            mPhotoRef = FirebaseDatabase.getInstance().getReference().child("Users").child(model.getFollower_id().toString());
-
-            mPhotoRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-
-                    if (dataSnapshot.child("photolink").exists()) {
-                        String photo = dataSnapshot.child("photolink").getValue().toString();
-                        Picasso.with(context).load(photo).fit().centerCrop().into(viewHolder.follow_imgview);
-
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-
-
-        } else {
-
-
-            viewHolder.follow_list.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-                    SharedPreferences.Editor edit = sp.edit();
-                    edit.putString("profile_id", model.getFollowing_id());
-                    edit.commit();
-
-                    Fragment fragment = new ProfileFragment();
-                    FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.main_container, fragment);
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
-                }
-            });
-
-
-
+            viewHolder.follow_list.setText(model.getUname());
 
             viewHolder.follow_profile.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
                     SharedPreferences.Editor edit = sp.edit();
-                    edit.putString("profile_id", model.getFollowing_id());
+                    edit.putString("profile_id", model.getUserid());
                     edit.commit();
+
+                    InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(),
+                            InputMethodManager.RESULT_UNCHANGED_SHOWN);
 
                     Fragment fragment = new ProfileFragment();
                     FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
@@ -126,30 +75,93 @@ public class FollowAdapter extends FirebaseRecyclerAdapter<FollowObject, FollowH
             });
 
 
+        } else {
 
-            viewHolder.follow_list.setText(model.getFollowing_name());
-            mPhotoRef = FirebaseDatabase.getInstance().getReference().child("Users").child(model.getFollowing_id().toString());
+            if (follow_check) {
 
-            mPhotoRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
+                viewHolder.follow_profile.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+                        SharedPreferences.Editor edit = sp.edit();
+                        edit.putString("profile_id", model.getFollower_id());
+                        edit.commit();
 
-                    if (dataSnapshot.child("photolink").exists()) {
-                        String photo = dataSnapshot.child("photolink").getValue().toString();
-                        Picasso.with(context).load(photo).fit().centerCrop().into(viewHolder.follow_imgview);
+                        Fragment fragment = new ProfileFragment();
+                        FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.replace(R.id.main_container, fragment);
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
+                    }
+                });
+
+                viewHolder.follow_list.setText(model.getFollower_name());
+
+                mPhotoRef = FirebaseDatabase.getInstance().getReference().child("Users").child(model.getFollower_id().toString());
+
+                mPhotoRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        if (dataSnapshot.child("photolink").exists()) {
+                            String photo = dataSnapshot.child("photolink").getValue().toString();
+                            Picasso.with(context).load(photo).fit().centerCrop().into(viewHolder.follow_imgview);
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
 
                     }
-                }
+                });
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
 
-                }
-            });
+            } else {
+
+
+                viewHolder.follow_profile.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+                        SharedPreferences.Editor edit = sp.edit();
+                        edit.putString("profile_id", model.getFollowing_id());
+                        edit.commit();
+
+                        Fragment fragment = new ProfileFragment();
+                        FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.replace(R.id.main_container, fragment);
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
+                    }
+                });
+
+
+                viewHolder.follow_list.setText(model.getFollowing_name());
+                mPhotoRef = FirebaseDatabase.getInstance().getReference().child("Users").child(model.getFollowing_id().toString());
+
+                mPhotoRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        if (dataSnapshot.child("photolink").exists()) {
+                            String photo = dataSnapshot.child("photolink").getValue().toString();
+                            Picasso.with(context).load(photo).fit().centerCrop().into(viewHolder.follow_imgview);
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+
+
         }
 
-
     }
-
-
 }

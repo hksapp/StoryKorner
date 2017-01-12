@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 
 /**
@@ -52,7 +53,7 @@ public class FollowFragment extends Fragment {
         SharedPreferences sharedPreference = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String prof_id = sharedPreference.getString("prof_followers_id", "null");
         usersearch_boolean = sharedPreference.getBoolean("usersearch_boolean", false);
-        follow_check = sharedPreference.getBoolean("follow_check", false);
+        String usersearch = sharedPreference.getString("usersearch", "");
 
 
         linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -60,15 +61,31 @@ public class FollowFragment extends Fragment {
         followRecyclerview = (RecyclerView) rootview.findViewById(R.id.follow_recycleview);
         followRecyclerview.setHasFixedSize(true);
 
-        mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("Users").child(prof_id);
-        if (follow_check) {
-            mChildRef = mDatabaseRef.child("followers");
+        if (usersearch_boolean) {
+
+            mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("Users");
+            Query searchUserRef = mDatabaseRef.orderByChild("uname").startAt(usersearch).endAt(usersearch + "\uf8ff");
+
+            mFollowAdapter = new FollowAdapter(FollowObject.class, R.layout.follow_custom_ui, FollowHolder.class, searchUserRef, getContext());
+
+
         } else {
-            mChildRef = mDatabaseRef.child("following");
+
+            mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("Users").child(prof_id);
+            follow_check = sharedPreference.getBoolean("follow_check", false);
+            if (follow_check) {
+                mChildRef = mDatabaseRef.child("followers");
+            } else {
+                mChildRef = mDatabaseRef.child("following");
+            }
+
+
+            mFollowAdapter = new FollowAdapter(FollowObject.class, R.layout.follow_custom_ui, FollowHolder.class, mChildRef, getContext());
+
+
         }
 
 
-        mFollowAdapter = new FollowAdapter(FollowObject.class, R.layout.follow_custom_ui, FollowHolder.class, mChildRef, getContext());
 
         followRecyclerview.setLayoutManager(linearLayoutManager);
 

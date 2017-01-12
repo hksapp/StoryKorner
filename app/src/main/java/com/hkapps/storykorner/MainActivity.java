@@ -187,6 +187,7 @@ public class MainActivity extends AppCompatActivity {
                     mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
                     mUserRef.child("uname").setValue(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
                     mUserRef.child("user_email").setValue(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+                    mUserRef.child("userid").setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
                 } else {
 

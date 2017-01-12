@@ -233,6 +233,7 @@ public class ProfileFragment extends Fragment {
                 SharedPreferences.Editor edit = sp.edit();
                 edit.putString("prof_followers_id", checkingid);
                 edit.putBoolean("follow_check", true);
+                edit.putBoolean("usersearch_boolean", false);
                 edit.commit();
 
                 Fragment fragment = new FollowFragment();
@@ -256,6 +257,7 @@ public class ProfileFragment extends Fragment {
                 edit.putString("prof_followers_id", checkingid);
                 edit.putBoolean("follow_check", false);
                 edit.putBoolean("storysearch_boolean", false);
+                edit.putBoolean("usersearch_boolean", false);
                 edit.commit();
 
                 Fragment fragment = new FollowFragment();

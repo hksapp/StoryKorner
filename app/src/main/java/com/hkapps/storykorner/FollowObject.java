@@ -7,7 +7,7 @@ package com.hkapps.storykorner;
 public class FollowObject {
 
 
-    private String follower_id, follower_name, following_id, following_name;
+    private String follower_id, follower_name, following_id, following_name, photolink, uname, user_email, userid;
 
 
     public FollowObject() {
@@ -16,13 +16,18 @@ public class FollowObject {
     }
 
 
-    public FollowObject(String follower_id, String follower_name, String following_id, String following_name) {
+    public FollowObject(String follower_id, String follower_name, String following_id, String following_name, String photolink, String uname, String user_email, String userid) {
 
 
         this.follower_id = follower_id;
         this.follower_name = follower_name;
         this.following_id = following_id;
         this.following_name = following_name;
+        this.photolink = photolink;
+        this.uname = uname;
+        this.user_email = user_email;
+        this.userid = userid;
+
 
 
     }
@@ -62,6 +67,44 @@ public class FollowObject {
     public void setFollowing_name(String following_name) {
         this.following_name = following_name;
     }
+
+
+    public String getUname() {
+        return uname;
+    }
+
+    public void setUname(String uname) {
+        this.uname = uname;
+    }
+
+
+    public String getPhotolink() {
+        return photolink;
+    }
+
+    public void setPhotolink(String photolink) {
+        this.photolink = photolink;
+    }
+
+
+    public String getUser_email() {
+        return user_email;
+    }
+
+    public void setUser_email(String user_email) {
+        this.user_email = user_email;
+    }
+
+    public String getUserid() {
+        return userid;
+    }
+
+    public void setUserid(String userid) {
+        this.userid = userid;
+    }
+
+
+
 
 }
 
