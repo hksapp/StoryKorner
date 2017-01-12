@@ -1,12 +1,14 @@
 package com.hkapps.storykorner;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -36,7 +38,7 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
     private static final String TAG = StoryAdapter.class.getSimpleName();
     public SharedPreferences sharedPreference;
     private Context context;
-    private DatabaseReference mFireRef, mLikeRef, mCommentRef, mCommentUpdateRef, mFollowingRef;
+    private DatabaseReference mFireRef, mLikeRef, mCommentRef, mCommentUpdateRef, mFollowingRef, mDelRef;
     private boolean liked;
     private LinearLayout backgroundColor;
 
@@ -55,12 +57,15 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
         String tym = formatter.format(date);
 
 
-        String post_key = getRef(position).getKey().toString();
+        final String post_key = getRef(position).getKey().toString();
 
         mLikeRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(post_key).child("likes");
 
         mCommentRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(post_key).child("comments");
         mCommentUpdateRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(post_key);
+
+
+        mDelRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories");
 
         mFollowingRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).child("following");
         sharedPreference = PreferenceManager.getDefaultSharedPreferences(context);
@@ -343,6 +348,51 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
         viewHolder.username.setText(model.getUsername());
 
 
+        if (model.getUserid().toString().equals(FirebaseAuth.getInstance().getCurrentUser().getUid().toString())) {
+
+            viewHolder.delete.setVisibility(View.VISIBLE);
+
+        }
+
+
+        viewHolder.delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                AlertDialog.Builder alert = new AlertDialog.Builder(
+                        context);
+                alert.setTitle("Confirm Deletion");
+                alert.setMessage("Delete this Story?");
+                alert.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //do your work here
+                        mDelRef.child(post_key).removeValue();
+                        dialog.dismiss();
+
+                    }
+                });
+                alert.setNegativeButton("Don't Delete", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.dismiss();
+                    }
+                });
+
+                alert.show();
+
+
+            }
+        });
+
+
+
+
+
 
         viewHolder.category.setText(model.getCategory());
 
@@ -467,4 +517,5 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
 
 
 }
+
 
