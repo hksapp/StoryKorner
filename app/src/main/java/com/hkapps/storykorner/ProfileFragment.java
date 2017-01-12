@@ -232,8 +232,8 @@ public class ProfileFragment extends Fragment {
                 SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
                 SharedPreferences.Editor edit = sp.edit();
                 edit.putString("prof_followers_id", checkingid);
-                edit.putBoolean("follow_check", true);
-                edit.putBoolean("usersearch_boolean", false);
+                edit.putInt("followfragment", 3);
+
                 edit.commit();
 
                 Fragment fragment = new FollowFragment();
@@ -255,9 +255,9 @@ public class ProfileFragment extends Fragment {
                 SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
                 SharedPreferences.Editor edit = sp.edit();
                 edit.putString("prof_followers_id", checkingid);
-                edit.putBoolean("follow_check", false);
-                edit.putBoolean("storysearch_boolean", false);
-                edit.putBoolean("usersearch_boolean", false);
+                edit.putInt("followfragment", 4);
+
+
                 edit.commit();
 
                 Fragment fragment = new FollowFragment();

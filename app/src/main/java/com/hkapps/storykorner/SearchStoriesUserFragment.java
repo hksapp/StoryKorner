@@ -124,7 +124,7 @@ public class SearchStoriesUserFragment extends Fragment {
 
                 } else {
 
-                    edit.putBoolean("usersearch_boolean", true);
+                    edit.putInt("followfragment", 2);
                     edit.putString("usersearch", newText);
                     edit.commit();
 

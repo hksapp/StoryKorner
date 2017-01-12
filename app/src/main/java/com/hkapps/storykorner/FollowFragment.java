@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -52,9 +53,9 @@ public class FollowFragment extends Fragment {
 
         SharedPreferences sharedPreference = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String prof_id = sharedPreference.getString("prof_followers_id", "null");
-        usersearch_boolean = sharedPreference.getBoolean("usersearch_boolean", false);
         String usersearch = sharedPreference.getString("usersearch", "");
         String likes_post_key = sharedPreference.getString("likes_post_key", "");
+        int followfragment = sharedPreference.getInt("followfragment", 404);
 
 
         linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -62,7 +63,39 @@ public class FollowFragment extends Fragment {
         followRecyclerview = (RecyclerView) rootview.findViewById(R.id.follow_recycleview);
         followRecyclerview.setHasFixedSize(true);
 
-        if (usersearch_boolean) {
+
+        switch (followfragment) {
+
+            case 1:
+                mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(likes_post_key).child("likes");
+                mFollowAdapter = new FollowAdapter(FollowObject.class, R.layout.follow_custom_ui, FollowHolder.class, mDatabaseRef, getContext());
+                break;
+
+            case 2:
+                mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("Users");
+                Query searchUserRef = mDatabaseRef.orderByChild("uname").startAt(usersearch).endAt(usersearch + "\uf8ff");
+                mFollowAdapter = new FollowAdapter(FollowObject.class, R.layout.follow_custom_ui, FollowHolder.class, searchUserRef, getContext());
+                break;
+
+            case 3:
+                mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("Users").child(prof_id);
+                mChildRef = mDatabaseRef.child("followers");
+                mFollowAdapter = new FollowAdapter(FollowObject.class, R.layout.follow_custom_ui, FollowHolder.class, mChildRef, getContext());
+                break;
+
+            case 4:
+                mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("Users").child(prof_id);
+                mChildRef = mDatabaseRef.child("following");
+                mFollowAdapter = new FollowAdapter(FollowObject.class, R.layout.follow_custom_ui, FollowHolder.class, mChildRef, getContext());
+                break;
+            case 404:
+                Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
+
+
+        }
+
+
+       /* if (followfragment == 2) {
 
             mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("Users");
             Query searchUserRef = mDatabaseRef.orderByChild("uname").startAt(usersearch).endAt(usersearch + "\uf8ff");
@@ -70,22 +103,32 @@ public class FollowFragment extends Fragment {
             mFollowAdapter = new FollowAdapter(FollowObject.class, R.layout.follow_custom_ui, FollowHolder.class, searchUserRef, getContext());
 
 
-        } else {
+        } else if (followfragment == 1) {
+
+
+            mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(likes_post_key).child("likes");
+
+
+            mFollowAdapter = new FollowAdapter(FollowObject.class, R.layout.follow_custom_ui, FollowHolder.class, mDatabaseRef, getContext());
+
+
+        } else if (followfragment == 3) {
 
             mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("Users").child(prof_id);
-            follow_check = sharedPreference.getBoolean("follow_check", false);
-            if (follow_check) {
-                mChildRef = mDatabaseRef.child("followers");
-            } else {
-                mChildRef = mDatabaseRef.child("following");
-            }
 
 
+            mChildRef = mDatabaseRef.child("followers");
             mFollowAdapter = new FollowAdapter(FollowObject.class, R.layout.follow_custom_ui, FollowHolder.class, mChildRef, getContext());
 
+        } else if (followfragment == 4) {
 
-        }
+            mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("Users").child(prof_id);
 
+
+            mChildRef = mDatabaseRef.child("following");
+            mFollowAdapter = new FollowAdapter(FollowObject.class, R.layout.follow_custom_ui, FollowHolder.class, mChildRef, getContext());
+
+        }*/
 
 
         followRecyclerview.setLayoutManager(linearLayoutManager);
