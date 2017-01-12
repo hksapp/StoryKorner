@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,11 +22,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by kamal on 11-12-2016.
@@ -38,7 +42,7 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
     private static final String TAG = StoryAdapter.class.getSimpleName();
     public SharedPreferences sharedPreference;
     private Context context;
-    private DatabaseReference mFireRef, mLikeRef, mCommentRef, mCommentUpdateRef, mFollowingRef, mDelRef;
+    private DatabaseReference mFireRef, mLikeRef, mCommentRef, mCommentUpdateRef, mFollowingRef, mDelRef, notifying;
     private boolean liked;
     private LinearLayout backgroundColor;
 
@@ -97,7 +101,7 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
             @Override
             public void onClick(View view) {
 
-                String post_key = getRef(position).getKey().toString();
+                final String post_key = getRef(position).getKey().toString();
                 mLikeRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(post_key).child("likes");
                 //   mLikeRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
 
@@ -111,17 +115,50 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                             if (dataSnapshot.hasChild(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
                                 mLikeRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).removeValue();
                                 // Toast.makeText(context, "HIIII", Toast.LENGTH_SHORT).show();
+                                notifying = FirebaseDatabase.getInstance().getReference().child("Users").child(model.getUserid().toString()).child("Notifications");
+
+
+                                final Query noti = notifying.orderByChild("liker_id_post_id").equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid().toString() + "_" + post_key);
+
+                                noti.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                        Toast.makeText(context, dataSnapshot.child("liker_id").getKey().toString(), Toast.LENGTH_SHORT).show();
+
+                                        for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
+                                            appleSnapshot.getRef().removeValue();
+                                        }
+
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
+
                                 viewHolder.like.setImageResource(R.drawable.ic_sentiment_satisfied_white_24dp);
                                 liked = false;
 
 
                             } else {
                                 mLikeRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+                                notifying = FirebaseDatabase.getInstance().getReference().child("Users").child(model.getUserid().toString()).child("Notifications");
+                                Map postdata = new HashMap();
+                                postdata.put("liker_id", FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
+                                postdata.put("liker_id_post_id", FirebaseAuth.getInstance().getCurrentUser().getUid().toString() + "_" + post_key);
+                                postdata.put("liker_name", FirebaseAuth.getInstance().getCurrentUser().getDisplayName().toString());
+
+
+                                postdata.put("post_id", post_key);
+                                postdata.put("timestamp", ServerValue.TIMESTAMP);
+                                notifying.push().setValue(postdata);
                                 viewHolder.like.setImageResource(R.drawable.ic_sentiment_very_satisfied_white_24dp);
                                 liked = false;
                             }
                         }
-
                         viewHolder.likecount.setText(String.valueOf(dataSnapshot.getChildrenCount()) + " Likes");
 
 

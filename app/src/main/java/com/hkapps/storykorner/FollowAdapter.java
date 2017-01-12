@@ -52,6 +52,9 @@ public class FollowAdapter extends FirebaseRecyclerAdapter<FollowObject, FollowH
             Picasso.with(context).load(model.getPhotolink()).fit().centerCrop().into(viewHolder.follow_imgview);
 
             viewHolder.follow_list.setText(model.getUname());
+            viewHolder.usermail.setVisibility(View.VISIBLE);
+            viewHolder.usermail.setText(model.getUser_email());
+
 
             viewHolder.follow_profile.setOnClickListener(new View.OnClickListener() {
                 @Override

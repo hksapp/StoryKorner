@@ -13,7 +13,7 @@ import android.widget.TextView;
 public class FollowHolder extends RecyclerView.ViewHolder {
 
 
-    public TextView follow_list;
+    public TextView follow_list, usermail;
     public ImageView follow_imgview;
     public LinearLayout follow_profile;
 
@@ -25,6 +25,8 @@ public class FollowHolder extends RecyclerView.ViewHolder {
         follow_imgview = (ImageView) itemView.findViewById(R.id.follow_imgview);
 
         follow_profile = (LinearLayout) itemView.findViewById(R.id.follow_profile);
+
+        usermail = (TextView) itemView.findViewById(R.id.usermail);
 
 
     }
