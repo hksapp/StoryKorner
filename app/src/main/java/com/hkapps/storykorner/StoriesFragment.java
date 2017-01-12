@@ -82,7 +82,7 @@ public class StoriesFragment extends Fragment {
 
         } else if (storysearch_boolean) {
 
-            Query profRef = childRef.orderByChild("title").startAt(storysearch).endAt(storysearch+"\uf8ff");
+            Query profRef = childRef.orderByChild("title").equalTo(storysearch);
             mStoryAdapter = new StoryAdapter(StoryObject.class, R.layout.story_custom_ui, StoryHolder.class, profRef, getContext());
         } else if (CategoryBoolean) {
 

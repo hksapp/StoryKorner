@@ -18,7 +18,7 @@ public class StoryHolder extends RecyclerView.ViewHolder {
     public TextView title_ui;
     public TextView story_ui;
     public TextView username;
-    public ImageView userimage,delete;
+    public ImageView userimage;
     public LinearLayout userproflink, write_comment, main_layout;
     public TextView timestamp;
     public ImageButton like;
@@ -52,7 +52,7 @@ public class StoryHolder extends RecyclerView.ViewHolder {
 
         category = (TextView) itemView.findViewById(R.id.categoryname);
 
-        delete = (ImageView) itemView.findViewById(R.id.delete);
+
 
     }
 }
