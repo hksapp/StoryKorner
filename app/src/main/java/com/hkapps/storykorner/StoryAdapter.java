@@ -327,10 +327,11 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                 SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
                 SharedPreferences.Editor edit = sp.edit();
                 edit.putString("likes_post_key", post_key);
+                edit.putInt("followfragment", 1);
                 edit.commit();
 
 
-                Fragment fragment = new LikeFragment();
+                Fragment fragment = new FollowFragment();
                 FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.main_container, fragment);

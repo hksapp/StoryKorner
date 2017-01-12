@@ -54,6 +54,7 @@ public class FollowFragment extends Fragment {
         String prof_id = sharedPreference.getString("prof_followers_id", "null");
         usersearch_boolean = sharedPreference.getBoolean("usersearch_boolean", false);
         String usersearch = sharedPreference.getString("usersearch", "");
+        String likes_post_key = sharedPreference.getString("likes_post_key", "");
 
 
         linearLayoutManager = new LinearLayoutManager(getActivity());
