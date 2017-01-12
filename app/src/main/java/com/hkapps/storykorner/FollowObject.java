@@ -7,7 +7,7 @@ package com.hkapps.storykorner;
 public class FollowObject {
 
 
-    private String follower_id, follower_name, following_id, following_name, photolink, uname, user_email, userid;
+    private String follower_id, follower_name, following_id, following_name, photolink, uname, user_email, userid, liked_id;
 
 
     public FollowObject() {
@@ -16,7 +16,7 @@ public class FollowObject {
     }
 
 
-    public FollowObject(String follower_id, String follower_name, String following_id, String following_name, String photolink, String uname, String user_email, String userid) {
+    public FollowObject(String follower_id, String follower_name, String following_id, String following_name, String photolink, String uname, String user_email, String userid, String liked_id) {
 
 
         this.follower_id = follower_id;
@@ -27,6 +27,7 @@ public class FollowObject {
         this.uname = uname;
         this.user_email = user_email;
         this.userid = userid;
+        this.liked_id = liked_id;
 
 
 
@@ -102,6 +103,16 @@ public class FollowObject {
     public void setUserid(String userid) {
         this.userid = userid;
     }
+
+
+    public String getLiked_id() {
+        return liked_id;
+    }
+
+    public void setLiked_id(String liked_id) {
+        this.liked_id = liked_id;
+    }
+
 
 
 

@@ -32,6 +32,8 @@ public class FollowAdapter extends FirebaseRecyclerAdapter<FollowObject, FollowH
     private boolean follow_check, usersearch_boolean;
     private int followfragment;
     private DatabaseReference mPhotoRef;
+    private String photolink = "Ssup";
+    private String uname = "hi";
 
     public FollowAdapter(Class<FollowObject> modelClass, int modelLayout, Class<FollowHolder> viewHolderClass, Query ref, Context context) {
         super(modelClass, modelLayout, viewHolderClass, ref);
@@ -55,6 +57,41 @@ public class FollowAdapter extends FirebaseRecyclerAdapter<FollowObject, FollowH
 
             case 1:
 
+
+                DatabaseReference Ref = FirebaseDatabase.getInstance().getReference().child("Users").child(model.getLiked_id());
+                Ref.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        viewHolder.follow_list.setText(dataSnapshot.child("uname").getValue().toString());
+                        Picasso.with(context).load(dataSnapshot.child("photolink").getValue().toString()).fit().centerCrop().into(viewHolder.follow_imgview);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+
+                });
+
+
+                viewHolder.follow_profile.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+                        SharedPreferences.Editor edit = sp.edit();
+                        edit.putString("profile_id", model.getLiked_id());
+                        edit.commit();
+
+
+                        Fragment fragment = new ProfileFragment();
+                        FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.replace(R.id.main_container, fragment);
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
+                    }
+                });
 
                 break;
 
@@ -310,4 +347,6 @@ public class FollowAdapter extends FirebaseRecyclerAdapter<FollowObject, FollowH
         }*/
 
     }
+
+
 }
