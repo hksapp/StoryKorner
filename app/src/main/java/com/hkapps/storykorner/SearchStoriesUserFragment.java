@@ -24,6 +24,7 @@ public class SearchStoriesUserFragment extends Fragment {
 
     private ViewPager viewPager;
     private TabPagerAdapter mAdapter;
+    private boolean storyTab = true;
 
     public SearchStoriesUserFragment() {
         // Required empty public constructor
@@ -73,6 +74,8 @@ public class SearchStoriesUserFragment extends Fragment {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
+                storyTab = tab.getPosition() == 0;
+
             }
 
             @Override
@@ -82,7 +85,7 @@ public class SearchStoriesUserFragment extends Fragment {
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-
+                storyTab = tab.getPosition() == 0;
             }
         });
 
@@ -104,17 +107,43 @@ public class SearchStoriesUserFragment extends Fragment {
 
                 SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
                 SharedPreferences.Editor edit = sp.edit();
-                edit.putBoolean("storysearch_boolean", true);
-                edit.putString("storysearch", newText);
-                edit.commit();
 
-                Fragment fragment = new StoriesFragment();
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.stor, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+                if (storyTab) {
+
+                    edit.putBoolean("storysearch_boolean", true);
+                    edit.putString("storysearch", newText);
+                    edit.commit();
+
+                    Fragment fragment = new StoriesFragment();
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.stor, fragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+
+
+                } else {
+
+                    edit.putBoolean("usersearch_boolean", true);
+                    edit.putString("usersearch", newText);
+                    edit.commit();
+
+                    Fragment fragment = new FollowFragment();
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.user, fragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+
+
+                }
+
+
+
+
                 return false;
+
+
             }
         });
 

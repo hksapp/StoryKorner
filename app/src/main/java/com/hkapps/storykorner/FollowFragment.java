@@ -26,7 +26,7 @@ public class FollowFragment extends Fragment {
     private LinearLayoutManager linearLayoutManager;
     private FollowAdapter mFollowAdapter;
     private DatabaseReference mDatabaseRef, mChildRef;
-    private boolean follow_check;
+    private boolean follow_check, usersearch_boolean;
 
     public FollowFragment() {
         // Required empty public constructor
@@ -51,7 +51,9 @@ public class FollowFragment extends Fragment {
 
         SharedPreferences sharedPreference = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String prof_id = sharedPreference.getString("prof_followers_id", "null");
+        usersearch_boolean = sharedPreference.getBoolean("usersearch_boolean", false);
         follow_check = sharedPreference.getBoolean("follow_check", false);
+
 
         linearLayoutManager = new LinearLayoutManager(getActivity());
 
@@ -69,7 +71,6 @@ public class FollowFragment extends Fragment {
         mFollowAdapter = new FollowAdapter(FollowObject.class, R.layout.follow_custom_ui, FollowHolder.class, mChildRef, getContext());
 
         followRecyclerview.setLayoutManager(linearLayoutManager);
-
 
         followRecyclerview.setAdapter(mFollowAdapter);
 
