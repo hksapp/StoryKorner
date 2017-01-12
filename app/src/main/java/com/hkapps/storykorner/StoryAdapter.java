@@ -357,6 +357,7 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                 edit.putString("Category", model.getCategory().toString());
 
                 edit.putBoolean("storysearch_boolean", false);
+
                 edit.commit();
 
                 Fragment fragment = new StoriesFragment();
