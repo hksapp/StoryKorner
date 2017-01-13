@@ -51,7 +51,7 @@ public class ProfileFragment extends Fragment {
     public SharedPreferences sharedPreferences;
     String checkingid = "";
     String checking_name = "";
-    private TextView uname, user_email, followers_count, following_count,stories_count;
+    private TextView uname, user_email, followers_count, following_count, stories_count, saved_count;
     private ImageButton prof_image;
     private StorageReference mStorageRef;
     private ProgressDialog mProgressDialog;
@@ -106,6 +106,7 @@ public class ProfileFragment extends Fragment {
         followers_count = (TextView) rootview.findViewById(R.id.followers_count);
         following_count = (TextView) rootview.findViewById(R.id.following_count);
         stories_count = (TextView) rootview.findViewById(R.id.stories_count);
+        saved_count = (TextView) rootview.findViewById(R.id.saved_count);
 
 
 
@@ -182,6 +183,12 @@ public class ProfileFragment extends Fragment {
                 if (dataSnapshot.child("following").exists()) {
 
                     following_count.setText(String.valueOf(dataSnapshot.child("following").getChildrenCount()));
+
+                }
+
+                if (dataSnapshot.child("saved").exists()) {
+
+                    saved_count.setText(String.valueOf(dataSnapshot.child("saved").getChildrenCount()));
 
                 }
 
