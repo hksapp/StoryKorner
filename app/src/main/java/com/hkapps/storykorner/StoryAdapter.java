@@ -54,82 +54,207 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
 
     @Override
     protected void populateViewHolder(final StoryHolder viewHolder, final StoryObject model, final int position) {
-
-        final long tmp = model.getTimestamp();
-        Date date = new Date(tmp);
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-        String tym = formatter.format(date);
-
-
-        final String post_key = getRef(position).getKey().toString();
-
-        mLikeRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(post_key).child("likes");
-
-        mCommentRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(post_key).child("comments");
-        mCommentUpdateRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(post_key);
-
-
-        mDelRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories");
-
-        mFollowingRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).child("following");
         sharedPreference = PreferenceManager.getDefaultSharedPreferences(context);
-        String storyuserid = sharedPreference.getString("storyuserid", model.getUserid());
+        int storiesfragment = sharedPreference.getInt("storiesfragment", 404);
 
 
+        if (storiesfragment == 5) {
 
 
+            final String postid = model.getSaved_post_id();
+
+            mLikeRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(postid).child("likes");
+
+            mCommentRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(postid).child("comments");
+            mCommentUpdateRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(postid);
 
 
+            mDelRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories");
+
+            mFollowingRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).child("following");
+
+            //  String storyuserid = sharedPreference.getString("storyuserid", model.getUserid());
 
 
+            mFireRef = FirebaseDatabase.getInstance().getReference().child("Users");
+
+            DatabaseReference saveRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(postid);
+
+            saveRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(final DataSnapshot dataSnapshot_saved) {
 
 
+                    viewHolder.title_ui.setText(dataSnapshot_saved.child("title").getValue().toString());
+                    viewHolder.story_ui.setText(dataSnapshot_saved.child("story").getValue().toString());
+                    viewHolder.username.setText(dataSnapshot_saved.child("username").getValue().toString());
 
 
+                    long tmp = (long) dataSnapshot_saved.child("timestamp").getValue();
+                    Date date = new Date(tmp);
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+                    String tym = formatter.format(date);
 
-        boolean chk = sharedPreference.getBoolean("profile", false);
-
-        mFireRef = FirebaseDatabase.getInstance().getReference().child("Users");
+                    viewHolder.timestamp.setText(tym);
 
 
-        viewHolder.timestamp.setText(tym);
+                    viewHolder.like.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View view) {
+
+                            mLikeRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(postid).child("likes");
+                            //   mLikeRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+
+                            liked = true;
+
+                            mLikeRef.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                    if (liked) {
+
+                                        if (dataSnapshot.hasChild(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                                            mLikeRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).removeValue();
+                                            // Toast.makeText(context, "HIIII", Toast.LENGTH_SHORT).show();
+                                            notifying = FirebaseDatabase.getInstance().getReference().child("Users").child(dataSnapshot_saved.child("userid").getValue().toString()).child("Notifications");
 
 
-        //like button
-        viewHolder.like.setOnClickListener(new View.OnClickListener() {
+                                            final Query noti = notifying.orderByChild("liker_id_post_id").equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid().toString() + "_" + postid);
 
-            @Override
-            public void onClick(View view) {
+                                            noti.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(DataSnapshot dataSnapshot) {
 
-                final String post_key = getRef(position).getKey().toString();
-                mLikeRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(post_key).child("likes");
-                //   mLikeRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+                                                    Toast.makeText(context, dataSnapshot.child("liker_id").getKey().toString(), Toast.LENGTH_SHORT).show();
 
-                liked = true;
+                                                    for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
+                                                        appleSnapshot.getRef().removeValue();
+                                                    }
 
-                mLikeRef.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
 
-                        if (liked) {
+                                                }
+
+                                                @Override
+                                                public void onCancelled(DatabaseError databaseError) {
+
+                                                }
+                                            });
+
+                                            viewHolder.like.setImageResource(R.drawable.ic_sentiment_satisfied_white_24dp);
+                                            liked = false;
+
+
+                                        } else {
+                                            mLikeRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("liked_id").setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                            notifying = FirebaseDatabase.getInstance().getReference().child("Users").child(dataSnapshot_saved.child("userid").getValue().toString()).child("Notifications");
+                                            Map postdata = new HashMap();
+                                            postdata.put("liker_id", FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
+                                            postdata.put("liker_id_post_id", FirebaseAuth.getInstance().getCurrentUser().getUid().toString() + "_" + postid);
+                                            postdata.put("liker_name", FirebaseAuth.getInstance().getCurrentUser().getDisplayName().toString());
+
+                                            postdata.put("post_id", postid);
+                                            postdata.put("timestamp", ServerValue.TIMESTAMP);
+                                            notifying.push().setValue(postdata);
+                                            viewHolder.like.setImageResource(R.drawable.ic_sentiment_very_satisfied_white_24dp);
+                                            liked = false;
+                                        }
+                                    }
+                                    viewHolder.likecount.setText(String.valueOf(dataSnapshot.getChildrenCount()) + " Likes");
+
+
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+
+
+                        }
+
+                    });
+
+                    mLikeRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+
                             if (dataSnapshot.hasChild(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-                                mLikeRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).removeValue();
-                                // Toast.makeText(context, "HIIII", Toast.LENGTH_SHORT).show();
-                                notifying = FirebaseDatabase.getInstance().getReference().child("Users").child(model.getUserid().toString()).child("Notifications");
+
+                                viewHolder.like.setImageResource(R.drawable.ic_sentiment_very_satisfied_white_24dp);
+                            } else {
+                                viewHolder.like.setImageResource(R.drawable.ic_sentiment_satisfied_white_24dp);
+                            }
+
+                            viewHolder.likecount.setText(String.valueOf(dataSnapshot.getChildrenCount()) + " Likes");
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
 
 
-                                final Query noti = notifying.orderByChild("liker_id_post_id").equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid().toString() + "_" + post_key);
+                    //COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS
 
-                                noti.addListenerForSingleValueEvent(new ValueEventListener() {
+                    viewHolder.comment.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            if (viewHolder.type_comment.getVisibility() == View.GONE) {
+                                viewHolder.type_comment.setVisibility(View.VISIBLE);
+                                viewHolder.send_comment.setVisibility(View.VISIBLE);
+                                viewHolder.type_comment.requestFocus();
+                                InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+
+                            } else if (viewHolder.type_comment.getVisibility() == View.VISIBLE) {
+
+                                viewHolder.type_comment.setVisibility(View.GONE);
+                                viewHolder.send_comment.setVisibility(View.GONE);
+                                InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(view.getWindowToken(),
+                                        InputMethodManager.RESULT_UNCHANGED_SHOWN);
+
+                            }
+
+
+                        }
+                    });
+
+
+                    viewHolder.send_comment.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(final View view) {
+                            InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(view.getWindowToken(),
+                                    InputMethodManager.RESULT_UNCHANGED_SHOWN);
+                            if (viewHolder.type_comment.getText().toString().trim().length() != 0) {
+
+
+                                // viewHolder.type_comment.setVisibility(View.INVISIBLE);
+                                // viewHolder.send_comment.setVisibility(View.INVISIBLE);
+                                viewHolder.write_comment.setVisibility(View.GONE);
+
+
+                                String post_key = getRef(position).getKey().toString();
+                                mCommentRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(post_key).child("comments");
+
+                                mCommentRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
+                                        String ct = viewHolder.type_comment.getText().toString();
 
-                                        Toast.makeText(context, dataSnapshot.child("liker_id").getKey().toString(), Toast.LENGTH_SHORT).show();
+                                        String key = mCommentRef.push().getKey();
 
-                                        for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
-                                            appleSnapshot.getRef().removeValue();
-                                        }
+                                        mCommentRef.child(key).child("cmt_user_id").setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                        mCommentRef.child(key).child("cmt").setValue(ct);
 
+
+                                        viewHolder.user_cmt.setText(String.valueOf(dataSnapshot.child("comments").getChildrenCount()) + " Comments");
 
                                     }
 
@@ -139,121 +264,31 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                                     }
                                 });
 
-                                viewHolder.like.setImageResource(R.drawable.ic_sentiment_satisfied_white_24dp);
-                                liked = false;
-
-
-                            } else {
-                                mLikeRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("liked_id").setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                                notifying = FirebaseDatabase.getInstance().getReference().child("Users").child(model.getUserid().toString()).child("Notifications");
-                                Map postdata = new HashMap();
-                                postdata.put("liker_id", FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
-                                postdata.put("liker_id_post_id", FirebaseAuth.getInstance().getCurrentUser().getUid().toString() + "_" + post_key);
-                                postdata.put("liker_name", FirebaseAuth.getInstance().getCurrentUser().getDisplayName().toString());
-
-                                postdata.put("post_id", post_key);
-                                postdata.put("timestamp", ServerValue.TIMESTAMP);
-                                notifying.push().setValue(postdata);
-                                viewHolder.like.setImageResource(R.drawable.ic_sentiment_very_satisfied_white_24dp);
-                                liked = false;
                             }
+
                         }
-                        viewHolder.likecount.setText(String.valueOf(dataSnapshot.getChildrenCount()) + " Likes");
+                    });
 
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-
-
-            }
-
-        });
-
-        mLikeRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-
-                if (dataSnapshot.hasChild(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-
-                    viewHolder.like.setImageResource(R.drawable.ic_sentiment_very_satisfied_white_24dp);
-                } else {
-                    viewHolder.like.setImageResource(R.drawable.ic_sentiment_satisfied_white_24dp);
-                }
-
-                viewHolder.likecount.setText(String.valueOf(dataSnapshot.getChildrenCount()) + " Likes");
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-
-        //COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS
-
-        viewHolder.comment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (viewHolder.type_comment.getVisibility() == View.GONE) {
-                    viewHolder.type_comment.setVisibility(View.VISIBLE);
-                    viewHolder.send_comment.setVisibility(View.VISIBLE);
-                    viewHolder.type_comment.requestFocus();
-                    InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-
-                } else if (viewHolder.type_comment.getVisibility() == View.VISIBLE) {
-
-                    viewHolder.type_comment.setVisibility(View.GONE);
-                    viewHolder.send_comment.setVisibility(View.GONE);
-                    InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view.getWindowToken(),
-                            InputMethodManager.RESULT_UNCHANGED_SHOWN);
-
-                }
-
-
-
-            }
-        });
-
-
-        viewHolder.send_comment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View view) {
-                InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(view.getWindowToken(),
-                        InputMethodManager.RESULT_UNCHANGED_SHOWN);
-                if (viewHolder.type_comment.getText().toString().trim().length() != 0) {
-
-
-                    // viewHolder.type_comment.setVisibility(View.INVISIBLE);
-                    // viewHolder.send_comment.setVisibility(View.INVISIBLE);
-                    viewHolder.write_comment.setVisibility(View.GONE);
-
-
-                    String post_key = getRef(position).getKey().toString();
-                    mCommentRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(post_key).child("comments");
-
-                    mCommentRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    mCommentUpdateRef.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            String ct = viewHolder.type_comment.getText().toString();
 
-                            String key = mCommentRef.push().getKey();
-
-                            mCommentRef.child(key).child("cmt_user_id").setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                            mCommentRef.child(key).child("cmt").setValue(ct);
+                            if (dataSnapshot.hasChild("comments")) {
 
 
-                            viewHolder.user_cmt.setText(String.valueOf(dataSnapshot.child("comments").getChildrenCount()) + " Comments");
+                                viewHolder.user_cmt.setText(String.valueOf(dataSnapshot.child("comments").getChildrenCount()) + " Comments");
+
+          /*         Map mm = new HashMap();
+                for( DataSnapshot ds :   dataSnapshot_saved.child("comments").getChildren()){
+
+               String cmt_user_id =  ds.child("cmt_user_id").getValue().toString();
+                 String cmt =   ds.child("cmt").getValue().toString();
+
+                 }
+
+                    */
+                            }
+
 
                         }
 
@@ -263,19 +298,424 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                         }
                     });
 
+
+                    //SAVE SAVE SAVE SAVE   SAVE SAVE SAVE SAVE SAVE
+
+                    viewHolder.save.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            DatabaseReference saveRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
+
+                            saveRef.child("saved").child(postid).child("saved_post_id").setValue(postid);
+
+                            Toast.makeText(context, "Successfully Saved", Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
+
+
+                    //COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS
+
+
+                    viewHolder.user_cmt.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            Fragment fragment = new CommentFragment();
+                            FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            fragmentTransaction.replace(R.id.main_container, fragment);
+                            fragmentTransaction.addToBackStack(null);
+                            fragmentTransaction.commit();
+
+                        }
+                    });
+
+
+                    //LIKE FRAGMENT
+
+                    viewHolder.likecount.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            String post_key = getRef(position).getKey().toString();
+                            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+                            SharedPreferences.Editor edit = sp.edit();
+                            edit.putString("likes_post_key", post_key);
+                            edit.putInt("followfragment", 1);
+                            edit.commit();
+
+
+                            Fragment fragment = new FollowFragment();
+                            FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            fragmentTransaction.replace(R.id.main_container, fragment);
+                            fragmentTransaction.addToBackStack(null);
+                            fragmentTransaction.commit();
+
+
+                        }
+                    });
+
+
+                    viewHolder.userproflink.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+                            SharedPreferences.Editor edit = sp.edit();
+                            edit.putString("profile_id", dataSnapshot_saved.child("userid").getValue().toString());
+                            edit.commit();
+
+                            Fragment fragment = new ProfileFragment();
+                            FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            fragmentTransaction.replace(R.id.main_container, fragment);
+                            fragmentTransaction.addToBackStack(null);
+                            fragmentTransaction.commit();
+
+
+                        }
+                    });
+
+
+                    // if (model.getUserid().equals(storyuserid)) {
+
+                    mFireRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.child(dataSnapshot_saved.child("userid").getValue().toString()).child("photolink").exists()) {
+                                String photo = dataSnapshot.child(dataSnapshot_saved.child("userid").getValue().toString()).child("photolink").getValue().toString();
+                                Picasso.with(context).load(photo).fit().centerCrop().into(viewHolder.userimage);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+
+                    if (dataSnapshot_saved.child("userid").getValue().toString().equals(FirebaseAuth.getInstance().getCurrentUser().getUid().toString())) {
+
+                        viewHolder.delete.setVisibility(View.VISIBLE);
+
+                    }
+
+
+                    viewHolder.delete.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+
+                            AlertDialog.Builder alert = new AlertDialog.Builder(
+                                    context);
+                            alert.setTitle("Confirm Deletion");
+                            alert.setMessage("Delete this Story?");
+                            alert.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //do your work here
+                                    mDelRef.child(postid).removeValue();
+                                    dialog.dismiss();
+
+                                }
+                            });
+                            alert.setNegativeButton("Don't Delete", new DialogInterface.OnClickListener() {
+
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    dialog.dismiss();
+                                }
+                            });
+
+                            alert.show();
+
+
+                        }
+                    });
+
+
+                    viewHolder.category.setText(dataSnapshot_saved.child("category").getValue().toString());
+
+
+                    viewHolder.category.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+                            SharedPreferences.Editor edit = sp.edit();
+                            edit.putInt("storiesfragment", 3);
+                            edit.putString("Category", dataSnapshot_saved.child("category").getValue().toString());
+                            edit.commit();
+
+                            Fragment fragment = new StoriesFragment();
+                            FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            fragmentTransaction.replace(R.id.main_container, fragment);
+                            fragmentTransaction.addToBackStack(null);
+                            fragmentTransaction.commit();
+
+
+                        }
+                    });
+
+
+                    viewHolder.story_ui.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            Intent i = new Intent(context, StoryDescription.class);
+                            i.putExtra("intent_title", dataSnapshot_saved.child("title").getValue().toString());
+                            i.putExtra("intent_story", dataSnapshot_saved.child("story").getValue().toString());
+
+                            context.startActivity(i);
+                        }
+                    });
+
+
+                    viewHolder.title_ui.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            Intent i = new Intent(context, StoryDescription.class);
+                            i.putExtra("intent_title", dataSnapshot_saved.child("title").getValue().toString());
+                            i.putExtra("intent_story", dataSnapshot_saved.child("story").getValue().toString());
+                            // i.putExtra("position",position);
+
+                            context.startActivity(i);
+                        }
+                    });
+
+
+
+
+
                 }
 
-            }
-        });
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-        mCommentUpdateRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                if (dataSnapshot.hasChild("comments")) {
+                }
+            });
 
 
-                    viewHolder.user_cmt.setText(String.valueOf(dataSnapshot.child("comments").getChildrenCount()) + " Comments");
+        } else {
+
+
+            final long tmp = model.getTimestamp();
+            Date date = new Date(tmp);
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+            String tym = formatter.format(date);
+
+
+            final String post_key = getRef(position).getKey().toString();
+
+            mLikeRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(post_key).child("likes");
+
+            mCommentRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(post_key).child("comments");
+            mCommentUpdateRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(post_key);
+
+
+            mDelRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories");
+
+            mFollowingRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).child("following");
+
+            String storyuserid = sharedPreference.getString("storyuserid", model.getUserid());
+
+
+            boolean chk = sharedPreference.getBoolean("profile", false);
+
+            mFireRef = FirebaseDatabase.getInstance().getReference().child("Users");
+
+
+            viewHolder.timestamp.setText(tym);
+
+
+            //like button
+            viewHolder.like.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View view) {
+
+                    final String post_key = getRef(position).getKey().toString();
+                    mLikeRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(post_key).child("likes");
+                    //   mLikeRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+
+                    liked = true;
+
+                    mLikeRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+                            if (liked) {
+
+                                if (dataSnapshot.hasChild(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                                    mLikeRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).removeValue();
+                                    // Toast.makeText(context, "HIIII", Toast.LENGTH_SHORT).show();
+                                    notifying = FirebaseDatabase.getInstance().getReference().child("Users").child(model.getUserid().toString()).child("Notifications");
+
+
+                                    final Query noti = notifying.orderByChild("liker_id_post_id").equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid().toString() + "_" + post_key);
+
+                                    noti.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                            Toast.makeText(context, dataSnapshot.child("liker_id").getKey().toString(), Toast.LENGTH_SHORT).show();
+
+                                            for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
+                                                appleSnapshot.getRef().removeValue();
+                                            }
+
+
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+
+                                        }
+                                    });
+
+                                    viewHolder.like.setImageResource(R.drawable.ic_sentiment_satisfied_white_24dp);
+                                    liked = false;
+
+
+                                } else {
+                                    mLikeRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("liked_id").setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                    notifying = FirebaseDatabase.getInstance().getReference().child("Users").child(model.getUserid().toString()).child("Notifications");
+                                    Map postdata = new HashMap();
+                                    postdata.put("liker_id", FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
+                                    postdata.put("liker_id_post_id", FirebaseAuth.getInstance().getCurrentUser().getUid().toString() + "_" + post_key);
+                                    postdata.put("liker_name", FirebaseAuth.getInstance().getCurrentUser().getDisplayName().toString());
+
+                                    postdata.put("post_id", post_key);
+                                    postdata.put("timestamp", ServerValue.TIMESTAMP);
+                                    notifying.push().setValue(postdata);
+                                    viewHolder.like.setImageResource(R.drawable.ic_sentiment_very_satisfied_white_24dp);
+                                    liked = false;
+                                }
+                            }
+                            viewHolder.likecount.setText(String.valueOf(dataSnapshot.getChildrenCount()) + " Likes");
+
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+
+                }
+
+            });
+
+            mLikeRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+
+                    if (dataSnapshot.hasChild(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+
+                        viewHolder.like.setImageResource(R.drawable.ic_sentiment_very_satisfied_white_24dp);
+                    } else {
+                        viewHolder.like.setImageResource(R.drawable.ic_sentiment_satisfied_white_24dp);
+                    }
+
+                    viewHolder.likecount.setText(String.valueOf(dataSnapshot.getChildrenCount()) + " Likes");
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+
+            //COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS
+
+            viewHolder.comment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    if (viewHolder.type_comment.getVisibility() == View.GONE) {
+                        viewHolder.type_comment.setVisibility(View.VISIBLE);
+                        viewHolder.send_comment.setVisibility(View.VISIBLE);
+                        viewHolder.type_comment.requestFocus();
+                        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+
+                    } else if (viewHolder.type_comment.getVisibility() == View.VISIBLE) {
+
+                        viewHolder.type_comment.setVisibility(View.GONE);
+                        viewHolder.send_comment.setVisibility(View.GONE);
+                        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(),
+                                InputMethodManager.RESULT_UNCHANGED_SHOWN);
+
+                    }
+
+
+                }
+            });
+
+
+            viewHolder.send_comment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View view) {
+                    InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(),
+                            InputMethodManager.RESULT_UNCHANGED_SHOWN);
+                    if (viewHolder.type_comment.getText().toString().trim().length() != 0) {
+
+
+                        // viewHolder.type_comment.setVisibility(View.INVISIBLE);
+                        // viewHolder.send_comment.setVisibility(View.INVISIBLE);
+                        viewHolder.write_comment.setVisibility(View.GONE);
+
+
+                        String post_key = getRef(position).getKey().toString();
+                        mCommentRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(post_key).child("comments");
+
+                        mCommentRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                String ct = viewHolder.type_comment.getText().toString();
+
+                                String key = mCommentRef.push().getKey();
+
+                                mCommentRef.child(key).child("cmt_user_id").setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                mCommentRef.child(key).child("cmt").setValue(ct);
+
+
+                                viewHolder.user_cmt.setText(String.valueOf(dataSnapshot.child("comments").getChildrenCount()) + " Comments");
+
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+                    }
+
+                }
+            });
+
+            mCommentUpdateRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    if (dataSnapshot.hasChild("comments")) {
+
+
+                        viewHolder.user_cmt.setText(String.valueOf(dataSnapshot.child("comments").getChildrenCount()) + " Comments");
 
           /*         Map mm = new HashMap();
                 for( DataSnapshot ds :   dataSnapshot.child("comments").getChildren()){
@@ -286,200 +726,210 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                  }
 
                     */
+                    }
+
+
                 }
 
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-
-        //COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS
-
-
-        viewHolder.user_cmt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Fragment fragment = new CommentFragment();
-                FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.main_container, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-
-            }
-        });
-
-
-        //LIKE FRAGMENT
-
-        viewHolder.likecount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                String post_key = getRef(position).getKey().toString();
-                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-                SharedPreferences.Editor edit = sp.edit();
-                edit.putString("likes_post_key", post_key);
-                edit.putInt("followfragment", 1);
-                edit.commit();
-
-
-                Fragment fragment = new FollowFragment();
-                FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.main_container, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-
-
-            }
-        });
-
-
-        viewHolder.userproflink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-                SharedPreferences.Editor edit = sp.edit();
-                edit.putString("profile_id", model.getUserid());
-                edit.commit();
-
-                Fragment fragment = new ProfileFragment();
-                FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.main_container, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-
-
-            }
-        });
-
-
-        // if (model.getUserid().equals(storyuserid)) {
-
-        mFireRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.child(model.getUserid()).child("photolink").exists()) {
-                    String photo = dataSnapshot.child(model.getUserid()).child("photolink").getValue().toString();
-                    Picasso.with(context).load(photo).fit().centerCrop().into(viewHolder.userimage);
                 }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        viewHolder.title_ui.setText(model.getTitle());
-        viewHolder.story_ui.setText(model.getStory());
-        viewHolder.username.setText(model.getUsername());
+            });
 
 
-        if (model.getUserid().toString().equals(FirebaseAuth.getInstance().getCurrentUser().getUid().toString())) {
+            //SAVE SAVE SAVE SAVE   SAVE SAVE SAVE SAVE SAVE
 
-            viewHolder.delete.setVisibility(View.VISIBLE);
+            viewHolder.save.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
-        }
+                    DatabaseReference saveRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
+
+                    saveRef.child("saved").child(post_key).child("saved_post_id").setValue(post_key);
+
+                }
+            });
 
 
-        viewHolder.delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            //COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS
 
 
-                AlertDialog.Builder alert = new AlertDialog.Builder(
-                        context);
-                alert.setTitle("Confirm Deletion");
-                alert.setMessage("Delete this Story?");
-                alert.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+            viewHolder.user_cmt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //do your work here
-                        mDelRef.child(post_key).removeValue();
-                        dialog.dismiss();
+                    Fragment fragment = new CommentFragment();
+                    FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.main_container, fragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
 
+                }
+            });
+
+
+            //LIKE FRAGMENT
+
+            viewHolder.likecount.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    String post_key = getRef(position).getKey().toString();
+                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+                    SharedPreferences.Editor edit = sp.edit();
+                    edit.putString("likes_post_key", post_key);
+                    edit.putInt("followfragment", 1);
+                    edit.commit();
+
+
+                    Fragment fragment = new FollowFragment();
+                    FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.main_container, fragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+
+
+                }
+            });
+
+
+            viewHolder.userproflink.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+                    SharedPreferences.Editor edit = sp.edit();
+                    edit.putString("profile_id", model.getUserid());
+                    edit.commit();
+
+                    Fragment fragment = new ProfileFragment();
+                    FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.main_container, fragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+
+
+                }
+            });
+
+
+            // if (model.getUserid().equals(storyuserid)) {
+
+            mFireRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.child(model.getUserid()).child("photolink").exists()) {
+                        String photo = dataSnapshot.child(model.getUserid()).child("photolink").getValue().toString();
+                        Picasso.with(context).load(photo).fit().centerCrop().into(viewHolder.userimage);
                     }
-                });
-                alert.setNegativeButton("Don't Delete", new DialogInterface.OnClickListener() {
+                }
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-                        dialog.dismiss();
-                    }
-                });
+                }
+            });
 
-                alert.show();
-
-
-            }
-        });
+            viewHolder.title_ui.setText(model.getTitle());
+            viewHolder.story_ui.setText(model.getStory());
+            viewHolder.username.setText(model.getUsername());
 
 
+            if (model.getUserid().toString().equals(FirebaseAuth.getInstance().getCurrentUser().getUid().toString())) {
 
-
-
-
-        viewHolder.category.setText(model.getCategory());
-
-
-        viewHolder.category.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-                SharedPreferences.Editor edit = sp.edit();
-                edit.putInt("storiesfragment", 3);
-                edit.putString("Category", model.getCategory().toString());
-                edit.commit();
-
-                Fragment fragment = new StoriesFragment();
-                FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.main_container, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-
+                viewHolder.delete.setVisibility(View.VISIBLE);
 
             }
-        });
 
 
-        viewHolder.story_ui.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent i = new Intent(context, StoryDescription.class);
-                i.putExtra("intent_title", model.getTitle());
-                i.putExtra("intent_story", model.getStory());
-                i.putExtra("position", position);
-                context.startActivity(i);
-            }
-        });
+            viewHolder.delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
 
-        viewHolder.title_ui.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(
+                            context);
+                    alert.setTitle("Confirm Deletion");
+                    alert.setMessage("Delete this Story?");
+                    alert.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
 
-                Intent i = new Intent(context, StoryDescription.class);
-                i.putExtra("intent_title", model.getTitle());
-                i.putExtra("intent_story", model.getStory());
-                // i.putExtra("position",position);
-                i.putExtra("position", position);
-                context.startActivity(i);
-            }
-        });
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //do your work here
+                            mDelRef.child(post_key).removeValue();
+                            dialog.dismiss();
+
+                        }
+                    });
+                    alert.setNegativeButton("Don't Delete", new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            dialog.dismiss();
+                        }
+                    });
+
+                    alert.show();
+
+
+                }
+            });
+
+
+            viewHolder.category.setText(model.getCategory());
+
+
+            viewHolder.category.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+                    SharedPreferences.Editor edit = sp.edit();
+                    edit.putInt("storiesfragment", 3);
+                    edit.putString("Category", model.getCategory().toString());
+                    edit.commit();
+
+                    Fragment fragment = new StoriesFragment();
+                    FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.main_container, fragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+
+
+                }
+            });
+
+
+            viewHolder.story_ui.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    Intent i = new Intent(context, StoryDescription.class);
+                    i.putExtra("intent_title", model.getTitle());
+                    i.putExtra("intent_story", model.getStory());
+                    i.putExtra("position", position);
+                    context.startActivity(i);
+                }
+            });
+
+
+            viewHolder.title_ui.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    Intent i = new Intent(context, StoryDescription.class);
+                    i.putExtra("intent_title", model.getTitle());
+                    i.putExtra("intent_story", model.getStory());
+                    // i.putExtra("position",position);
+                    i.putExtra("position", position);
+                    context.startActivity(i);
+                }
+            });
 
 
 
@@ -546,9 +996,9 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
         }*/
 
 
+        }
+
     }
-
-
 }
 
 

@@ -56,7 +56,7 @@ public class ProfileFragment extends Fragment {
     private StorageReference mStorageRef;
     private ProgressDialog mProgressDialog;
     private DatabaseReference mDatabaseRef, mFollowRef, mStoryCountRef;
-    private LinearLayout prof_stories, prof_followers, prof_following;
+    private LinearLayout prof_stories, prof_followers, prof_following, prof_saved;
     private Button signout, follow;
 
     public ProfileFragment() {
@@ -87,6 +87,7 @@ public class ProfileFragment extends Fragment {
         prof_stories = (LinearLayout) rootview.findViewById(R.id.prof_stories);
         prof_followers = (LinearLayout) rootview.findViewById(R.id.prof_followers);
         prof_following = (LinearLayout) rootview.findViewById(R.id.prof_following);
+        prof_saved = (LinearLayout) rootview.findViewById(R.id.prof_saved);
 
 
 
@@ -116,6 +117,8 @@ public class ProfileFragment extends Fragment {
 
 
             follow.setVisibility(View.GONE);
+
+            prof_saved.setVisibility(View.VISIBLE);
 
             signout.setVisibility(View.VISIBLE);
 
@@ -271,6 +274,27 @@ public class ProfileFragment extends Fragment {
 
             }
         });
+
+        prof_saved.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                SharedPreferences.Editor edit = sp.edit();
+                edit.putInt("storiesfragment", 5);
+                edit.commit();
+
+                Fragment fragment = new StoriesFragment();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.main_container, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+
+            }
+        });
+
+
 
 
         if (!checkingid.equals(userid)) {

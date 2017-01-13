@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
@@ -46,6 +47,7 @@ public class StoriesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootview = inflater.inflate(R.layout.fragment_stories, container, false);
+
 
 
         sharedPreference = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -100,6 +102,12 @@ public class StoriesFragment extends Fragment {
                 mStoryAdapter = new StoryAdapter(StoryObject.class, R.layout.story_custom_ui, StoryHolder.class, childRef, getContext());
 
                 break;
+
+            case 5:
+
+                Query savedRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).child("saved");
+                mStoryAdapter = new StoryAdapter(StoryObject.class, R.layout.story_custom_ui, StoryHolder.class, savedRef, getContext());
+
         }
 
 

@@ -6,7 +6,7 @@ package com.hkapps.storykorner;
 
 public class StoryObject {
 
-    private String title;
+    private String title, saved_post_id;
     private String story;
     private String username;
     private String userid;
@@ -19,13 +19,14 @@ public class StoryObject {
 
     }
 
-    public StoryObject(String title, String story, String username, String userid, String category, long timestamp ) {
+    public StoryObject(String title, String story, String username, String userid, String category, long timestamp, String saved_post_id) {
         this.title = title;
         this.story = story;
         this.username = username;
         this.userid = userid;
         this.category = category;
         this.timestamp = timestamp;
+        this.saved_post_id = saved_post_id;
     }
 
     public String getTitle() { return title;}
@@ -50,7 +51,13 @@ public class StoryObject {
 
     public void setCategory(String category) { this.category = category; }
 
+    public String getSaved_post_id() {
+        return saved_post_id;
+    }
 
+    public void setSaved_post_id(String saved_post_id) {
+        this.saved_post_id = saved_post_id;
+    }
 
     public long getTimestamp() {
         return timestamp;

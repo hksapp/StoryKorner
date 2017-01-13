@@ -240,11 +240,12 @@
 
 
             <LinearLayout
+                android:id="@+id/prof_saved"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
                 android:layout_margin="10dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <ImageView
                     android:layout_width="0dp"
