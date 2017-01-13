@@ -16,9 +16,12 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -113,7 +116,35 @@ public class CreateFragment extends Fragment {
                     postdata.put("timestamp", ServerValue.TIMESTAMP);
                     postdata.put("category", cat);
 
-                    post_stories.push().setValue(postdata);
+                    final String pushid = post_stories.push().getKey();
+                    post_stories.child(pushid).setValue(postdata);
+
+                    DatabaseReference mOwnRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).child("newsfeed");
+                    mOwnRef.child(pushid).child("story_id").setValue(pushid);
+
+                    DatabaseReference mFollowerRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).child("followers");
+
+                    mFollowerRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
+
+                                String follower_id = ds.getKey().toString();
+
+                                DatabaseReference mNewsFeedRef = FirebaseDatabase.getInstance().getReference().child("Users").child(follower_id).child("newsfeed");
+
+                                mNewsFeedRef.child(pushid).child("story_id").setValue(pushid);
+
+
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
 
 
                     SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());

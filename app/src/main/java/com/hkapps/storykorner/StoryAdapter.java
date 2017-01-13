@@ -58,10 +58,10 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
         int storiesfragment = sharedPreference.getInt("storiesfragment", 404);
 
 
-        if (storiesfragment == 5) {
+        if (storiesfragment == 5 || storiesfragment == 4) {
 
 
-            final String postid = model.getSaved_post_id();
+            final String postid = model.getStory_id();
 
             mLikeRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(postid).child("likes");
 
@@ -307,8 +307,7 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
 
                             DatabaseReference saveRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
 
-                            saveRef.child("saved").child(postid).child("saved_post_id").setValue(postid);
-
+                            saveRef.child("saved").child(postid).child("story_id").setValue(postid);
                             Toast.makeText(context, "Successfully Saved", Toast.LENGTH_SHORT).show();
 
                         }
@@ -420,6 +419,42 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                                 public void onClick(DialogInterface dialog, int which) {
                                     //do your work here
                                     mDelRef.child(postid).removeValue();
+                                    DatabaseReference mOwnRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).child("newsfeed");
+                                    mOwnRef.child(postid).removeValue();
+
+                                    DatabaseReference saveRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
+
+                                    saveRef.child("saved").child(postid).removeValue();
+
+                                    DatabaseReference mFollowerRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).child("followers");
+
+                                    mFollowerRef.addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
+
+                                                String follower_id = ds.getKey().toString();
+
+                                                DatabaseReference mNewsFeedRef = FirebaseDatabase.getInstance().getReference().child("Users").child(follower_id).child("newsfeed");
+
+                                                mNewsFeedRef.child(postid).removeValue();
+
+                                                DatabaseReference saveRef = FirebaseDatabase.getInstance().getReference().child("Users").child(follower_id);
+
+                                                saveRef.child("saved").child(postid).removeValue();
+
+
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+
+                                        }
+                                    });
+
+
                                     dialog.dismiss();
 
                                 }
@@ -746,7 +781,9 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
 
                     DatabaseReference saveRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
 
-                    saveRef.child("saved").child(post_key).child("saved_post_id").setValue(post_key);
+                    saveRef.child("saved").child(post_key).child("story_id").setValue(post_key);
+
+                    Toast.makeText(context, "Successfully Saved", Toast.LENGTH_SHORT).show();
 
                 }
             });
@@ -861,6 +898,40 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                         public void onClick(DialogInterface dialog, int which) {
                             //do your work here
                             mDelRef.child(post_key).removeValue();
+
+                            DatabaseReference mOwnRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).child("newsfeed");
+                            mOwnRef.child(post_key).removeValue();
+
+                            DatabaseReference mFollowerRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).child("followers");
+
+                            mFollowerRef.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+
+                                        String follower_id = ds.getKey().toString();
+
+                                        DatabaseReference mNewsFeedRef = FirebaseDatabase.getInstance().getReference().child("Users").child(follower_id).child("newsfeed");
+
+                                        mNewsFeedRef.child(post_key).removeValue();
+
+                                        DatabaseReference saveRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
+
+                                        saveRef.child("saved").child(post_key).removeValue();
+
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+
+
+
+
                             dialog.dismiss();
 
                         }
