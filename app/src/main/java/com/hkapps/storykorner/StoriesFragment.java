@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -55,16 +54,15 @@ public class StoriesFragment extends Fragment {
 
 
         String storysearch = sharedPreference.getString("storysearch", "None");
-        Boolean storysearch_boolean = sharedPreference.getBoolean("storysearch_boolean", false);
+        boolean storysearch_boolean = sharedPreference.getBoolean("storysearch_boolean", false);
 
         String Category = sharedPreference.getString("Category", "Humor");
-        Boolean CategoryBoolean = sharedPreference.getBoolean("CategoryBoolean", false);
+        boolean CategoryBoolean = sharedPreference.getBoolean("CategoryBoolean", false);
+
+        int storiesfragment = sharedPreference.getInt("storiesfragment", 404);
 
 
-        if(CategoryBoolean.equals(true)){
 
-            Toast.makeText(getContext(), Category, Toast.LENGTH_SHORT).show();
-        }
 
 
         linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -76,7 +74,37 @@ public class StoriesFragment extends Fragment {
         childRef = mDatabaseRef.child("Posted_Stories");
         childRef.keepSynced(true);
 
-        if (chk) {
+
+        switch (storiesfragment) {
+
+            case 1:
+
+                Query profRef = childRef.orderByChild("userid").equalTo(storyuserid);
+                mStoryAdapter = new StoryAdapter(StoryObject.class, R.layout.story_custom_ui, StoryHolder.class, profRef, getContext());
+                break;
+
+            case 2:
+
+                Query storyRef = childRef.orderByChild("title").startAt(storysearch).endAt(storysearch + "\uf8ff");
+                mStoryAdapter = new StoryAdapter(StoryObject.class, R.layout.story_custom_ui, StoryHolder.class, storyRef, getContext());
+                break;
+
+            case 3:
+
+                Query catRef = childRef.orderByChild("category").equalTo(Category);
+                mStoryAdapter = new StoryAdapter(StoryObject.class, R.layout.story_custom_ui, StoryHolder.class, catRef, getContext());
+                break;
+
+            case 4:
+
+                mStoryAdapter = new StoryAdapter(StoryObject.class, R.layout.story_custom_ui, StoryHolder.class, childRef, getContext());
+
+                break;
+        }
+
+
+
+      /*  if (chk) {
 
             Query profRef = childRef.orderByChild("userid").equalTo(storyuserid);
             mStoryAdapter = new StoryAdapter(StoryObject.class, R.layout.story_custom_ui, StoryHolder.class, profRef, getContext());
@@ -94,7 +122,7 @@ public class StoriesFragment extends Fragment {
 
             mStoryAdapter = new StoryAdapter(StoryObject.class, R.layout.story_custom_ui, StoryHolder.class, childRef, getContext());
 
-        }
+        }*/
 
         storyRecyclerview.setLayoutManager(linearLayoutManager);
         storyRecyclerview.setAdapter(mStoryAdapter);

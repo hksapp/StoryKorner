@@ -439,12 +439,8 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
             public void onClick(View view) {
                 SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
                 SharedPreferences.Editor edit = sp.edit();
-                edit.putBoolean("CategoryBoolean", true);
-                edit.putBoolean("profile", false);
+                edit.putInt("storiesfragment", 3);
                 edit.putString("Category", model.getCategory().toString());
-
-                edit.putBoolean("storysearch_boolean", false);
-
                 edit.commit();
 
                 Fragment fragment = new StoriesFragment();

@@ -82,10 +82,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
         SharedPreferences.Editor edit = sp.edit();
-        edit.putBoolean("CategoryBoolean", true);
-        edit.putBoolean("profile", false);
-
-        edit.putBoolean("storysearch_boolean", false);
+        edit.putInt("storiesfragment", 3);
         edit.commit();
 
 

@@ -49,9 +49,7 @@ public class MainActivity extends AppCompatActivity {
 //To Open Stories Screen
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         SharedPreferences.Editor edit = sp.edit();
-        edit.putBoolean("profile", false);
-        edit.putBoolean("storysearch_boolean", false);
-        edit.putBoolean("CategoryBoolean", false);
+        edit.putInt("storiesfragment", 4);
         edit.commit();
 
         fragmentManager = getSupportFragmentManager();
@@ -119,9 +117,7 @@ public class MainActivity extends AppCompatActivity {
                         //To open Stories Screen
                         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                         SharedPreferences.Editor edit = sp.edit();
-                        edit.putBoolean("profile", false);
-                        edit.putBoolean("storysearch_boolean", false);
-                        edit.putBoolean("CategoryBoolean", false);
+                        edit.putInt("storiesfragment", 4);
                         edit.commit();
                         fragment = new StoriesFragment();
                         break;

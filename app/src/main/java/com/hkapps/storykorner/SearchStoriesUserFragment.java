@@ -110,7 +110,7 @@ public class SearchStoriesUserFragment extends Fragment {
 
                 if (storyTab) {
 
-                    edit.putBoolean("storysearch_boolean", true);
+                    edit.putInt("storiesfragment", 2);
                     edit.putString("storysearch", newText);
                     edit.commit();
 

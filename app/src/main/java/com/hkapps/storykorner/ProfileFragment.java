@@ -211,6 +211,7 @@ public class ProfileFragment extends Fragment {
                 SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
                 SharedPreferences.Editor edit = sp.edit();
                 edit.putString("storyuserid", checkingid);
+                edit.putInt("storiesfragment", 1);
                 edit.commit();
 
                 Fragment fragment = new StoriesFragment();
@@ -333,16 +334,6 @@ public class ProfileFragment extends Fragment {
             });
 
         }
-
-
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        SharedPreferences.Editor edit = sp.edit();
-        edit.putBoolean("profile", true);
-        edit.putBoolean("CategoryBoolean", false);
-        edit.putBoolean("storysearch_boolean", false);
-        edit.commit();
-
-
 
 
         return rootview;
