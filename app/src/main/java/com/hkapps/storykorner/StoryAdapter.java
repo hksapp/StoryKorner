@@ -493,6 +493,31 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
 
                             saveRef.child("saved").child(postid).removeValue();
 
+                            DatabaseReference nRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).child("Notifications");
+
+                            Query nNotDelRef = nRef.orderByChild("post_id").equalTo(postid);
+
+
+                            nNotDelRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+
+
+                                    for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
+                                        appleSnapshot.getRef().removeValue();
+                                    }
+
+
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+
+
+
                             DatabaseReference mFollowerRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).child("followers");
 
                             mFollowerRef.addValueEventListener(new ValueEventListener() {
@@ -905,6 +930,33 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
 
                             DatabaseReference mOwnRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).child("newsfeed");
                             mOwnRef.child(post_key).removeValue();
+
+
+                            DatabaseReference nRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).child("Notifications");
+
+                            Query nNotDelRef = nRef.orderByChild("post_id").equalTo(post_key);
+
+
+                            nNotDelRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+
+
+                                    for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
+                                        appleSnapshot.getRef().removeValue();
+                                    }
+
+
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+
+
+
 
                             DatabaseReference mFollowerRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).child("followers");
 
