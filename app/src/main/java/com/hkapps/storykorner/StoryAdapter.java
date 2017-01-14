@@ -102,8 +102,8 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
 
                         @Override
                         public void onClick(View view) {
-
-                            mLikeRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(postid).child("likes");
+                            final String post_key = getRef(position).getKey().toString();
+                            mLikeRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(post_key).child("likes");
                             //   mLikeRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
 
                             liked = true;
@@ -120,7 +120,7 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                                             notifying = FirebaseDatabase.getInstance().getReference().child("Users").child(dataSnapshot_saved.child("userid").getValue().toString()).child("Notifications");
 
 
-                                            final Query noti = notifying.orderByChild("liker_id_post_id").equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid().toString() + "_" + postid);
+                                            final Query noti = notifying.orderByChild("liker_id_post_id").equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid().toString() + "_" + post_key);
 
                                             noti.addListenerForSingleValueEvent(new ValueEventListener() {
                                                 @Override
@@ -150,10 +150,10 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                                             notifying = FirebaseDatabase.getInstance().getReference().child("Users").child(dataSnapshot_saved.child("userid").getValue().toString()).child("Notifications");
                                             Map postdata = new HashMap();
                                             postdata.put("liker_id", FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
-                                            postdata.put("liker_id_post_id", FirebaseAuth.getInstance().getCurrentUser().getUid().toString() + "_" + postid);
+                                            postdata.put("liker_id_post_id", FirebaseAuth.getInstance().getCurrentUser().getUid().toString() + "_" + post_key);
                                             postdata.put("liker_name", FirebaseAuth.getInstance().getCurrentUser().getDisplayName().toString());
 
-                                            postdata.put("post_id", postid);
+                                            postdata.put("post_id", post_key);
                                             postdata.put("timestamp", ServerValue.TIMESTAMP);
                                             notifying.push().setValue(postdata);
                                             viewHolder.like.setImageResource(R.drawable.ic_sentiment_very_satisfied_white_24dp);
@@ -176,26 +176,6 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
 
                     });
 
-                    mLikeRef.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-
-
-                            if (dataSnapshot.hasChild(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-
-                                viewHolder.like.setImageResource(R.drawable.ic_sentiment_very_satisfied_white_24dp);
-                            } else {
-                                viewHolder.like.setImageResource(R.drawable.ic_sentiment_satisfied_white_24dp);
-                            }
-
-                            viewHolder.likecount.setText(String.valueOf(dataSnapshot.getChildrenCount()) + " Likes");
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
 
 
                     //COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS
@@ -404,75 +384,7 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                     }
 
 
-                    viewHolder.delete.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
 
-
-                            AlertDialog.Builder alert = new AlertDialog.Builder(
-                                    context);
-                            alert.setTitle("Confirm Deletion");
-                            alert.setMessage("Delete this Story?");
-                            alert.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    //do your work here
-                                    mDelRef.child(postid).removeValue();
-                                    DatabaseReference mOwnRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).child("newsfeed");
-                                    mOwnRef.child(postid).removeValue();
-
-                                    DatabaseReference saveRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
-
-                                    saveRef.child("saved").child(postid).removeValue();
-
-                                    DatabaseReference mFollowerRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).child("followers");
-
-                                    mFollowerRef.addValueEventListener(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(DataSnapshot dataSnapshot) {
-
-                                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
-
-                                                String follower_id = ds.getKey().toString();
-
-                                                DatabaseReference mNewsFeedRef = FirebaseDatabase.getInstance().getReference().child("Users").child(follower_id).child("newsfeed");
-
-                                                mNewsFeedRef.child(postid).removeValue();
-
-                                                DatabaseReference saveRef = FirebaseDatabase.getInstance().getReference().child("Users").child(follower_id);
-
-                                                saveRef.child("saved").child(postid).removeValue();
-
-
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onCancelled(DatabaseError databaseError) {
-
-                                        }
-                                    });
-
-
-                                    dialog.dismiss();
-
-                                }
-                            });
-                            alert.setNegativeButton("Don't Delete", new DialogInterface.OnClickListener() {
-
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                    dialog.dismiss();
-                                }
-                            });
-
-                            alert.show();
-
-
-                        }
-                    });
 
 
                     viewHolder.category.setText(dataSnapshot_saved.child("category").getValue().toString());
@@ -533,6 +445,98 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+            mLikeRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+
+                    if (dataSnapshot.hasChild(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+
+                        viewHolder.like.setImageResource(R.drawable.ic_sentiment_very_satisfied_white_24dp);
+                    } else {
+                        viewHolder.like.setImageResource(R.drawable.ic_sentiment_satisfied_white_24dp);
+                    }
+
+                    viewHolder.likecount.setText(String.valueOf(dataSnapshot.getChildrenCount()) + " Likes");
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+
+            viewHolder.delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+
+                    AlertDialog.Builder alert = new AlertDialog.Builder(
+                            context);
+                    alert.setTitle("Confirm Deletion");
+                    alert.setMessage("Delete this Story?");
+                    alert.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //do your work here
+                            mDelRef.child(postid).removeValue();
+                            DatabaseReference mOwnRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).child("newsfeed");
+                            mOwnRef.child(postid).removeValue();
+
+                            DatabaseReference saveRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
+
+                            saveRef.child("saved").child(postid).removeValue();
+
+                            DatabaseReference mFollowerRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).child("followers");
+
+                            mFollowerRef.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+
+                                        String follower_id = ds.getKey().toString();
+
+                                        DatabaseReference mNewsFeedRef = FirebaseDatabase.getInstance().getReference().child("Users").child(follower_id).child("newsfeed");
+
+                                        mNewsFeedRef.child(postid).removeValue();
+
+                                        DatabaseReference saveRef = FirebaseDatabase.getInstance().getReference().child("Users").child(follower_id);
+
+                                        saveRef.child("saved").child(postid).removeValue();
+
+
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+
+
+                            dialog.dismiss();
+
+                        }
+                    });
+                    alert.setNegativeButton("Don't Delete", new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            dialog.dismiss();
+                        }
+                    });
+
+                    alert.show();
+
 
                 }
             });
