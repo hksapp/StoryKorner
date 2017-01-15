@@ -12,6 +12,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -44,12 +45,12 @@ public class FollowAdapter extends FirebaseRecyclerAdapter<FollowObject, FollowH
 
 
     @Override
-    protected void populateViewHolder(final FollowHolder viewHolder, final FollowObject model, int position) {
+    protected void populateViewHolder(final FollowHolder viewHolder, final FollowObject model, final int position) {
 
         SharedPreferences sharedPreference = PreferenceManager.getDefaultSharedPreferences(context);
         follow_check = sharedPreference.getBoolean("follow_check", false);
         String comment_id = sharedPreference.getString("comment_id", "null");
-        String comment_post_key = sharedPreference.getString("comment_post_key", "");
+        final String comment_post_key = sharedPreference.getString("comment_post_key", "");
 
         usersearch_boolean = sharedPreference.getBoolean("usersearch_boolean", false);
         followfragment = sharedPreference.getInt("followfragment", 404);
@@ -241,6 +242,46 @@ public class FollowAdapter extends FirebaseRecyclerAdapter<FollowObject, FollowH
                     }
 
                 });
+
+
+                final DatabaseReference checkComRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(comment_post_key);
+                checkComRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(final DataSnapshot dataSnapshot) {
+                        if ((FirebaseAuth.getInstance().getCurrentUser().getUid().toString().equals(dataSnapshot.child("userid").getValue().toString())) || (FirebaseAuth.getInstance().getCurrentUser().getUid().toString().equals(model.getCmt_user_id().toString()))) {
+
+
+                            viewHolder.follow_profile.setOnLongClickListener(new View.OnLongClickListener() {
+                                @Override
+                                public boolean onLongClick(View view) {
+
+                                    checkComRef.child("comments").child(model.getCmt_key().toString()).removeValue();
+                                    checkComRef.keepSynced(true);
+
+                                    Toast.makeText(context, "Done Deletion!", Toast.LENGTH_SHORT).show();
+
+
+                                    return true;
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+
+
+
+
+
+
+
+
+
 
 
                 viewHolder.follow_profile.setOnClickListener(new View.OnClickListener() {

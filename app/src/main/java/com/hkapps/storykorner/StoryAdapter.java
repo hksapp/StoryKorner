@@ -481,6 +481,8 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
 
                         mCommentRef.child(key).child("cmt_user_id").setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
                         mCommentRef.child(key).child("cmt").setValue(ct);
+                        mCommentRef.child(key).child("cmt_key").setValue(key.toString());
+
 
 
                     }
@@ -757,6 +759,7 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
 
                         mCommentRef.child(key).child("cmt_user_id").setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
                         mCommentRef.child(key).child("cmt").setValue(ct);
+                        mCommentRef.child(key).child("cmt_key").setValue(key.toString());
 
 
                     }

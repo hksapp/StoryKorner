@@ -82,31 +82,37 @@ public class StoriesFragment extends Fragment {
             case 1:
 
                 Query profRef = childRef.orderByChild("userid").equalTo(storyuserid);
+                profRef.keepSynced(true);
                 mStoryAdapter = new StoryAdapter(StoryObject.class, R.layout.story_custom_ui, StoryHolder.class, profRef, getContext());
                 break;
 
             case 2:
 
                 Query storyRef = childRef.orderByChild("title").startAt(storysearch).endAt(storysearch + "\uf8ff");
+                storyRef.keepSynced(true);
                 mStoryAdapter = new StoryAdapter(StoryObject.class, R.layout.story_custom_ui, StoryHolder.class, storyRef, getContext());
                 break;
 
             case 3:
 
                 Query catRef = childRef.orderByChild("category").equalTo(Category);
+                catRef.keepSynced(true);
                 mStoryAdapter = new StoryAdapter(StoryObject.class, R.layout.story_custom_ui, StoryHolder.class, catRef, getContext());
                 break;
 
             case 4:
 
                 Query newsfeedRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).child("newsfeed");
+                newsfeedRef.keepSynced(true);
                 mStoryAdapter = new StoryAdapter(StoryObject.class, R.layout.story_custom_ui, StoryHolder.class, newsfeedRef, getContext());
 
                 break;
 
             case 5:
 
+
                 Query savedRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).child("saved");
+                savedRef.keepSynced(true);
                 mStoryAdapter = new StoryAdapter(StoryObject.class, R.layout.story_custom_ui, StoryHolder.class, savedRef, getContext());
 
         }
