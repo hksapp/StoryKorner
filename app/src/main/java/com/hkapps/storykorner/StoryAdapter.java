@@ -103,6 +103,8 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                         @Override
                         public void onClick(View view) {
                             final String post_key = getRef(position).getKey().toString();
+
+
                             mLikeRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(post_key).child("likes");
                             //   mLikeRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
 
@@ -180,162 +182,7 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
 
                     //COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS
 
-                    viewHolder.comment.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
 
-                            if (viewHolder.type_comment.getVisibility() == View.GONE) {
-                                viewHolder.type_comment.setVisibility(View.VISIBLE);
-                                viewHolder.send_comment.setVisibility(View.VISIBLE);
-                                viewHolder.type_comment.requestFocus();
-                                InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-
-                            } else if (viewHolder.type_comment.getVisibility() == View.VISIBLE) {
-
-                                viewHolder.type_comment.setVisibility(View.GONE);
-                                viewHolder.send_comment.setVisibility(View.GONE);
-                                InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                                imm.hideSoftInputFromWindow(view.getWindowToken(),
-                                        InputMethodManager.RESULT_UNCHANGED_SHOWN);
-
-                            }
-
-
-                        }
-                    });
-
-
-                    viewHolder.send_comment.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(final View view) {
-                            InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                            imm.hideSoftInputFromWindow(view.getWindowToken(),
-                                    InputMethodManager.RESULT_UNCHANGED_SHOWN);
-                            if (viewHolder.type_comment.getText().toString().trim().length() != 0) {
-
-
-                                // viewHolder.type_comment.setVisibility(View.INVISIBLE);
-                                // viewHolder.send_comment.setVisibility(View.INVISIBLE);
-                                viewHolder.write_comment.setVisibility(View.GONE);
-
-
-                                String post_key = getRef(position).getKey().toString();
-                                mCommentRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(post_key).child("comments");
-
-                                mCommentRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot dataSnapshot) {
-                                        String ct = viewHolder.type_comment.getText().toString();
-
-                                        String key = mCommentRef.push().getKey();
-
-                                        mCommentRef.child(key).child("cmt_user_id").setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                                        mCommentRef.child(key).child("cmt").setValue(ct);
-
-
-                                        viewHolder.user_cmt.setText(String.valueOf(dataSnapshot.child("comments").getChildrenCount()) + " Comments");
-
-                                    }
-
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-
-                                    }
-                                });
-
-                            }
-
-                        }
-                    });
-
-                    mCommentUpdateRef.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-
-                            if (dataSnapshot.hasChild("comments")) {
-
-
-                                viewHolder.user_cmt.setText(String.valueOf(dataSnapshot.child("comments").getChildrenCount()) + " Comments");
-
-          /*         Map mm = new HashMap();
-                for( DataSnapshot ds :   dataSnapshot_saved.child("comments").getChildren()){
-
-               String cmt_user_id =  ds.child("cmt_user_id").getValue().toString();
-                 String cmt =   ds.child("cmt").getValue().toString();
-
-                 }
-
-                    */
-                            }
-
-
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-
-
-                    //SAVE SAVE SAVE SAVE   SAVE SAVE SAVE SAVE SAVE
-
-                    viewHolder.save.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-
-                            DatabaseReference saveRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
-
-                            saveRef.child("saved").child(postid).child("story_id").setValue(postid);
-                            Toast.makeText(context, "Successfully Saved", Toast.LENGTH_SHORT).show();
-
-                        }
-                    });
-
-
-                    //COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS
-
-
-                    viewHolder.user_cmt.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-
-                            Fragment fragment = new CommentFragment();
-                            FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.main_container, fragment);
-                            fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-
-                        }
-                    });
-
-
-                    //LIKE FRAGMENT
-
-                    viewHolder.likecount.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-
-                            String post_key = getRef(position).getKey().toString();
-                            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-                            SharedPreferences.Editor edit = sp.edit();
-                            edit.putString("likes_post_key", post_key);
-                            edit.putInt("followfragment", 1);
-                            edit.commit();
-
-
-                            Fragment fragment = new FollowFragment();
-                            FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.main_container, fragment);
-                            fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-
-
-                        }
-                    });
 
 
                     viewHolder.userproflink.setOnClickListener(new View.OnClickListener() {
@@ -471,6 +318,24 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
             });
 
 
+            mCommentRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+
+                    viewHolder.user_cmt.setText(String.valueOf(dataSnapshot.getChildrenCount()) + " Comments");
+
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+
+
             viewHolder.delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -561,6 +426,128 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                     });
 
                     alert.show();
+
+
+                }
+            });
+
+
+            viewHolder.comment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    if (viewHolder.type_comment.getVisibility() == View.GONE) {
+                        viewHolder.type_comment.setVisibility(View.VISIBLE);
+                        viewHolder.send_comment.setVisibility(View.VISIBLE);
+                        viewHolder.type_comment.requestFocus();
+                        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+
+                    } else if (viewHolder.type_comment.getVisibility() == View.VISIBLE) {
+
+                        viewHolder.type_comment.setVisibility(View.GONE);
+                        viewHolder.send_comment.setVisibility(View.GONE);
+                        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(),
+                                InputMethodManager.RESULT_UNCHANGED_SHOWN);
+
+                    }
+
+
+                }
+            });
+
+
+            viewHolder.send_comment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View view) {
+                    InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(),
+                            InputMethodManager.RESULT_UNCHANGED_SHOWN);
+                    if (viewHolder.type_comment.getText().toString().trim().length() != 0) {
+
+
+                        // viewHolder.type_comment.setVisibility(View.INVISIBLE);
+                        // viewHolder.send_comment.setVisibility(View.INVISIBLE);
+                        viewHolder.write_comment.setVisibility(View.GONE);
+
+
+                        String post_key = getRef(position).getKey().toString();
+                        mCommentRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(post_key).child("comments");
+
+                        String ct = viewHolder.type_comment.getText().toString();
+
+                        String key = mCommentRef.push().getKey();
+
+                        mCommentRef.child(key).child("cmt_user_id").setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                        mCommentRef.child(key).child("cmt").setValue(ct);
+
+
+                    }
+
+                }
+            });
+
+            //COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS
+
+
+            viewHolder.user_cmt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+
+                    String post_key = getRef(position).getKey().toString();
+                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+                    SharedPreferences.Editor edit = sp.edit();
+                    edit.putString("comment_post_key", post_key);
+                    edit.putInt("followfragment", 10);
+                    edit.commit();
+
+                    Fragment fragment = new FollowFragment();
+                    FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.main_container, fragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                }
+            });
+
+
+            //SAVE SAVE SAVE SAVE   SAVE SAVE SAVE SAVE SAVE
+
+            viewHolder.save.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    DatabaseReference saveRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
+
+                    saveRef.child("saved").child(postid).child("story_id").setValue(postid);
+                    Toast.makeText(context, "Successfully Saved", Toast.LENGTH_SHORT).show();
+
+                }
+            });
+
+
+            //LIKE FRAGMENT
+
+            viewHolder.likecount.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    String post_key = getRef(position).getKey().toString();
+                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+                    SharedPreferences.Editor edit = sp.edit();
+                    edit.putString("likes_post_key", post_key);
+                    edit.putInt("followfragment", 1);
+                    edit.commit();
+
+
+                    Fragment fragment = new FollowFragment();
+                    FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.main_container, fragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
 
 
                 }
@@ -701,6 +688,23 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
             });
 
 
+            mCommentRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+
+                    viewHolder.user_cmt.setText(String.valueOf(dataSnapshot.getChildrenCount()) + " Comments");
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+
+
             //COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS
 
             viewHolder.comment.setOnClickListener(new View.OnClickListener() {
@@ -746,60 +750,21 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                         String post_key = getRef(position).getKey().toString();
                         mCommentRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(post_key).child("comments");
 
-                        mCommentRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                String ct = viewHolder.type_comment.getText().toString();
+                        String ct = viewHolder.type_comment.getText().toString();
 
-                                String key = mCommentRef.push().getKey();
-
-                                mCommentRef.child(key).child("cmt_user_id").setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                                mCommentRef.child(key).child("cmt").setValue(ct);
+                        String key = mCommentRef.push().getKey();
 
 
-                                viewHolder.user_cmt.setText(String.valueOf(dataSnapshot.child("comments").getChildrenCount()) + " Comments");
+                        mCommentRef.child(key).child("cmt_user_id").setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                        mCommentRef.child(key).child("cmt").setValue(ct);
 
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        });
 
                     }
 
                 }
             });
 
-            mCommentUpdateRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
 
-                    if (dataSnapshot.hasChild("comments")) {
-
-
-                        viewHolder.user_cmt.setText(String.valueOf(dataSnapshot.child("comments").getChildrenCount()) + " Comments");
-
-          /*         Map mm = new HashMap();
-                for( DataSnapshot ds :   dataSnapshot.child("comments").getChildren()){
-
-               String cmt_user_id =  ds.child("cmt_user_id").getValue().toString();
-                 String cmt =   ds.child("cmt").getValue().toString();
-
-                 }
-
-                    */
-                    }
-
-
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
 
 
             //SAVE SAVE SAVE SAVE   SAVE SAVE SAVE SAVE SAVE
@@ -825,12 +790,32 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                 @Override
                 public void onClick(View view) {
 
-                    Fragment fragment = new CommentFragment();
+                   /* Fragment fragment = new CommentFragment();
                     FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.replace(R.id.main_container, fragment);
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
+*/
+
+
+                    String post_key = getRef(position).getKey().toString();
+                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+                    SharedPreferences.Editor edit = sp.edit();
+                    edit.putString("comment_post_key", post_key);
+                    edit.putInt("followfragment", 10);
+                    edit.commit();
+
+
+                    Fragment fragment = new FollowFragment();
+                    FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.main_container, fragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+
+
+
 
                 }
             });

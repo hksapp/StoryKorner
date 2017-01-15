@@ -48,6 +48,9 @@ public class FollowAdapter extends FirebaseRecyclerAdapter<FollowObject, FollowH
 
         SharedPreferences sharedPreference = PreferenceManager.getDefaultSharedPreferences(context);
         follow_check = sharedPreference.getBoolean("follow_check", false);
+        String comment_id = sharedPreference.getString("comment_id", "null");
+        String comment_post_key = sharedPreference.getString("comment_post_key", "");
+
         usersearch_boolean = sharedPreference.getBoolean("usersearch_boolean", false);
         followfragment = sharedPreference.getInt("followfragment", 404);
 
@@ -214,6 +217,53 @@ public class FollowAdapter extends FirebaseRecyclerAdapter<FollowObject, FollowH
                 });
 
                 break;
+
+
+            case 10:
+
+
+                DatabaseReference cmtRef = FirebaseDatabase.getInstance().getReference().child("Users").child(model.getCmt_user_id());
+                cmtRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        viewHolder.follow_list.setText(dataSnapshot.child("uname").getValue().toString());
+                        Picasso.with(context).load(dataSnapshot.child("photolink").getValue().toString()).fit().centerCrop().into(viewHolder.follow_imgview);
+                        viewHolder.usermail.setVisibility(View.VISIBLE);
+                        viewHolder.usermail.setText("'" + model.getCmt().toString() + "'");
+
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+
+                });
+
+
+                viewHolder.follow_profile.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+                        SharedPreferences.Editor edit = sp.edit();
+                        edit.putString("profile_id", model.getCmt_user_id());
+                        edit.commit();
+
+
+                        Fragment fragment = new ProfileFragment();
+                        FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.replace(R.id.main_container, fragment);
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
+                    }
+                });
+
+                break;
+
+
 
             case 404:
                 Toast.makeText(context, "Umm...Error Occured", Toast.LENGTH_SHORT).show();

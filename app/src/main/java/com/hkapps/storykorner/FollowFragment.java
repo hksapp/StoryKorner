@@ -55,7 +55,13 @@ public class FollowFragment extends Fragment {
         String prof_id = sharedPreference.getString("prof_followers_id", "null");
         String usersearch = sharedPreference.getString("usersearch", "");
         String likes_post_key = sharedPreference.getString("likes_post_key", "");
+        String comment_post_key = sharedPreference.getString("comment_post_key", "");
+
         int followfragment = sharedPreference.getInt("followfragment", 404);
+
+        //String comment_post_key = sharedPreference.getString("comment_post_key", "");
+        //int followfragment_cmt = sharedPreference.getInt("followfragment_cmt", 100);
+
 
 
         linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -88,6 +94,14 @@ public class FollowFragment extends Fragment {
                 mChildRef = mDatabaseRef.child("following");
                 mFollowAdapter = new FollowAdapter(FollowObject.class, R.layout.follow_custom_ui, FollowHolder.class, mChildRef, getContext());
                 break;
+
+            case 10:
+                mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(comment_post_key).child("comments");
+                mFollowAdapter = new FollowAdapter(FollowObject.class, R.layout.follow_custom_ui, FollowHolder.class, mDatabaseRef, getContext());
+                break;
+
+
+
             case 404:
                 Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
 
