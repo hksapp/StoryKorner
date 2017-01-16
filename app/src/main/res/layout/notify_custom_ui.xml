@@ -48,10 +48,19 @@
                     android:textSize="16sp" />
 
                 <TextView
+                    android:id="@+id/tag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=" liked your story"
                     android:textColor="#EEEEEE" />
+
+                <TextView
+                    android:id="@+id/cmttag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" Liked your story"
+                    android:textColor="#EEEEEE"
+                    android:visibility="gone" />
             </LinearLayout>
 
 

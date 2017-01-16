@@ -10,7 +10,7 @@ import android.widget.TextView;
  */
 public class NotifyHolder extends RecyclerView.ViewHolder {
 
-    public TextView liker_name;
+    public TextView liker_name, tag, cmttag;
     public ImageView notify_imgview;
     public TextView notify_time;
     public ImageView imgview;
@@ -21,5 +21,7 @@ public class NotifyHolder extends RecyclerView.ViewHolder {
         liker_name = (TextView) itemView.findViewById(R.id.liker_name);
         notify_imgview = (ImageView) itemView.findViewById(R.id.notify_imgview);
         notify_time = (TextView) itemView.findViewById(R.id.notify_time);
+        tag = (TextView) itemView.findViewById(R.id.tag);
+        cmttag = (TextView) itemView.findViewById(R.id.cmttag);
     }
 }

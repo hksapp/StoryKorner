@@ -36,67 +36,137 @@ public class NotifyAdapter extends FirebaseRecyclerAdapter<NotifyObject, NotifyH
     protected void populateViewHolder(final NotifyHolder viewHolder, final NotifyObject model, int position) {
 
 
-        viewHolder.liker_name.setText(model.getLiker_name());
+        if (model.getCmt_key_post_id() == null) {
 
-        DatabaseReference imgRef = FirebaseDatabase.getInstance().getReference().child("Users").child(model.getLiker_id().toString());
 
-        imgRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.child("photolink").exists()) {
-                    String photo = dataSnapshot.child("photolink").getValue().toString();
-                    Picasso.with(context).load(photo).fit().centerCrop().into(viewHolder.notify_imgview);
+            viewHolder.liker_name.setText(model.getLiker_name());
+
+            DatabaseReference imgRef = FirebaseDatabase.getInstance().getReference().child("Users").child(model.getLiker_id().toString());
+
+            imgRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.child("photolink").exists()) {
+                        String photo = dataSnapshot.child("photolink").getValue().toString();
+                        Picasso.with(context).load(photo).fit().centerCrop().into(viewHolder.notify_imgview);
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
-        final long tmp = model.getTimestamp();
-        Date date = new Date(tmp);
-        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
-        String tym = formatter.format(date);
+                }
+            });
+            final long tmp = model.getTimestamp();
+            Date date = new Date(tmp);
+            SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
+            String tym = formatter.format(date);
 
-        viewHolder.notify_time.setText(tym);
+            viewHolder.notify_time.setText(tym);
 
-        viewHolder.liker_name.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-                SharedPreferences.Editor edit = sp.edit();
-                edit.putString("profile_id", model.getLiker_id());
-                edit.commit();
+            viewHolder.liker_name.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+                    SharedPreferences.Editor edit = sp.edit();
+                    edit.putString("profile_id", model.getLiker_id());
+                    edit.commit();
 
-                Fragment fragment = new ProfileFragment();
-                FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.main_container, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-            }
-        });
-
-
-        viewHolder.notify_imgview.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-                SharedPreferences.Editor edit = sp.edit();
-                edit.putString("profile_id", model.getLiker_id());
-                edit.commit();
-
-                Fragment fragment = new ProfileFragment();
-                FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.main_container, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-            }
-        });
+                    Fragment fragment = new ProfileFragment();
+                    FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.main_container, fragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                }
+            });
 
 
+            viewHolder.notify_imgview.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+                    SharedPreferences.Editor edit = sp.edit();
+                    edit.putString("profile_id", model.getLiker_id());
+                    edit.commit();
+
+                    Fragment fragment = new ProfileFragment();
+                    FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.main_container, fragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                }
+            });
+
+        } else {
+
+            viewHolder.liker_name.setText(model.getCmt_name());
+
+            viewHolder.tag.setText("Commented on your Story");
+            viewHolder.cmttag.setVisibility(View.VISIBLE);
+            viewHolder.cmttag.setText("'" + model.getCmt() + "'");
+
+            DatabaseReference imgRef = FirebaseDatabase.getInstance().getReference().child("Users").child(model.getCmt_user_id().toString());
+
+            imgRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.child("photolink").exists()) {
+                        String photo = dataSnapshot.child("photolink").getValue().toString();
+                        Picasso.with(context).load(photo).fit().centerCrop().into(viewHolder.notify_imgview);
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+            final long tmp = model.getTimestamp();
+            Date date = new Date(tmp);
+            SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
+            String tym = formatter.format(date);
+
+            viewHolder.notify_time.setText(tym);
+
+            viewHolder.liker_name.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+                    SharedPreferences.Editor edit = sp.edit();
+                    edit.putString("profile_id", model.getCmt_user_id());
+                    edit.commit();
+
+                    Fragment fragment = new ProfileFragment();
+                    FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.main_container, fragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                }
+            });
+
+
+            viewHolder.notify_imgview.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+                    SharedPreferences.Editor edit = sp.edit();
+                    edit.putString("profile_id", model.getCmt_user_id());
+                    edit.commit();
+
+                    Fragment fragment = new ProfileFragment();
+                    FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.main_container, fragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                }
+            });
+
+
+        }
     }
 
 

@@ -223,7 +223,7 @@ public class FollowAdapter extends FirebaseRecyclerAdapter<FollowObject, FollowH
             case 10:
 
 
-                DatabaseReference cmtRef = FirebaseDatabase.getInstance().getReference().child("Users").child(model.getCmt_user_id());
+                final DatabaseReference cmtRef = FirebaseDatabase.getInstance().getReference().child("Users").child(model.getCmt_user_id());
                 cmtRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -257,9 +257,31 @@ public class FollowAdapter extends FirebaseRecyclerAdapter<FollowObject, FollowH
 
                                     checkComRef.child("comments").child(model.getCmt_key().toString()).removeValue();
                                     checkComRef.keepSynced(true);
-
+                                    cmtRef.keepSynced(true);
                                     Toast.makeText(context, "Done Deletion!", Toast.LENGTH_SHORT).show();
 
+                                    DatabaseReference cmtRef = FirebaseDatabase.getInstance().getReference().child("Users").child(dataSnapshot.child("userid").getValue().toString()).child("Notifications");
+
+
+                                    Query noti = cmtRef.orderByChild("cmt_key_post_id").equalTo(model.getCmt_key().toString() + "_" + comment_post_key);
+
+                                    noti.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+
+                                            for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
+                                                appleSnapshot.getRef().removeValue();
+                                            }
+
+
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+
+                                        }
+                                    });
 
                                     return true;
                                 }

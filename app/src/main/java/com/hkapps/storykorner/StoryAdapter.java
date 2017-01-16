@@ -285,6 +285,49 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                     });
 
 
+                    viewHolder.send_comment.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(final View view) {
+                            InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(view.getWindowToken(),
+                                    InputMethodManager.RESULT_UNCHANGED_SHOWN);
+                            if (viewHolder.type_comment.getText().toString().trim().length() != 0) {
+
+
+                                // viewHolder.type_comment.setVisibility(View.INVISIBLE);
+                                // viewHolder.send_comment.setVisibility(View.INVISIBLE);
+                                viewHolder.write_comment.setVisibility(View.GONE);
+
+
+                                String post_key = getRef(position).getKey().toString();
+                                mCommentRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(post_key).child("comments");
+
+                                String ct = viewHolder.type_comment.getText().toString();
+
+                                String key = mCommentRef.push().getKey();
+
+                                mCommentRef.child(key).child("cmt_user_id").setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                mCommentRef.child(key).child("cmt").setValue(ct);
+                                mCommentRef.child(key).child("cmt_key").setValue(key.toString());
+
+                                DatabaseReference cmtRef = FirebaseDatabase.getInstance().getReference().child("Users").child(dataSnapshot_saved.child("userid").getValue().toString()).child("Notifications");
+
+                                Map postdata = new HashMap();
+                                postdata.put("cmt_user_id", FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
+                                postdata.put("cmt_key_post_id", key.toString() + "_" + post_key);
+                                postdata.put("cmt_name", FirebaseAuth.getInstance().getCurrentUser().getDisplayName().toString());
+                                postdata.put("cmt", ct);
+                                postdata.put("post_id", post_key);
+                                postdata.put("timestamp", ServerValue.TIMESTAMP);
+                                cmtRef.push().setValue(postdata);
+
+                            }
+
+                        }
+                    });
+
+
+
 
 
 
@@ -458,37 +501,6 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
             });
 
 
-            viewHolder.send_comment.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(final View view) {
-                    InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view.getWindowToken(),
-                            InputMethodManager.RESULT_UNCHANGED_SHOWN);
-                    if (viewHolder.type_comment.getText().toString().trim().length() != 0) {
-
-
-                        // viewHolder.type_comment.setVisibility(View.INVISIBLE);
-                        // viewHolder.send_comment.setVisibility(View.INVISIBLE);
-                        viewHolder.write_comment.setVisibility(View.GONE);
-
-
-                        String post_key = getRef(position).getKey().toString();
-                        mCommentRef = FirebaseDatabase.getInstance().getReference().child("Posted_Stories").child(post_key).child("comments");
-
-                        String ct = viewHolder.type_comment.getText().toString();
-
-                        String key = mCommentRef.push().getKey();
-
-                        mCommentRef.child(key).child("cmt_user_id").setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                        mCommentRef.child(key).child("cmt").setValue(ct);
-                        mCommentRef.child(key).child("cmt_key").setValue(key.toString());
-
-
-
-                    }
-
-                }
-            });
 
             //COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS
 
@@ -579,8 +591,6 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
 
             String storyuserid = sharedPreference.getString("storyuserid", model.getUserid());
 
-
-            boolean chk = sharedPreference.getBoolean("profile", false);
 
             mFireRef = FirebaseDatabase.getInstance().getReference().child("Users");
 
@@ -755,7 +765,6 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                         String ct = viewHolder.type_comment.getText().toString();
 
                         String key = mCommentRef.push().getKey();
-
 
                         mCommentRef.child(key).child("cmt_user_id").setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
                         mCommentRef.child(key).child("cmt").setValue(ct);
