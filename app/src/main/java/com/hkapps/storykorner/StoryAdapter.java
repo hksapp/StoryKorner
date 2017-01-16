@@ -128,7 +128,6 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                                                 @Override
                                                 public void onDataChange(DataSnapshot dataSnapshot) {
 
-                                                    Toast.makeText(context, dataSnapshot.child("liker_id").getKey().toString(), Toast.LENGTH_SHORT).show();
 
                                                     for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
                                                         appleSnapshot.getRef().removeValue();
@@ -162,6 +161,13 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                                             liked = false;
                                         }
                                     }
+                                    if (dataSnapshot.getChildrenCount() == 0) {
+                                        viewHolder.likecount.setVisibility(View.GONE);
+                                    } else {
+                                        viewHolder.likecount.setVisibility(View.VISIBLE);
+                                    }
+
+
                                     viewHolder.likecount.setText(String.valueOf(dataSnapshot.getChildrenCount()) + " Likes");
 
 
@@ -351,6 +357,11 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                         viewHolder.like.setImageResource(R.drawable.ic_sentiment_satisfied_white_24dp);
                     }
 
+                    if (dataSnapshot.getChildrenCount() == 0) {
+                        viewHolder.likecount.setVisibility(View.GONE);
+                    } else {
+                        viewHolder.likecount.setVisibility(View.VISIBLE);
+                    }
                     viewHolder.likecount.setText(String.valueOf(dataSnapshot.getChildrenCount()) + " Likes");
                 }
 
@@ -365,8 +376,15 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
+                    if (dataSnapshot.getChildrenCount() == 0) {
+                        viewHolder.user_cmt.setVisibility(View.GONE);
+                    } else {
+                        viewHolder.user_cmt.setVisibility(View.VISIBLE);
+                    }
+
 
                     viewHolder.user_cmt.setText(String.valueOf(dataSnapshot.getChildrenCount()) + " Comments");
+
 
 
                 }
@@ -628,7 +646,6 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                                         @Override
                                         public void onDataChange(DataSnapshot dataSnapshot) {
 
-                                            Toast.makeText(context, dataSnapshot.child("liker_id").getKey().toString(), Toast.LENGTH_SHORT).show();
 
                                             for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
                                                 appleSnapshot.getRef().removeValue();
@@ -662,6 +679,13 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                                     liked = false;
                                 }
                             }
+
+                            if (dataSnapshot.getChildrenCount() == 0) {
+                                viewHolder.likecount.setVisibility(View.GONE);
+                            } else {
+                                viewHolder.likecount.setVisibility(View.VISIBLE);
+                            }
+
                             viewHolder.likecount.setText(String.valueOf(dataSnapshot.getChildrenCount()) + " Likes");
 
 
@@ -690,6 +714,14 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                         viewHolder.like.setImageResource(R.drawable.ic_sentiment_satisfied_white_24dp);
                     }
 
+
+                    if (dataSnapshot.getChildrenCount() == 0) {
+                        viewHolder.likecount.setVisibility(View.GONE);
+                    } else {
+                        viewHolder.likecount.setVisibility(View.VISIBLE);
+                    }
+
+
                     viewHolder.likecount.setText(String.valueOf(dataSnapshot.getChildrenCount()) + " Likes");
                 }
 
@@ -703,6 +735,11 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
             mCommentRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.getChildrenCount() == 0) {
+                        viewHolder.user_cmt.setVisibility(View.GONE);
+                    } else {
+                        viewHolder.user_cmt.setVisibility(View.VISIBLE);
+                    }
 
 
                     viewHolder.user_cmt.setText(String.valueOf(dataSnapshot.getChildrenCount()) + " Comments");

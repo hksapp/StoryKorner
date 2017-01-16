@@ -1,11 +1,13 @@
 package com.hkapps.storykorner;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -255,33 +257,60 @@ public class FollowAdapter extends FirebaseRecyclerAdapter<FollowObject, FollowH
                                 @Override
                                 public boolean onLongClick(View view) {
 
-                                    checkComRef.child("comments").child(model.getCmt_key().toString()).removeValue();
-                                    checkComRef.keepSynced(true);
-                                    cmtRef.keepSynced(true);
-                                    Toast.makeText(context, "Done Deletion!", Toast.LENGTH_SHORT).show();
 
-                                    DatabaseReference cmtRef = FirebaseDatabase.getInstance().getReference().child("Users").child(dataSnapshot.child("userid").getValue().toString()).child("Notifications");
-
-
-                                    Query noti = cmtRef.orderByChild("cmt_key_post_id").equalTo(model.getCmt_key().toString() + "_" + comment_post_key);
-
-                                    noti.addListenerForSingleValueEvent(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(DataSnapshot dataSnapshot) {
-
-
-                                            for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
-                                                appleSnapshot.getRef().removeValue();
-                                            }
-
-
-                                        }
+                                    AlertDialog.Builder alert = new AlertDialog.Builder(
+                                            context);
+                                    alert.setTitle("Confirm Deletion");
+                                    alert.setMessage("Delete this Comment?");
+                                    alert.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
 
                                         @Override
-                                        public void onCancelled(DatabaseError databaseError) {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            //do your work here
+                                            checkComRef.child("comments").child(model.getCmt_key().toString()).removeValue();
+                                            checkComRef.keepSynced(true);
+                                            cmtRef.keepSynced(true);
+                                            Toast.makeText(context, "Done Deletion!", Toast.LENGTH_SHORT).show();
+
+                                            DatabaseReference cmtRef = FirebaseDatabase.getInstance().getReference().child("Users").child(dataSnapshot.child("userid").getValue().toString()).child("Notifications");
+
+
+                                            Query noti = cmtRef.orderByChild("cmt_key_post_id").equalTo(model.getCmt_key().toString() + "_" + comment_post_key);
+
+                                            noti.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(DataSnapshot dataSnapshot) {
+
+
+                                                    for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
+                                                        appleSnapshot.getRef().removeValue();
+                                                    }
+
+
+                                                }
+
+                                                @Override
+                                                public void onCancelled(DatabaseError databaseError) {
+
+                                                }
+                                            });
+
+
+                                            dialog.dismiss();
 
                                         }
                                     });
+                                    alert.setNegativeButton("Don't Delete", new DialogInterface.OnClickListener() {
+
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+
+                                            dialog.dismiss();
+                                        }
+                                    });
+
+                                    alert.show();
+
 
                                     return true;
                                 }
