@@ -44,10 +44,9 @@ public class StoriesFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         View rootview = inflater.inflate(R.layout.fragment_stories, container, false);
-
 
 
         sharedPreference = PreferenceManager.getDefaultSharedPreferences(getActivity());
