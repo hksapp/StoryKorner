@@ -180,6 +180,7 @@ public class ProfileFragment extends Fragment {
 
                 }
 
+
                 if (dataSnapshot.child("following").exists()) {
 
                     following_count.setText(String.valueOf(dataSnapshot.child("following").getChildrenCount()));
@@ -191,8 +192,6 @@ public class ProfileFragment extends Fragment {
                     saved_count.setText(String.valueOf(dataSnapshot.child("saved").getChildrenCount()));
 
                 }
-
-
 
 
             }

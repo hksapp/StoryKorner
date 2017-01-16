@@ -412,6 +412,7 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                         public void onClick(DialogInterface dialog, int which) {
                             //do your work here
                             mDelRef.child(postid).removeValue();
+                            mDelRef.keepSynced(true);
                             DatabaseReference mOwnRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).child("newsfeed");
                             mOwnRef.child(postid).removeValue();
 
@@ -434,6 +435,7 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                                     }
 
 
+
                                 }
 
                                 @Override
@@ -441,7 +443,7 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
 
                                 }
                             });
-
+                            nNotDelRef.keepSynced(true);
 
 
                             DatabaseReference mFollowerRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).child("followers");
