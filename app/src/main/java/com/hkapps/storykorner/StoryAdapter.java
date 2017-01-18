@@ -96,9 +96,10 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                     String tym = formatter.format(date);
 
                     viewHolder.timestamp.setText(tym);
-              /*      Long tsLong = System.currentTimeMillis()/1000;
 
-                    Toast.makeText(context, tsLong.toString(), Toast.LENGTH_SHORT).show();
+              /* long tsLong = ServerValue.TIMESTAMP;
+
+                    Toast.makeText(context,tsLong , Toast.LENGTH_SHORT).show();*/
 
                     long ctym = tsLong-tmp;
                     if(ctym<=60) {
@@ -122,7 +123,6 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                         viewHolder.timestamp.setText(tym);
 
                     }
-*/
 
 
                     viewHolder.like.setOnClickListener(new View.OnClickListener() {
@@ -186,6 +186,8 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                                             notifying.push().setValue(postdata);
                                             viewHolder.like.setImageResource(R.drawable.ic_sentiment_very_satisfied_white_24dp);
                                             liked = false;
+
+
                                         }
                                     }
                                     if (dataSnapshot.getChildrenCount() == 0) {
