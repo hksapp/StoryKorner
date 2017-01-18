@@ -96,6 +96,33 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                     String tym = formatter.format(date);
 
                     viewHolder.timestamp.setText(tym);
+              /*      Long tsLong = System.currentTimeMillis()/1000;
+
+                    Toast.makeText(context, tsLong.toString(), Toast.LENGTH_SHORT).show();
+
+                    long ctym = tsLong-tmp;
+                    if(ctym<=60) {
+                        viewHolder.timestamp.setText(ctym + " Secs");
+                    }
+                    else if(ctym<=3600){
+                        viewHolder.timestamp.setText(ctym/60 + " Minutes");
+
+                    }else if(ctym<=86400){
+                        viewHolder.timestamp.setText(ctym/3600 + " Hours");
+
+                    }else if(ctym>=86400&&ctym<86400*2){
+                        viewHolder.timestamp.setText(ctym/86400 + " Day");
+                    }
+
+
+                    else if(ctym>86400*2&&ctym<86400*30){
+                        viewHolder.timestamp.setText(ctym/86400 + " Days");
+                    }
+                    else {
+                        viewHolder.timestamp.setText(tym);
+
+                    }
+*/
 
 
                     viewHolder.like.setOnClickListener(new View.OnClickListener() {

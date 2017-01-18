@@ -12,7 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -54,7 +53,7 @@ public class StoriesFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootview = inflater.inflate(R.layout.fragment_stories, container, false);
 
-        DatabaseReference noRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
+       /* DatabaseReference noRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
 
         noRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -77,7 +76,7 @@ public class StoriesFragment extends Fragment {
             }
         });
 
-
+*/
 
         sharedPreference = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String storyuserid = sharedPreference.getString("storyuserid", null);
