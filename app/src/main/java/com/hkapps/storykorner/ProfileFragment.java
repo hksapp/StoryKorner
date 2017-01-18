@@ -221,6 +221,8 @@ public class ProfileFragment extends Fragment {
                 SharedPreferences.Editor edit = sp.edit();
                 edit.putString("storyuserid", checkingid);
                 edit.putInt("storiesfragment", 1);
+                edit.putInt("error", 1);
+
                 edit.commit();
 
                 Fragment fragment = new StoriesFragment();
@@ -243,6 +245,7 @@ public class ProfileFragment extends Fragment {
                 SharedPreferences.Editor edit = sp.edit();
                 edit.putString("prof_followers_id", checkingid);
                 edit.putInt("followfragment", 3);
+                edit.putInt("error", 2);
 
                 edit.commit();
 
@@ -266,6 +269,7 @@ public class ProfileFragment extends Fragment {
                 SharedPreferences.Editor edit = sp.edit();
                 edit.putString("prof_followers_id", checkingid);
                 edit.putInt("followfragment", 4);
+                edit.putInt("error", 3);
 
 
                 edit.commit();
@@ -288,6 +292,7 @@ public class ProfileFragment extends Fragment {
                 SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
                 SharedPreferences.Editor edit = sp.edit();
                 edit.putInt("storiesfragment", 5);
+                edit.putInt("error", 4);
                 edit.commit();
 
                 Fragment fragment = new StoriesFragment();

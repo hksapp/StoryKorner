@@ -67,6 +67,7 @@ public class CreateFragment extends Fragment {
         final EditText create_story = (EditText) rootview.findViewById(R.id.create_story);
         final EditText create_title = (EditText) rootview.findViewById(R.id.create_title);
 
+
         ///  Button save_story = (Button) rootview.findViewById(R.id.save_story);
         Button publish_story = (Button) rootview.findViewById(R.id.publish_story);
 
@@ -76,7 +77,7 @@ public class CreateFragment extends Fragment {
 
         spnr = (Spinner) rootview.findViewById(R.id.spinner);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                getActivity(), android.R.layout.simple_spinner_item, celebrities);
+                getActivity(), R.layout.customspinner, celebrities);
 
         spnr.setAdapter(adapter);
         spnr.setOnItemSelectedListener(
