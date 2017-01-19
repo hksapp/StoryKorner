@@ -1,9 +1,14 @@
 package com.hkapps.storykorner;
 
 
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -39,6 +44,24 @@ public class NotificationFragment extends Fragment {
         View rootview = inflater.inflate(R.layout.fragment_notification, container, false);
 
 
+        if (!isNetworkConnected()) {
+
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            SharedPreferences.Editor edit = sp.edit();
+            edit.putInt("error", 6);
+            edit.commit();
+
+
+            Fragment fragment = new EmptyScreenFragment();
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.main_container, fragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+
+        }
+
+
         linearLayoutManager = new LinearLayoutManager(getActivity());
         notifyRecyclerView = (RecyclerView) rootview.findViewById(R.id.notify_recycler_view);
         notifyRecyclerView.setHasFixedSize(true);
@@ -54,4 +77,12 @@ public class NotificationFragment extends Fragment {
         return rootview;
     }
 
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null;
+    }
+
+
 }
+

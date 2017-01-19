@@ -47,17 +47,32 @@ public class EmptyScreenFragment extends Fragment {
 
             case 2:
                 errImg.setImageResource(R.drawable.ic_people_outline_white_24dp);
-                errText.setText("No Users to show....Find users on search space..!");
+                errText.setText("No Users to show");
                 break;
 
             case 3:
                 errImg.setImageResource(R.drawable.ic_people_white_24dp);
-                errText.setText("No Users to show....Find users on search space..!");
+                errText.setText("No Users to show");
                 break;
 
             case 4:
                 errImg.setImageResource(R.drawable.ic_chevron_right_white_24dp);
                 errText.setText("You haven't saved any Stories yet..!");
+                break;
+
+            case 5:
+                errImg.setImageResource(R.drawable.ic_chevron_right_white_24dp);
+                errText.setText("No Content to Show");
+                break;
+
+            case 6:
+                errImg.setImageResource(R.drawable.ic_sentiment_satisfied_white_24dp);
+                errText.setText("No Internet Connection");
+                break;
+
+            case 7:
+                errImg.setImageResource(R.drawable.ic_sentiment_satisfied_white_24dp);
+                errText.setText("Your Story will be uploaded as soon as \n your phone connects to Internet");
                 break;
 
 

@@ -1,7 +1,9 @@
 package com.hkapps.storykorner;
 
 
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -32,6 +34,24 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootview = inflater.inflate(R.layout.fragment_search, container, false);
+
+
+        if (!isNetworkConnected()) {
+
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            SharedPreferences.Editor edit = sp.edit();
+            edit.putInt("error", 6);
+            edit.commit();
+
+
+            Fragment fragment = new EmptyScreenFragment();
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.main_container, fragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+
+        }
 
 
         LinearLayout search_parent = (LinearLayout) rootview.findViewById(R.id.search_parent);
@@ -137,4 +157,11 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
         fragmentTransaction.commit();
 
     }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null;
+    }
+
 }

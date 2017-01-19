@@ -1,10 +1,14 @@
 package com.hkapps.storykorner;
 
 
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -153,7 +157,26 @@ public class CreateFragment extends Fragment {
                     edit.putInt("storiesfragment", 4);
                     edit.commit();
 
-                    getFragmentManager().beginTransaction().replace(R.id.main_container, new StoriesFragment()).commit();
+
+                    if (!isNetworkConnected()) {
+
+
+                        edit.putInt("error", 7);
+                        edit.commit();
+
+
+                        Fragment fragment = new EmptyScreenFragment();
+                        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.replace(R.id.main_container, fragment);
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
+
+                    } else {
+
+                        getFragmentManager().beginTransaction().replace(R.id.main_container, new StoriesFragment()).commit();
+
+                    }
 
 
                 } else {
@@ -169,5 +192,12 @@ public class CreateFragment extends Fragment {
 
         return rootview;
     }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null;
+    }
+
 
 }

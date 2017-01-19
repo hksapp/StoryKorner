@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -91,6 +92,25 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         final View rootview = inflater.inflate(R.layout.fragment_profile, container, false);
+
+
+        if (!isNetworkConnected()) {
+
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            SharedPreferences.Editor edit = sp.edit();
+            edit.putInt("error", 6);
+            edit.commit();
+
+
+            Fragment fragment = new EmptyScreenFragment();
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.main_container, fragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+
+        }
+
 
         final String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -481,6 +501,13 @@ public class ProfileFragment extends Fragment {
             width = (int) (height * bitmapRatio);
         }
         return Bitmap.createScaledBitmap(image, width, height, true);
+    }
+
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null;
     }
 
 }

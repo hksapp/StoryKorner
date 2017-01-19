@@ -1,7 +1,9 @@
 package com.hkapps.storykorner;
 
 
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -54,12 +56,37 @@ public class StoriesFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootview = inflater.inflate(R.layout.fragment_stories, container, false);
 
+        if (!isNetworkConnected()) {
+
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            SharedPreferences.Editor edit = sp.edit();
+            edit.putInt("error", 6);
+            edit.commit();
+
+
+            Fragment fragment = new EmptyScreenFragment();
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.main_container, fragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+
+        }
+
+
+
         DatabaseReference noRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
 
         noRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.child("newsfeed").exists()) {
+
+                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                    SharedPreferences.Editor edit = sp.edit();
+                    edit.putInt("error", 5);
+                    edit.commit();
+
 
                     Fragment fragment = new EmptyScreenFragment();
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
@@ -193,6 +220,13 @@ public class StoriesFragment extends Fragment {
 
 
         return rootview;
+    }
+
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null;
     }
 
 
