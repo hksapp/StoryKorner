@@ -12,9 +12,11 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 
 /**
  * Created by kamal on 23-12-2016.
@@ -48,7 +50,39 @@ public class NotificationListener extends Service {
         DatabaseReference notif = FirebaseDatabase.getInstance().getReference().child("Posted_Stories");
         notifying = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).child("Notifications");
 
-        Query nRef = notif.orderByChild("userid").equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
+        notifying.keepSynced(true);
+        notifying.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+
+                showNotifications(dataSnapshot.child("liker_name").getValue().toString());
+
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
 
 
        /* nRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -65,16 +99,16 @@ public class NotificationListener extends Service {
                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
 
-                           *//* Map postdata = new HashMap();
+                            Map postdata = new HashMap();
                             postdata.put("liker_id",dataSnapshot.getKey().toString());
                             postdata.put("liker_name", dataSnapshot.getValue().toString());
 
 
                             postdata.put("post_id", dataSnapshot.getRef());
                             postdata.put("timestamp", ServerValue.TIMESTAMP);
-*//*
 
-                          *//*  notifying.push().setValue(ds.getKey().toString());*//*
+
+                            notifying.push().setValue(ds.getKey().toString());
 
                             showNotifications(dataSnapshot.getValue().toString());
 
@@ -109,8 +143,8 @@ public class NotificationListener extends Service {
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });*/
-
+        });
+*/
 
         return START_STICKY;
     }

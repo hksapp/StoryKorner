@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         mAuth = FirebaseAuth.getInstance();
-
+        startService(new Intent(getApplicationContext(), NotificationListener.class));
 
 
 //To Open Stories Screen

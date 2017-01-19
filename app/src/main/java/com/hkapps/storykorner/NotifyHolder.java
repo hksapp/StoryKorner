@@ -14,6 +14,7 @@ public class NotifyHolder extends RecyclerView.ViewHolder {
     public ImageView notify_imgview;
     public TextView notify_time;
     public ImageView imgview;
+    public ImageView notifStory;
 
     public NotifyHolder(View itemView) {
         super(itemView);
@@ -23,5 +24,6 @@ public class NotifyHolder extends RecyclerView.ViewHolder {
         notify_time = (TextView) itemView.findViewById(R.id.notify_time);
         tag = (TextView) itemView.findViewById(R.id.tag);
         cmttag = (TextView) itemView.findViewById(R.id.cmttag);
+        notifStory = (ImageView) itemView.findViewById(R.id.notifStory);
     }
 }

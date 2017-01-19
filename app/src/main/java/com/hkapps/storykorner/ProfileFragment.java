@@ -427,7 +427,7 @@ public class ProfileFragment extends Fragment {
             mProgressDialog.setMessage("Uploading...");
             mProgressDialog.show();
             Uri selectedImageUri = data.getData();
-            Uri selectedImageUri2 = Uri.EMPTY;
+           /* Uri selectedImageUri2 = Uri.EMPTY;
             Bitmap im = BitmapFactory.decodeResource(getResources(), R.drawable.blur);
 
             try {
@@ -435,7 +435,7 @@ public class ProfileFragment extends Fragment {
                 selectedImageUri2 = getImageUri(getActivity(), im);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
-            }
+            }*/
           /*  try {
 
             InputStream imageStream = getContext().getContentResolver().openInputStream(selectedImageUri);
@@ -454,7 +454,7 @@ public class ProfileFragment extends Fragment {
             mStorageRef = FirebaseStorage.getInstance().getReference().child("User_Photos").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
 
-            mStorageRef.putFile(selectedImageUri2).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            mStorageRef.putFile(selectedImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 

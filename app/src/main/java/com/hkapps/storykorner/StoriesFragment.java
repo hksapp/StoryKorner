@@ -115,7 +115,7 @@ public class StoriesFragment extends Fragment {
 
         String Category = sharedPreference.getString("Category", "Humor");
         boolean CategoryBoolean = sharedPreference.getBoolean("CategoryBoolean", false);
-
+        String story_id = sharedPreference.getString("story_id", "-KapV7mFEkt15bS8yhHD");
         int storiesfragment = sharedPreference.getInt("storiesfragment", 404);
 
 
@@ -191,6 +191,12 @@ public class StoriesFragment extends Fragment {
 
                     }
                 });
+            case 8:
+
+                Query nStory = childRef.orderByChild("post_id").equalTo(story_id);
+                nStory.keepSynced(true);
+                mStoryAdapter = new StoryAdapter(StoryObject.class, R.layout.story_custom_ui, StoryHolder.class, nStory, getContext());
+                break;
         }
 
 

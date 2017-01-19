@@ -95,7 +95,6 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm");
                     String tym = formatter.format(date);
 
-                    viewHolder.timestamp.setText(tym);
 
                     Long tsLong = System.currentTimeMillis();
 

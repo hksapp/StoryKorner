@@ -122,6 +122,7 @@ public class CreateFragment extends Fragment {
                     postdata.put("category", cat);
 
                     final String pushid = post_stories.push().getKey();
+                    postdata.put("post_id", pushid);
                     post_stories.child(pushid).setValue(postdata);
 
                     DatabaseReference mOwnRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).child("newsfeed");

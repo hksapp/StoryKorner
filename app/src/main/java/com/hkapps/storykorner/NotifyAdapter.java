@@ -36,6 +36,42 @@ public class NotifyAdapter extends FirebaseRecyclerAdapter<NotifyObject, NotifyH
     protected void populateViewHolder(final NotifyHolder viewHolder, final NotifyObject model, int position) {
 
 
+        long tmp = model.getTimestamp();
+        Date date = new Date(tmp);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+        String tym = formatter.format(date);
+
+
+        Long tsLong = System.currentTimeMillis();
+
+
+        long ctym = tsLong - tmp;
+        if (ctym <= 60000) {
+            viewHolder.notify_time.setText(ctym / 1000 + " Secs ago");
+        } else if (ctym <= 120000) {
+            viewHolder.notify_time.setText(ctym / 60000 + " Min ago");
+        } else if (ctym <= 3600000) {
+            viewHolder.notify_time.setText(ctym / 60000 + " Mins ago");
+
+        } else if (ctym <= 7200000) {
+            viewHolder.notify_time.setText(ctym / 3600000 + " Hr ago");
+
+        } else if (ctym <= 86400000) {
+            viewHolder.notify_time.setText(ctym / 3600000 + " Hrs ago");
+
+        } else if (ctym >= 86400000 && ctym < 86400000 * 2) {
+            viewHolder.notify_time.setText(ctym / 86400000 + " Day ago");
+
+        } else if (ctym > 86400000 * 2 && ctym < 86400000 * 30) {
+            viewHolder.notify_time.setText(ctym / 86400000 + " Days ago");
+
+        } else {
+            viewHolder.notify_time.setText(tym);
+        }
+
+
+
+
         if (model.getCmt_key_post_id() == null) {
 
 
@@ -57,12 +93,7 @@ public class NotifyAdapter extends FirebaseRecyclerAdapter<NotifyObject, NotifyH
 
                 }
             });
-            final long tmp = model.getTimestamp();
-            Date date = new Date(tmp);
-            SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
-            String tym = formatter.format(date);
 
-            viewHolder.notify_time.setText(tym);
 
             viewHolder.liker_name.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -91,6 +122,24 @@ public class NotifyAdapter extends FirebaseRecyclerAdapter<NotifyObject, NotifyH
                     edit.commit();
 
                     Fragment fragment = new ProfileFragment();
+                    FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.main_container, fragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                }
+            });
+
+            viewHolder.notifStory.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+                    SharedPreferences.Editor edit = sp.edit();
+                    edit.putString("story_id", model.getPost_id());
+                    edit.putInt("storiesfragment", 8);
+                    edit.commit();
+
+                    Fragment fragment = new StoriesFragment();
                     FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.replace(R.id.main_container, fragment);
@@ -123,12 +172,7 @@ public class NotifyAdapter extends FirebaseRecyclerAdapter<NotifyObject, NotifyH
 
                 }
             });
-            final long tmp = model.getTimestamp();
-            Date date = new Date(tmp);
-            SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
-            String tym = formatter.format(date);
 
-            viewHolder.notify_time.setText(tym);
 
             viewHolder.liker_name.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -157,6 +201,24 @@ public class NotifyAdapter extends FirebaseRecyclerAdapter<NotifyObject, NotifyH
                     edit.commit();
 
                     Fragment fragment = new ProfileFragment();
+                    FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.main_container, fragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                }
+            });
+
+            viewHolder.notifStory.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+                    SharedPreferences.Editor edit = sp.edit();
+                    edit.putString("story_id", model.getPost_id());
+                    edit.putInt("storiesfragment", 8);
+                    edit.commit();
+
+                    Fragment fragment = new StoriesFragment();
                     FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.replace(R.id.main_container, fragment);
