@@ -17,6 +17,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 /**
  * Created by kamal on 23-12-2016.
@@ -55,8 +56,28 @@ public class NotificationListener extends Service {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
+                String photo = null;
+                String uid = dataSnapshot.child("liker_id").getValue().toString();
 
-                showNotifications(dataSnapshot.child("liker_name").getValue().toString());
+                DatabaseReference imgRef = FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
+
+                imgRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.child("photolink").exists()) {
+                            String photo = dataSnapshot.child("photolink").getValue().toString();
+                            // Picasso.with(context).load(photo).fit().centerCrop().into(viewHolder.notify_imgview);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+
+                showNotifications(dataSnapshot.child("liker_name").getValue().toString(), photo);
 
 
             }
@@ -149,13 +170,36 @@ public class NotificationListener extends Service {
         return START_STICKY;
     }
 
-    private void showNotifications(String username) {
+    private void showNotifications(String username, String pic) {
 
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
+        final NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
 
-        mBuilder.setSmallIcon(R.drawable.bestfrnds);
+
+        // mBuilder.setLargeIcon(Picasso.with(getBaseContext()).load(pic).get());
+
         mBuilder.setContentTitle(username);
         mBuilder.setContentText(username + " Liked your post");
+        mBuilder.setSmallIcon(R.drawable.profile_bg_min);
+
+
+
+     /*   Picasso.with(getApplicationContext()).load(pic).into(new Target() {
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+
+                mBuilder.setLargeIcon(bitmap);
+            }
+
+            @Override
+            public void onBitmapFailed(Drawable errorDrawable) {
+            }
+
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+            }
+        });
+*/
+
 
 
         mBuilder.setDefaults(Notification.DEFAULT_SOUND);
@@ -187,6 +231,12 @@ public class NotificationListener extends Service {
 
 // notificationID allows you to update the notification later on.
         mNotificationManager.notify(0, mBuilder.build());
+
+       /* final int notifId = 1337;
+        final RemoteViews contentView = mBuilder.getContentView();
+        final int iconId = android.R.id.icon;
+        Picasso.with(getApplicationContext()).load(pic).into(contentView, iconId, notifId,mBuilder.build() );
+*/
 
 
     }

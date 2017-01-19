@@ -389,8 +389,6 @@ public class ProfileFragment extends Fragment {
 
                                 mFollowRef.child(checkingid).child("followers").child(userid).child("follower_id").setValue(userid);
                                 mFollowRef.child(checkingid).child("followers").child(userid).child("follower_name").setValue(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
-
-
                                 mFollowRef.child(userid).child("following").child(checkingid).child("following_id").setValue(checkingid);
                                 mFollowRef.child(userid).child("following").child(checkingid).child("following_name").setValue(checking_name);
 
