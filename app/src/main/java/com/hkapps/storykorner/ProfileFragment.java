@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -37,6 +38,7 @@ import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -63,6 +65,27 @@ public class ProfileFragment extends Fragment {
         // Required empty public constructor
     }
 
+    public static Bitmap decodeUri(Context c, Uri uri, final int requiredSize)
+            throws FileNotFoundException {
+        BitmapFactory.Options o = new BitmapFactory.Options();
+        o.inJustDecodeBounds = true;
+        BitmapFactory.decodeStream(c.getContentResolver().openInputStream(uri), null, o);
+
+        int width_tmp = o.outWidth, height_tmp = o.outHeight;
+        int scale = 1;
+
+        while (true) {
+            if (width_tmp / 2 < requiredSize || height_tmp / 2 < requiredSize)
+                break;
+            width_tmp /= 2;
+            height_tmp /= 2;
+            scale *= 2;
+        }
+
+        BitmapFactory.Options o2 = new BitmapFactory.Options();
+        o2.inSampleSize = scale;
+        return BitmapFactory.decodeStream(c.getContentResolver().openInputStream(uri), null, o2);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
@@ -374,16 +397,25 @@ public class ProfileFragment extends Fragment {
         return rootview;
     }
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
 
 
         if (requestCode == GALLERY_INTENT && resultCode == RESULT_OK) {
             mProgressDialog.setMessage("Uploading...");
             mProgressDialog.show();
             Uri selectedImageUri = data.getData();
+            Uri selectedImageUri2 = Uri.EMPTY;
+            Bitmap im = BitmapFactory.decodeResource(getResources(), R.drawable.blur);
+
+            try {
+                im = decodeUri(getActivity(), selectedImageUri, 192);
+                selectedImageUri2 = getImageUri(getActivity(), im);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
           /*  try {
 
             InputStream imageStream = getContext().getContentResolver().openInputStream(selectedImageUri);
@@ -402,7 +434,7 @@ public class ProfileFragment extends Fragment {
             mStorageRef = FirebaseStorage.getInstance().getReference().child("User_Photos").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
 
-            mStorageRef.putFile(selectedImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            mStorageRef.putFile(selectedImageUri2).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
@@ -450,6 +482,5 @@ public class ProfileFragment extends Fragment {
         }
         return Bitmap.createScaledBitmap(image, width, height, true);
     }
-
 
 }

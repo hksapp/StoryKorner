@@ -97,31 +97,32 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
 
                     viewHolder.timestamp.setText(tym);
 
-              /* long tsLong = ServerValue.TIMESTAMP;
+                    Long tsLong = System.currentTimeMillis();
 
-                    Toast.makeText(context,tsLong , Toast.LENGTH_SHORT).show();*/
+
 
                     long ctym = tsLong-tmp;
-                    if(ctym<=60) {
-                        viewHolder.timestamp.setText(ctym + " Secs");
-                    }
-                    else if(ctym<=3600){
-                        viewHolder.timestamp.setText(ctym/60 + " Minutes");
+                    if (ctym <= 60000) {
+                        viewHolder.timestamp.setText(ctym / 1000 + " Secs ago");
+                    } else if (ctym <= 120000) {
+                        viewHolder.timestamp.setText(ctym / 60000 + " Minute ago");
+                    } else if (ctym <= 3600000) {
+                        viewHolder.timestamp.setText(ctym / 60000 + " Minutes ago");
 
-                    }else if(ctym<=86400){
-                        viewHolder.timestamp.setText(ctym/3600 + " Hours");
+                    } else if (ctym <= 7200000) {
+                        viewHolder.timestamp.setText(ctym / 3600000 + " Hour ago");
 
-                    }else if(ctym>=86400&&ctym<86400*2){
-                        viewHolder.timestamp.setText(ctym/86400 + " Day");
-                    }
+                    } else if (ctym <= 86400000) {
+                        viewHolder.timestamp.setText(ctym / 3600000 + " Hours ago");
 
+                    } else if (ctym >= 86400000 && ctym < 86400000 * 2) {
+                        viewHolder.timestamp.setText(ctym / 86400000 + " Day ago");
 
-                    else if(ctym>86400*2&&ctym<86400*30){
-                        viewHolder.timestamp.setText(ctym/86400 + " Days");
-                    }
-                    else {
+                    } else if (ctym > 86400000 * 2 && ctym < 86400000 * 30) {
+                        viewHolder.timestamp.setText(ctym / 86400000 + " Days ago");
+
+                    } else {
                         viewHolder.timestamp.setText(tym);
-
                     }
 
 
@@ -620,10 +621,40 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
         } else {
 
 
-            final long tmp = model.getTimestamp();
+            long tmp = model.getTimestamp();
             Date date = new Date(tmp);
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm");
             String tym = formatter.format(date);
+
+            viewHolder.timestamp.setText(tym);
+
+            Long tsLong = System.currentTimeMillis();
+
+
+            long ctym = tsLong - tmp;
+            if (ctym <= 60000) {
+                viewHolder.timestamp.setText(ctym / 1000 + " Secs ago");
+            } else if (ctym <= 120000) {
+                viewHolder.timestamp.setText(ctym / 60000 + " Minute ago");
+            } else if (ctym <= 3600000) {
+                viewHolder.timestamp.setText(ctym / 60000 + " Minutes ago");
+
+            } else if (ctym <= 7200000) {
+                viewHolder.timestamp.setText(ctym / 3600000 + " Hour ago");
+
+            } else if (ctym <= 86400000) {
+                viewHolder.timestamp.setText(ctym / 3600000 + " Hours ago");
+
+            } else if (ctym >= 86400000 && ctym < 86400000 * 2) {
+                viewHolder.timestamp.setText(ctym / 86400000 + " Day ago");
+
+            } else if (ctym > 86400000 * 2 && ctym < 86400000 * 30) {
+                viewHolder.timestamp.setText(ctym / 86400000 + " Days ago");
+
+            } else {
+                viewHolder.timestamp.setText(tym);
+            }
+
 
 
             final String post_key = getRef(position).getKey().toString();
@@ -642,9 +673,6 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
 
 
             mFireRef = FirebaseDatabase.getInstance().getReference().child("Users");
-
-
-            viewHolder.timestamp.setText(tym);
 
 
             //like button

@@ -42,18 +42,22 @@ public class EmptyScreenFragment extends Fragment {
 
             case 1:
                 errImg.setImageResource(R.drawable.ic_import_contacts_white_24dp);
+                errText.setText("You haven't written any Story yet..!");
                 break;
 
             case 2:
                 errImg.setImageResource(R.drawable.ic_people_outline_white_24dp);
+                errText.setText("No Users to show....Find users on search space..!");
                 break;
 
             case 3:
                 errImg.setImageResource(R.drawable.ic_people_white_24dp);
+                errText.setText("No Users to show....Find users on search space..!");
                 break;
 
             case 4:
                 errImg.setImageResource(R.drawable.ic_chevron_right_white_24dp);
+                errText.setText("You haven't saved any Stories yet..!");
                 break;
 
 
