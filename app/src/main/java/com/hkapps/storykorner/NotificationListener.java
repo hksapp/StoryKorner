@@ -66,11 +66,13 @@ public class NotificationListener extends Service {
 
                 String uid = dataSnapshot1.child("liker_id").getValue().toString();
 
-                DatabaseReference imgRef = FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
+                final DatabaseReference imgRef = FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
+
 
                 imgRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+
                         if (dataSnapshot.child("photolink").exists()) {
                             String photo = dataSnapshot.child("photolink").getValue().toString();
                             // Picasso.with(context).load(photo).fit().centerCrop().into(viewHolder.notify_imgview);

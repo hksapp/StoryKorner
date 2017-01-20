@@ -174,18 +174,22 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
 
 
                                         } else {
+
                                             mLikeRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("liked_id").setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
                                             notifying = FirebaseDatabase.getInstance().getReference().child("Users").child(dataSnapshot_saved.child("userid").getValue().toString()).child("Notifications");
-                                            Map postdata = new HashMap();
-                                            postdata.put("liker_id", FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
-                                            postdata.put("liker_id_post_id", FirebaseAuth.getInstance().getCurrentUser().getUid().toString() + "_" + post_key);
-                                            postdata.put("liker_name", FirebaseAuth.getInstance().getCurrentUser().getDisplayName().toString());
+                                            if (!dataSnapshot_saved.child("userid").getValue().toString().equals(FirebaseAuth.getInstance().getCurrentUser().getUid().toString())) {
+                                                Map postdata = new HashMap();
+                                                postdata.put("liker_id", FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
+                                                postdata.put("liker_id_post_id", FirebaseAuth.getInstance().getCurrentUser().getUid().toString() + "_" + post_key);
+                                                postdata.put("liker_name", FirebaseAuth.getInstance().getCurrentUser().getDisplayName().toString());
 
-                                            postdata.put("post_id", post_key);
-                                            postdata.put("timestamp", ServerValue.TIMESTAMP);
-                                            notifying.push().setValue(postdata);
+                                                postdata.put("post_id", post_key);
+                                                postdata.put("timestamp", ServerValue.TIMESTAMP);
+                                                notifying.push().setValue(postdata);
+                                            }
                                             viewHolder.like.setImageResource(R.drawable.ic_sentiment_very_satisfied_white_24dp);
                                             liked = false;
+
 
 
                                         }
@@ -724,15 +728,18 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
 
                                 } else {
                                     mLikeRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("liked_id").setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                                    notifying = FirebaseDatabase.getInstance().getReference().child("Users").child(model.getUserid().toString()).child("Notifications");
-                                    Map postdata = new HashMap();
-                                    postdata.put("liker_id", FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
-                                    postdata.put("liker_id_post_id", FirebaseAuth.getInstance().getCurrentUser().getUid().toString() + "_" + post_key);
-                                    postdata.put("liker_name", FirebaseAuth.getInstance().getCurrentUser().getDisplayName().toString());
 
-                                    postdata.put("post_id", post_key);
-                                    postdata.put("timestamp", ServerValue.TIMESTAMP);
-                                    notifying.push().setValue(postdata);
+                                    if (!model.getUserid().toString().equals(FirebaseAuth.getInstance().getCurrentUser().getUid().toString())) {
+                                        notifying = FirebaseDatabase.getInstance().getReference().child("Users").child(model.getUserid().toString()).child("Notifications");
+                                        Map postdata = new HashMap();
+                                        postdata.put("liker_id", FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
+                                        postdata.put("liker_id_post_id", FirebaseAuth.getInstance().getCurrentUser().getUid().toString() + "_" + post_key);
+                                        postdata.put("liker_name", FirebaseAuth.getInstance().getCurrentUser().getDisplayName().toString());
+
+                                        postdata.put("post_id", post_key);
+                                        postdata.put("timestamp", ServerValue.TIMESTAMP);
+                                        notifying.push().setValue(postdata);
+                                    }
                                     viewHolder.like.setImageResource(R.drawable.ic_sentiment_very_satisfied_white_24dp);
                                     liked = false;
                                 }
