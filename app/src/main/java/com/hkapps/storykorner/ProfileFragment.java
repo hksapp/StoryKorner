@@ -246,10 +246,17 @@ public class ProfileFragment extends Fragment {
         });
 
         signout.setOnClickListener(new View.OnClickListener() {
+
+
             @Override
             public void onClick(View view) {
+
+
                 AuthUI.getInstance()
                         .signOut(getActivity());
+                getActivity().stopService(new Intent(getActivity(), NotificationListener.class));
+
+
 
             }
         });
@@ -375,6 +382,7 @@ public class ProfileFragment extends Fragment {
                                 following_count.setText(String.valueOf(dataSnapshot.child("following").getChildrenCount()));
 
                             }
+
 
                             if (dataSnapshot.child(checkingid).child("followers").hasChild(userid)) {
 

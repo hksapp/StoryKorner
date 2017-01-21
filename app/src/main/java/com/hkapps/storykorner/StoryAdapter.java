@@ -85,6 +85,7 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                 public void onDataChange(final DataSnapshot dataSnapshot_saved) {
 
 
+
                     viewHolder.title_ui.setText(dataSnapshot_saved.child("title").getValue().toString());
                     viewHolder.story_ui.setText(dataSnapshot_saved.child("story").getValue().toString());
                     viewHolder.username.setText(dataSnapshot_saved.child("username").getValue().toString());
@@ -263,11 +264,11 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                     });
 
 
-                    if (dataSnapshot_saved.child("userid").getValue().toString().equals(FirebaseAuth.getInstance().getCurrentUser().getUid().toString())) {
+                  /*  if (dataSnapshot_saved.child("userid").getValue().toString().equals(FirebaseAuth.getInstance().getCurrentUser().getUid().toString())) {
 
                         viewHolder.delete.setVisibility(View.VISIBLE);
 
-                    }
+                    }*/
 
 
 
@@ -622,6 +623,16 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
 
 
         } else {
+
+
+            if (storiesfragment == 1 && model.getUserid().toString().equals(FirebaseAuth.getInstance().getCurrentUser().getUid().toString())) {
+
+                viewHolder.delete.setVisibility(View.VISIBLE);
+
+            } else {
+                viewHolder.delete.setVisibility(View.GONE);
+
+            }
 
 
             long tmp = model.getTimestamp();
@@ -1004,11 +1015,7 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
             viewHolder.username.setText(model.getUsername());
 
 
-            if (model.getUserid().toString().equals(FirebaseAuth.getInstance().getCurrentUser().getUid().toString())) {
 
-                viewHolder.delete.setVisibility(View.VISIBLE);
-
-            }
 
 
             viewHolder.delete.setOnClickListener(new View.OnClickListener() {

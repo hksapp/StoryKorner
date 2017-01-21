@@ -63,8 +63,9 @@ public class NotificationListener extends Service {
             @Override
             public void onChildAdded(final DataSnapshot dataSnapshot1, String s) {
 
+                if (dataSnapshot1.child("liker_id").exists()) {
 
-                String uid = dataSnapshot1.child("liker_id").getValue().toString();
+                    String uid = dataSnapshot1.child("liker_id").getValue().toString();
 
                 final DatabaseReference imgRef = FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
 
@@ -76,9 +77,9 @@ public class NotificationListener extends Service {
                         if (dataSnapshot.child("photolink").exists()) {
                             String photo = dataSnapshot.child("photolink").getValue().toString();
                             // Picasso.with(context).load(photo).fit().centerCrop().into(viewHolder.notify_imgview);
-                            showNotifications(dataSnapshot1.child("liker_name").getValue().toString(), photo);
+                            showNotifications(dataSnapshot1.child("liker_name").getValue().toString(), photo, "liked");
                         } else {
-                            showNotifications(dataSnapshot1.child("liker_name").getValue().toString(), null);
+                            showNotifications(dataSnapshot1.child("liker_name").getValue().toString(), null, "liked");
 
                         }
 
@@ -91,7 +92,38 @@ public class NotificationListener extends Service {
                     }
                 });
 
+                } else if (dataSnapshot1.child("cmt_user_id").exists()) {
 
+
+                    String uid = dataSnapshot1.child("cmt_user_id").getValue().toString();
+
+                    final DatabaseReference imgRef = FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
+
+
+                    imgRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+                            if (dataSnapshot.child("photolink").exists()) {
+                                String photo = dataSnapshot.child("photolink").getValue().toString();
+                                // Picasso.with(context).load(photo).fit().centerCrop().into(viewHolder.notify_imgview);
+                                showNotifications(dataSnapshot1.child("cmt_name").getValue().toString(), photo, "Commented on");
+                            } else {
+                                showNotifications(dataSnapshot1.child("cmt_name").getValue().toString(), null, "Commented on");
+
+                            }
+
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+
+                }
 
 
             }
@@ -184,7 +216,8 @@ public class NotificationListener extends Service {
         return START_STICKY;
     }
 
-    private void showNotifications(String username, String pic) {
+
+    private void showNotifications(String username, String pic, String reacted) {
 
         mBuilder = new NotificationCompat.Builder(this);
 
@@ -192,7 +225,7 @@ public class NotificationListener extends Service {
         // mBuilder.setLargeIcon(Picasso.with(getBaseContext()).load(pic).get());
 
         mBuilder.setContentTitle(username);
-        mBuilder.setContentText(username + " Liked your post");
+        mBuilder.setContentText(username + " " + reacted + " your post");
         mBuilder.setSmallIcon(R.drawable.ic_notifications_black_24dp);
 
         Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_account_circle_black_24dp);

@@ -43,18 +43,79 @@ public class MainActivity extends AppCompatActivity {
 
 
         mAuth = FirebaseAuth.getInstance();
-        startService(new Intent(getApplicationContext(), NotificationListener.class));
 
 
-//To Open Stories Screen
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        SharedPreferences.Editor edit = sp.edit();
-        edit.putInt("storiesfragment", 4);
-        edit.commit();
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
 
-        fragmentManager = getSupportFragmentManager();
-        transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.main_container, new StoriesFragment()).commit();
+                if (user != null) {
+                    // User is signed in
+
+                    //To Open Stories Screen
+                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    SharedPreferences.Editor edit = sp.edit();
+                    edit.putInt("storiesfragment", 4);
+                    edit.commit();
+
+                    fragmentManager = getSupportFragmentManager();
+                    transaction = fragmentManager.beginTransaction();
+                    transaction.replace(R.id.main_container, new StoriesFragment()).commit();
+
+
+                    if (!NotificationListener.isRunning) {
+                        startService(new Intent(getApplicationContext(), NotificationListener.class));
+                    }
+
+
+                    // Email Verificatiom
+                    if (!user.isEmailVerified()) {
+
+                        user.sendEmailVerification();
+                        Toast.makeText(getApplicationContext(), "Verify your Account from Email", Toast.LENGTH_SHORT).show();
+
+                    }
+
+
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+
+                    //Send Uname & UID to Firebase!
+
+                    mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                    mUserRef.child("uname").setValue(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+                    mUserRef.child("user_email").setValue(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+                    mUserRef.child("userid").setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+                } else {
+
+
+                    startActivityForResult(
+                            AuthUI.getInstance()
+                                    .createSignInIntentBuilder()
+                                    .setIsSmartLockEnabled(false)
+                                    .setLogo(R.drawable.sk)
+                                    .setTheme(R.style.FullscreenTheme)
+                                    .setProviders(
+                                            AuthUI.EMAIL_PROVIDER,
+                                            AuthUI.GOOGLE_PROVIDER)
+                                    .build(),
+                            RC_SIGN_IN);
+                    // User is signed out
+                    Log.d(TAG, "onAuthStateChanged:signed_out");
+
+
+                }
+                // ...
+            }
+        };
+
+        //  startService(new Intent(getApplicationContext(), NotificationListener.class));
+
+
+
+
+
 
         mBottomNav = (BottomNavigationView) findViewById(R.id.navigation);
 
@@ -92,7 +153,6 @@ public class MainActivity extends AppCompatActivity {
         };
 
         final ColorStateList csl2 = new ColorStateList(states, colors); */
-
 
         mBottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -155,58 +215,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
 
-                if (user != null) {
-                    // User is signed in
-                    if (!NotificationListener.isRunning) {
-                        startService(new Intent(getApplicationContext(), NotificationListener.class));
-                    }
-
-
-                    // Email Verificatiom
-                    if (!user.isEmailVerified()) {
-
-                        user.sendEmailVerification();
-                        Toast.makeText(getApplicationContext(), "Verify your Account from Email", Toast.LENGTH_SHORT).show();
-
-                    }
-
-
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-
-                    //Send Uname & UID to Firebase!
-
-                    mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                    mUserRef.child("uname").setValue(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
-                    mUserRef.child("user_email").setValue(FirebaseAuth.getInstance().getCurrentUser().getEmail());
-                    mUserRef.child("userid").setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
-
-                } else {
-
-
-                    startActivityForResult(
-                            AuthUI.getInstance()
-                                    .createSignInIntentBuilder()
-                                    .setIsSmartLockEnabled(false)
-                                    .setLogo(R.drawable.sk)
-                                    .setTheme(R.style.FullscreenTheme)
-                                    .setProviders(
-                                            AuthUI.EMAIL_PROVIDER,
-                                            AuthUI.GOOGLE_PROVIDER)
-                                    .build(),
-                            RC_SIGN_IN);
-                    // User is signed out
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
-
-
-                }
-                // ...
-            }
-        };
 
 
         Intent n = getIntent();
@@ -236,7 +245,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Welcome " + FirebaseAuth.getInstance().getCurrentUser().getDisplayName(), Toast.LENGTH_SHORT).show();
 
 
-                startService(new Intent(getApplicationContext(), NotificationListener.class));
+                //  startService(new Intent(getApplicationContext(), NotificationListener.class));
 
 
 
