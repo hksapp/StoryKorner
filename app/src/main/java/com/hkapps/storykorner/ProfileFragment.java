@@ -32,6 +32,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -40,6 +41,8 @@ import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.Map;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -391,6 +394,24 @@ public class ProfileFragment extends Fragment {
                                 mFollowRef.child(userid).child("following_name").removeValue();
                                 mFollowRef.child(userid).child("following").child(checkingid).removeValue();
 
+                                DatabaseReference flwRef = FirebaseDatabase.getInstance().getReference().child("Users").child(checkingid).child("Notifications");
+                                Query fQueryRef = flwRef.orderByChild("follower_user_id").equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
+
+
+                                fQueryRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
+                                            appleSnapshot.getRef().removeValue();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
+
                                 follow.setText("Follow");
                             } else {
 
@@ -399,6 +420,14 @@ public class ProfileFragment extends Fragment {
                                 mFollowRef.child(checkingid).child("followers").child(userid).child("follower_name").setValue(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
                                 mFollowRef.child(userid).child("following").child(checkingid).child("following_id").setValue(checkingid);
                                 mFollowRef.child(userid).child("following").child(checkingid).child("following_name").setValue(checking_name);
+
+                                DatabaseReference flwRef = FirebaseDatabase.getInstance().getReference().child("Users").child(checkingid).child("Notifications");
+
+                                Map postdata = new HashMap();
+                                postdata.put("follower_user_id", FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
+                                postdata.put("follower_name", FirebaseAuth.getInstance().getCurrentUser().getDisplayName().toString());
+                                postdata.put("timestamp", ServerValue.TIMESTAMP);
+                                flwRef.push().setValue(postdata);
 
 
                                 follow.setText("Following");

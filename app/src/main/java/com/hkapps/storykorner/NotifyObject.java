@@ -5,7 +5,7 @@ package com.hkapps.storykorner;
  */
 public class NotifyObject {
 
-    private String liker_id, liker_name, post_id, cmt, cmt_key_post_id, cmt_name, cmt_user_id;
+    private String liker_id, liker_name, post_id, cmt, cmt_key_post_id, cmt_name, cmt_user_id, follower_user_id, follower_name;
     private long timestamp;
 
 
@@ -13,7 +13,7 @@ public class NotifyObject {
 
     }
 
-    public NotifyObject(String liker_id, String liker_name, String post_id, long timestamp, String cmt, String cmt_key_post_id, String cmt_name, String cmt_user_id) {
+    public NotifyObject(String liker_id, String liker_name, String post_id, long timestamp, String cmt, String cmt_key_post_id, String cmt_name, String cmt_user_id, String follower_name, String follower_user_id) {
         this.liker_id = liker_id;
         this.liker_name = liker_name;
         this.post_id = post_id;
@@ -22,6 +22,8 @@ public class NotifyObject {
         this.cmt_key_post_id = cmt_key_post_id;
         this.cmt_name = cmt_name;
         this.cmt_user_id = cmt_user_id;
+        this.follower_name = follower_name;
+        this.follower_user_id = follower_user_id;
 
 
     }
@@ -92,6 +94,24 @@ public class NotifyObject {
 
     public void setCmt_user_id(String cmt_user_id) {
         this.cmt_user_id = cmt_user_id;
+    }
+
+
+    public String getFollower_user_id() {
+        return follower_user_id;
+    }
+
+    public void setFollower_user_id(String follower_user_id) {
+        this.follower_user_id = follower_user_id;
+    }
+
+
+    public String getFollower_name() {
+        return follower_name;
+    }
+
+    public void setFollower_name(String follower_name) {
+        this.follower_name = follower_name;
     }
 
 }
