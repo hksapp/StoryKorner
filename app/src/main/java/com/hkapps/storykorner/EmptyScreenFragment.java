@@ -42,7 +42,7 @@ public class EmptyScreenFragment extends Fragment {
 
             case 1:
                 errImg.setImageResource(R.drawable.ic_import_contacts_white_24dp);
-                errText.setText("You haven't written any Story yet..!");
+                errText.setText("No Stories to show..!");
                 break;
 
             case 2:

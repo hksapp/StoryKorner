@@ -350,16 +350,18 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                                 mCommentRef.child(key).child("cmt").setValue(ct);
                                 mCommentRef.child(key).child("cmt_key").setValue(key.toString());
 
-                                DatabaseReference cmtRef = FirebaseDatabase.getInstance().getReference().child("Users").child(dataSnapshot_saved.child("userid").getValue().toString()).child("Notifications");
+                                if (!dataSnapshot_saved.child("userid").getValue().toString().equals(FirebaseAuth.getInstance().getCurrentUser().getUid().toString())) {
+                                    DatabaseReference cmtRef = FirebaseDatabase.getInstance().getReference().child("Users").child(dataSnapshot_saved.child("userid").getValue().toString()).child("Notifications");
 
-                                Map postdata = new HashMap();
-                                postdata.put("cmt_user_id", FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
-                                postdata.put("cmt_key_post_id", key.toString() + "_" + post_key);
-                                postdata.put("cmt_name", FirebaseAuth.getInstance().getCurrentUser().getDisplayName().toString());
-                                postdata.put("cmt", ct);
-                                postdata.put("post_id", post_key);
-                                postdata.put("timestamp", ServerValue.TIMESTAMP);
-                                cmtRef.push().setValue(postdata);
+                                    Map postdata = new HashMap();
+                                    postdata.put("cmt_user_id", FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
+                                    postdata.put("cmt_key_post_id", key.toString() + "_" + post_key);
+                                    postdata.put("cmt_name", FirebaseAuth.getInstance().getCurrentUser().getDisplayName().toString());
+                                    postdata.put("cmt", ct);
+                                    postdata.put("post_id", post_key);
+                                    postdata.put("timestamp", ServerValue.TIMESTAMP);
+                                    cmtRef.push().setValue(postdata);
+                                }
 
                             }
 
@@ -882,6 +884,20 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                         mCommentRef.child(key).child("cmt_user_id").setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
                         mCommentRef.child(key).child("cmt").setValue(ct);
                         mCommentRef.child(key).child("cmt_key").setValue(key.toString());
+
+
+                        if (!model.getUserid().toString().equals(FirebaseAuth.getInstance().getCurrentUser().getUid().toString())) {
+                            DatabaseReference cmtRef = FirebaseDatabase.getInstance().getReference().child("Users").child(model.getUserid().toString()).child("Notifications");
+                            Map postdata = new HashMap();
+                            postdata.put("cmt_user_id", FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
+                            postdata.put("cmt_key_post_id", key.toString() + "_" + post_key);
+                            postdata.put("cmt_name", FirebaseAuth.getInstance().getCurrentUser().getDisplayName().toString());
+                            postdata.put("cmt", ct);
+                            postdata.put("post_id", post_key);
+                            postdata.put("timestamp", ServerValue.TIMESTAMP);
+                            cmtRef.push().setValue(postdata);
+                        }
+
 
 
                     }

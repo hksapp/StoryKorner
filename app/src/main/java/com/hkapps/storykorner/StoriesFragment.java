@@ -75,34 +75,7 @@ public class StoriesFragment extends Fragment {
 
 
 
-        DatabaseReference noRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
 
-        noRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (!dataSnapshot.child("newsfeed").exists()) {
-
-                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                    SharedPreferences.Editor edit = sp.edit();
-                    edit.putInt("error", 5);
-                    edit.commit();
-
-
-                    Fragment fragment = new EmptyScreenFragment();
-                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.main_container, fragment);
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-                Toast.makeText(getContext(), "Network errrorrrr", Toast.LENGTH_SHORT).show();
-            }
-        });
 
 
         sharedPreference = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -137,6 +110,35 @@ public class StoriesFragment extends Fragment {
             case 1:
 
                 Query profRef = childRef.orderByChild("userid").equalTo(storyuserid);
+                profRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.getValue() == null) {
+
+                            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                            SharedPreferences.Editor edit = sp.edit();
+                            edit.putInt("error", 1);
+                            edit.commit();
+
+
+                            Fragment fragment = new EmptyScreenFragment();
+                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            fragmentTransaction.replace(R.id.main_container, fragment);
+                            fragmentTransaction.addToBackStack(null);
+                            fragmentTransaction.commit();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+
+
+
                 profRef.keepSynced(true);
                 mStoryAdapter = new StoryAdapter(StoryObject.class, R.layout.story_custom_ui, StoryHolder.class, profRef, getContext());
                 break;
@@ -157,6 +159,37 @@ public class StoriesFragment extends Fragment {
 
             case 4:
 
+
+                DatabaseReference noRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
+
+                noRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (!dataSnapshot.child("newsfeed").exists()) {
+
+                            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                            SharedPreferences.Editor edit = sp.edit();
+                            edit.putInt("error", 5);
+                            edit.commit();
+
+
+                            Fragment fragment = new EmptyScreenFragment();
+                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            fragmentTransaction.replace(R.id.main_container, fragment);
+                            fragmentTransaction.addToBackStack(null);
+                            fragmentTransaction.commit();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                        Toast.makeText(getContext(), "Network errrorrrr", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
                 Query newsfeedRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).child("newsfeed");
                 newsfeedRef.keepSynced(true);
                 mStoryAdapter = new StoryAdapter(StoryObject.class, R.layout.story_custom_ui, StoryHolder.class, newsfeedRef, getContext());
@@ -165,38 +198,48 @@ public class StoriesFragment extends Fragment {
 
             case 5:
 
-
                 Query savedRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).child("saved");
-                savedRef.keepSynced(true);
-                mStoryAdapter = new StoryAdapter(StoryObject.class, R.layout.story_custom_ui, StoryHolder.class, savedRef, getContext());
 
-                mDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                savedRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (!dataSnapshot.exists()) {
+                        if (dataSnapshot.getValue() == null) {
+
+                            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                            SharedPreferences.Editor edit = sp.edit();
+                            edit.putInt("error", 4);
+                            edit.commit();
+
+
                             Fragment fragment = new EmptyScreenFragment();
                             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                             fragmentTransaction.replace(R.id.main_container, fragment);
                             fragmentTransaction.addToBackStack(null);
                             fragmentTransaction.commit();
-
                         }
-
                     }
-
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
 
                     }
                 });
+
+
+                savedRef.keepSynced(true);
+                mStoryAdapter = new StoryAdapter(StoryObject.class, R.layout.story_custom_ui, StoryHolder.class, savedRef, getContext());
+                break;
+
+
             case 8:
 
                 Query nStory = childRef.orderByChild("post_id").equalTo(story_id);
                 nStory.keepSynced(true);
                 mStoryAdapter = new StoryAdapter(StoryObject.class, R.layout.story_custom_ui, StoryHolder.class, nStory, getContext());
                 break;
+
         }
 
 

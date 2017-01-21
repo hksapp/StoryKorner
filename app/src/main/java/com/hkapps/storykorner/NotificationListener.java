@@ -250,7 +250,7 @@ public class NotificationListener extends Service {
         Intent resultIntent = new Intent(this, MainActivity.class);
         resultIntent.putExtra("notif", true);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        stackBuilder.addParentStack(StoryDescription.class);
+        stackBuilder.addParentStack(MainActivity.class);
 
 // Adds the Intent that starts the Activity to the top of the stack
         stackBuilder.addNextIntent(resultIntent);
