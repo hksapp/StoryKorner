@@ -35,6 +35,7 @@ public class NotificationListener extends Service {
     private DatabaseReference notifying;
     private Target mTarget;
     private NotificationCompat.Builder mBuilder;
+    private int notif_id = 0;
 
     @Nullable
     @Override
@@ -71,11 +72,18 @@ public class NotificationListener extends Service {
             @Override
             public void onChildAdded(final DataSnapshot dataSnapshot1, String s) {
 
+                if (notif_id > 30000)
+                    notif_id = 0;
+
+                notif_id = notif_id + 1;
+
+
                 if (dataSnapshot1.child("liker_id").exists()) {
 
                     String uid = dataSnapshot1.child("liker_id").getValue().toString();
 
-                final DatabaseReference imgRef = FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
+
+                    final DatabaseReference imgRef = FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
 
 
                 imgRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -317,7 +325,7 @@ public class NotificationListener extends Service {
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
 // notificationID allows you to update the notification later on.
-        mNotificationManager.notify(0, mBuilder.build());
+        mNotificationManager.notify(notif_id, mBuilder.build());
 
        /* final int notifId = 1337;
         final RemoteViews contentView = mBuilder.getContentView();
