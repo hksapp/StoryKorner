@@ -45,18 +45,6 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
 
-        Intent n = getIntent();
-        boolean s = n.getBooleanExtra("notif", false);
-
-        if (s) {
-            Fragment fragment = new NotificationFragment();
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.main_container, fragment);
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
-
-        }
 
 
 
@@ -68,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
                 if (user != null) {
                     // User is signed in
 
+
                     //To Open Stories Screen
                     SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                     SharedPreferences.Editor edit = sp.edit();
@@ -77,6 +66,22 @@ public class MainActivity extends AppCompatActivity {
                     fragmentManager = getSupportFragmentManager();
                     transaction = fragmentManager.beginTransaction();
                     transaction.replace(R.id.main_container, new StoriesFragment()).commit();
+
+                    //To open notification fragment on clicking notification
+
+                    Intent n = getIntent();
+                    boolean s = n.getBooleanExtra("notif", false);
+
+                    if (s) {
+                        Fragment fragment = new NotificationFragment();
+                        FragmentManager fragmentManager = getSupportFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.replace(R.id.main_container, fragment);
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
+
+                    }
+
 
 
                     startService(new Intent(getApplicationContext(), NotificationListener.class));
