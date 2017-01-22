@@ -195,6 +195,7 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
 
                                                 postdata.put("post_id", post_key);
                                                 postdata.put("timestamp", ServerValue.TIMESTAMP);
+                                                postdata.put("seen", true);
                                                 notifying.push().setValue(postdata);
                                             }
                                             viewHolder.like.setImageResource(R.drawable.ic_sentiment_very_satisfied_white_24dp);
@@ -369,6 +370,7 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                                     postdata.put("cmt", ct);
                                     postdata.put("post_id", post_key);
                                     postdata.put("timestamp", ServerValue.TIMESTAMP);
+                                    postdata.put("seen", true);
                                     cmtRef.push().setValue(postdata);
                                 }
 
@@ -768,6 +770,7 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
 
                                         postdata.put("post_id", post_key);
                                         postdata.put("timestamp", ServerValue.TIMESTAMP);
+                                        postdata.put("seen", true);
                                         notifying.push().setValue(postdata);
                                     }
                                     viewHolder.like.setImageResource(R.drawable.ic_sentiment_very_satisfied_white_24dp);
@@ -912,6 +915,7 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                             postdata.put("cmt", ct);
                             postdata.put("post_id", post_key);
                             postdata.put("timestamp", ServerValue.TIMESTAMP);
+                            postdata.put("seen", true);
                             cmtRef.push().setValue(postdata);
                         }
 

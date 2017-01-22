@@ -67,7 +67,7 @@ public class NotificationListener extends Service {
         notifying = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).child("Notifications");
 
         notifying.keepSynced(true);
-        notifying.addChildEventListener(new ChildEventListener() {
+        notifying.orderByChild("seen").equalTo(true).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(final DataSnapshot dataSnapshot1, String s) {
 
@@ -100,6 +100,9 @@ public class NotificationListener extends Service {
                     }
                 });
 
+
+                    dataSnapshot1.child("seen").getRef().removeValue();
+
                 } else if (dataSnapshot1.child("cmt_user_id").exists()) {
 
 
@@ -129,6 +132,8 @@ public class NotificationListener extends Service {
 
                         }
                     });
+
+                    dataSnapshot1.child("seen").getRef().removeValue();
 
 
                 } else if (dataSnapshot1.child("follower_user_id").exists()) {
@@ -160,6 +165,9 @@ public class NotificationListener extends Service {
 
                         }
                     });
+
+                    dataSnapshot1.child("seen").getRef().removeValue();
+
 
                 }
 

@@ -45,6 +45,21 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
 
+        Intent n = getIntent();
+        boolean s = n.getBooleanExtra("notif", false);
+
+        if (s) {
+            Fragment fragment = new NotificationFragment();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.main_container, fragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+
+        }
+
+
+
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -217,18 +232,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        Intent n = getIntent();
-        boolean s = n.getBooleanExtra("notif", false);
 
-        if (s) {
-            Fragment fragment = new NotificationFragment();
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.main_container, fragment);
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
-
-        }
 
 
     }

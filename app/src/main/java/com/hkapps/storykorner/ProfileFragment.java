@@ -427,6 +427,7 @@ public class ProfileFragment extends Fragment {
                                 postdata.put("follower_user_id", FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
                                 postdata.put("follower_name", FirebaseAuth.getInstance().getCurrentUser().getDisplayName().toString());
                                 postdata.put("timestamp", ServerValue.TIMESTAMP);
+                                postdata.put("seen", true);
                                 flwRef.push().setValue(postdata);
 
 
