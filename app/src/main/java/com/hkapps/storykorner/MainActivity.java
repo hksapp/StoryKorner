@@ -64,9 +64,8 @@ public class MainActivity extends AppCompatActivity {
                     transaction.replace(R.id.main_container, new StoriesFragment()).commit();
 
 
-                    if (!NotificationListener.isRunning) {
-                        startService(new Intent(getApplicationContext(), NotificationListener.class));
-                    }
+                    startService(new Intent(getApplicationContext(), NotificationListener.class));
+
 
 
                     // Email Verificatiom

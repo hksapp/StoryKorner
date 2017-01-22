@@ -30,7 +30,8 @@ import com.squareup.picasso.Target;
 
 public class NotificationListener extends Service {
 
-    public static boolean isRunning;
+
+    public static boolean isRunning = true;
     private DatabaseReference notifying;
     private Target mTarget;
     private NotificationCompat.Builder mBuilder;
@@ -45,6 +46,13 @@ public class NotificationListener extends Service {
     public void onDestroy() {
         super.onDestroy();
         isRunning = false;
+    }
+
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        isRunning = true;
     }
 
     //When the service is started
