@@ -102,29 +102,38 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
 
 
                     long ctym = tsLong-tmp;
-                    if (ctym <= 60000) {
-                        viewHolder.timestamp.setText(ctym / 1000 + " Secs ago");
-                    } else if (ctym <= 120000) {
-                        viewHolder.timestamp.setText(ctym / 60000 + " Minute ago");
-                    } else if (ctym <= 3600000) {
-                        viewHolder.timestamp.setText(ctym / 60000 + " Minutes ago");
 
-                    } else if (ctym <= 7200000) {
-                        viewHolder.timestamp.setText(ctym / 3600000 + " Hour ago");
+                    long seconds = ctym / 1000;
+                    long minutes = seconds / 60;
+                    long hours = minutes / 60;
+                    long days = hours / 24;
 
-                    } else if (ctym <= 86400000) {
-                        viewHolder.timestamp.setText(ctym / 3600000 + " Hours ago");
+                    if (days == 0) {
 
-                    } else if (ctym >= 86400000 && ctym < 86400000 * 2) {
-                        viewHolder.timestamp.setText(ctym / 86400000 + " Day ago");
+                        if (hours != 0) {
+                            if (hours == 1)
+                                viewHolder.timestamp.setText(String.valueOf(hours) + " Hr");
+                            else
+                                viewHolder.timestamp.setText(String.valueOf(hours) + " Hrs");
+                        } else {
+                            if (minutes != 0) {
+                                if (minutes == 1)
+                                    viewHolder.timestamp.setText(String.valueOf(minutes) + " Min");
+                                else
+                                    viewHolder.timestamp.setText(String.valueOf(minutes) + " Mins");
 
-                    } else if (ctym > 86400000 * 2 && ctym < 86400000 * 30) {
-                        viewHolder.timestamp.setText(ctym / 86400000 + " Days ago");
+                            } else {
+                                viewHolder.timestamp.setText(String.valueOf(seconds) + " Secs");
 
+                            }
+                        }
                     } else {
-                        viewHolder.timestamp.setText(tym);
-                    }
+                        if (days == 1)
+                            viewHolder.timestamp.setText(String.valueOf(days) + " day");
+                        else
+                            viewHolder.timestamp.setText(String.valueOf(days) + " days");
 
+                    }
 
                     viewHolder.like.setOnClickListener(new View.OnClickListener() {
 
@@ -648,29 +657,37 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
 
 
             long ctym = tsLong - tmp;
-            if (ctym <= 60000) {
-                viewHolder.timestamp.setText(ctym / 1000 + " Secs ago");
-            } else if (ctym <= 120000) {
-                viewHolder.timestamp.setText(ctym / 60000 + " Minute ago");
-            } else if (ctym <= 3600000) {
-                viewHolder.timestamp.setText(ctym / 60000 + " Minutes ago");
+            long seconds = ctym / 1000;
+            long minutes = seconds / 60;
+            long hours = minutes / 60;
+            long days = hours / 24;
 
-            } else if (ctym <= 7200000) {
-                viewHolder.timestamp.setText(ctym / 3600000 + " Hour ago");
+            if (days == 0) {
 
-            } else if (ctym <= 86400000) {
-                viewHolder.timestamp.setText(ctym / 3600000 + " Hours ago");
+                if (hours != 0) {
+                    if (hours == 1)
+                        viewHolder.timestamp.setText(String.valueOf(hours) + " Hr");
+                    else
+                        viewHolder.timestamp.setText(String.valueOf(hours) + " Hrs");
+                } else {
+                    if (minutes != 0) {
+                        if (minutes == 1)
+                            viewHolder.timestamp.setText(String.valueOf(minutes) + " Min");
+                        else
+                            viewHolder.timestamp.setText(String.valueOf(minutes) + " Mins");
 
-            } else if (ctym >= 86400000 && ctym < 86400000 * 2) {
-                viewHolder.timestamp.setText(ctym / 86400000 + " Day ago");
+                    } else {
+                        viewHolder.timestamp.setText(String.valueOf(seconds) + " Secs");
 
-            } else if (ctym > 86400000 * 2 && ctym < 86400000 * 30) {
-                viewHolder.timestamp.setText(ctym / 86400000 + " Days ago");
-
+                    }
+                }
             } else {
-                viewHolder.timestamp.setText(tym);
-            }
+                if (days == 1)
+                    viewHolder.timestamp.setText(String.valueOf(days) + " day");
+                else
+                    viewHolder.timestamp.setText(String.valueOf(days) + " days");
 
+            }
 
 
             final String post_key = getRef(position).getKey().toString();

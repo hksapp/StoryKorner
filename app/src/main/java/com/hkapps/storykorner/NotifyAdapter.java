@@ -46,7 +46,41 @@ public class NotifyAdapter extends FirebaseRecyclerAdapter<NotifyObject, NotifyH
 
 
         long ctym = tsLong - tmp;
-        if (ctym <= 60000) {
+
+        long seconds = ctym / 1000;
+        long minutes = seconds / 60;
+        long hours = minutes / 60;
+        long days = hours / 24;
+
+        if (days == 0) {
+
+            if (hours != 0) {
+                if (hours == 1)
+                    viewHolder.notify_time.setText(String.valueOf(hours) + " Hr");
+                else
+                    viewHolder.notify_time.setText(String.valueOf(hours) + " Hrs");
+            } else {
+                if (minutes != 0) {
+                    if (minutes == 1)
+                        viewHolder.notify_time.setText(String.valueOf(minutes) + " Min");
+                    else
+                        viewHolder.notify_time.setText(String.valueOf(minutes) + " Mins");
+
+                } else {
+                    viewHolder.notify_time.setText(String.valueOf(seconds) + " Secs");
+
+                }
+            }
+        } else {
+            if (days == 1)
+                viewHolder.notify_time.setText(String.valueOf(days) + " day");
+            else
+                viewHolder.notify_time.setText(String.valueOf(days) + " days");
+
+        }
+
+
+      /*  if (ctym <= 60000) {
             viewHolder.notify_time.setText(ctym / 1000 + " Secs ago");
         } else if (ctym <= 120000) {
             viewHolder.notify_time.setText(ctym / 60000 + " Min ago");
@@ -63,12 +97,12 @@ public class NotifyAdapter extends FirebaseRecyclerAdapter<NotifyObject, NotifyH
             viewHolder.notify_time.setText(ctym / 86400000 + " Day ago");
 
         } else if (ctym > 86400000 * 2 && ctym < 86400000 * 30) {
-            viewHolder.notify_time.setText(ctym / 86400000 + " Days ago");
+            viewHolder.notify_time.setText(((ctym / (1000*60*60*24)) % 7) + " Days ago");
 
         } else {
             viewHolder.notify_time.setText(tym);
         }
-
+*/
 
         if (model.getLiker_id() != null) {
 
