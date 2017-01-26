@@ -3,12 +3,20 @@
     android:id="@+id/user"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
+    android:gravity="center"
     tools:context="com.hkapps.storykorner.UserSearchFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="User" />
+        android:background="@drawable/profilebackground"
+        android:fontFamily="cursive"
+        android:text="Search Users"
+        android:textColor="#FFFFFF"
+
+        android:textSize="30sp"
+        android:textStyle="bold" />
 
 </FrameLayout>

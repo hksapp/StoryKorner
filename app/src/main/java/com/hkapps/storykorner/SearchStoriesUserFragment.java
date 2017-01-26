@@ -40,6 +40,8 @@ public class SearchStoriesUserFragment extends Fragment {
 
         SearchView searchView = (SearchView) rootview.findViewById(R.id.searchview);
         searchView.setQueryHint("Search");
+        searchView.setIconified(false);
+        searchView.setIconifiedByDefault(true);
 
 
         //*** setOnQueryTextFocusChangeListener ***

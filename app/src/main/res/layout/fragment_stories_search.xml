@@ -1,21 +1,27 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
 
+
     android:id="@+id/stor"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
 
 
     tools:context="com.hkapps.storykorner.StoriesSearchFragment">
 
     <!-- TODO: Update blank fragment layout -->
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fontFamily="sans-serif"
+        android:background="@drawable/profilebackground"
+        android:fontFamily="cursive"
+        android:text="Search Stories"
+        android:textColor="#FFFFFF"
 
-        android:text="Search"
-        android:textSize="30sp" />
-    />
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
 
 </FrameLayout>
