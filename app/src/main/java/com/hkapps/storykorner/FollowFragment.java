@@ -58,7 +58,7 @@ public class FollowFragment extends Fragment {
 
         SharedPreferences sharedPreference = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String prof_id = sharedPreference.getString("prof_followers_id", "null");
-        String usersearch = sharedPreference.getString("usersearch", "");
+        String usersearch = sharedPreference.getString("usersearch", "").toLowerCase();
         String likes_post_key = sharedPreference.getString("likes_post_key", "");
         String comment_post_key = sharedPreference.getString("comment_post_key", "");
 
@@ -84,7 +84,7 @@ public class FollowFragment extends Fragment {
 
             case 2:
                 mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("Users");
-                Query searchUserRef = mDatabaseRef.orderByChild("uname").startAt(usersearch).endAt(usersearch + "\uf8ff");
+                Query searchUserRef = mDatabaseRef.orderByChild("uname_lower").startAt(usersearch).endAt(usersearch + "\uf8ff");
                 mFollowAdapter = new FollowAdapter(FollowObject.class, R.layout.follow_custom_ui, FollowHolder.class, searchUserRef, getContext());
                 break;
 

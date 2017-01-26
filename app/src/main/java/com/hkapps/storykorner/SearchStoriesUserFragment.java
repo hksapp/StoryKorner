@@ -14,7 +14,6 @@ import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 
 /**
@@ -50,8 +49,7 @@ public class SearchStoriesUserFragment extends Fragment {
             public void onFocusChange(View v, boolean hasFocus) {
                 // TODO Auto-generated method stub
 
-                Toast.makeText(getContext(), String.valueOf(hasFocus),
-                        Toast.LENGTH_SHORT).show();
+
             }
         });
 

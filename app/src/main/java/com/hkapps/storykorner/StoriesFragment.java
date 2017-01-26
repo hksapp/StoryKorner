@@ -82,7 +82,7 @@ public class StoriesFragment extends Fragment {
         boolean chk = sharedPreference.getBoolean("profile", false);
 
 
-        String storysearch = sharedPreference.getString("storysearch", "None");
+        String storysearch = sharedPreference.getString("storysearch", "None").toLowerCase();
         boolean storysearch_boolean = sharedPreference.getBoolean("storysearch_boolean", false);
 
         String Category = sharedPreference.getString("Category", "Humor");
@@ -144,7 +144,7 @@ public class StoriesFragment extends Fragment {
 
             case 2:
 
-                Query storyRef = childRef.orderByChild("title").startAt(storysearch).endAt(storysearch + "\uf8ff");
+                Query storyRef = childRef.orderByChild("title_lower").startAt(storysearch).endAt(storysearch + "\uf8ff");
                 storyRef.keepSynced(true);
                 mStoryAdapter = new StoryAdapter(StoryObject.class, R.layout.story_custom_ui, StoryHolder.class, storyRef, getContext());
                 break;

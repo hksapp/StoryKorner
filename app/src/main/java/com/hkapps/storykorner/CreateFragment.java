@@ -120,6 +120,7 @@ public class CreateFragment extends Fragment {
                     postdata.put("username", FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
                     postdata.put("timestamp", ServerValue.TIMESTAMP);
                     postdata.put("category", cat);
+                    postdata.put("title_lower", create_title.getText().toString().toLowerCase());
 
                     final String pushid = post_stories.push().getKey();
                     postdata.put("post_id", pushid);
