@@ -171,7 +171,6 @@ public class CreateFragment extends Fragment {
                         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                         fragmentTransaction.replace(R.id.main_container, fragment);
-                        fragmentTransaction.addToBackStack(null);
                         fragmentTransaction.commit();
 
                     } else {

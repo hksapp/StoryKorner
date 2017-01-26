@@ -119,7 +119,7 @@ public class SearchStoriesUserFragment extends Fragment {
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.replace(R.id.stor, fragment);
-                    fragmentTransaction.addToBackStack(null);
+
                     fragmentTransaction.commit();
 
 
@@ -133,7 +133,7 @@ public class SearchStoriesUserFragment extends Fragment {
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.replace(R.id.user, fragment);
-                    fragmentTransaction.addToBackStack(null);
+
                     fragmentTransaction.commit();
 
 

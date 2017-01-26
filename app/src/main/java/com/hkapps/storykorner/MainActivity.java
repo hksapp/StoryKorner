@@ -117,7 +117,6 @@ public class MainActivity extends AppCompatActivity {
                                     .setLogo(R.drawable.sk)
                                     .setTheme(R.style.FullscreenTheme)
                                     .setProviders(
-                                            AuthUI.EMAIL_PROVIDER,
                                             AuthUI.GOOGLE_PROVIDER)
                                     .build(),
                             RC_SIGN_IN);

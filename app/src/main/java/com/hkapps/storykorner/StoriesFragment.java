@@ -29,6 +29,7 @@ import com.google.firebase.database.ValueEventListener;
  */
 public class StoriesFragment extends Fragment {
 
+
     public static StoryAdapter mStoryAdapter;
     private RecyclerView storyRecyclerview;
     private LinearLayoutManager linearLayoutManager;
@@ -55,190 +56,183 @@ public class StoriesFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootview = inflater.inflate(R.layout.fragment_stories, container, false);
 
-        if (!isNetworkConnected()) {
-
-            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            SharedPreferences.Editor edit = sp.edit();
-            edit.putInt("error", 6);
-            edit.commit();
+        try {
 
 
-            Fragment fragment = new EmptyScreenFragment();
-            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.main_container, fragment);
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
+            if (!isNetworkConnected()) {
 
-        }
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                SharedPreferences.Editor edit = sp.edit();
+                edit.putInt("error", 6);
+                edit.commit();
 
 
+                Fragment fragment = new EmptyScreenFragment();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.main_container, fragment);
+
+                fragmentTransaction.commit();
+
+            }
 
 
+            sharedPreference = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            String storyuserid = sharedPreference.getString("storyuserid", null);
+            boolean chk = sharedPreference.getBoolean("profile", false);
 
 
-        sharedPreference = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String storyuserid = sharedPreference.getString("storyuserid", null);
-        boolean chk = sharedPreference.getBoolean("profile", false);
+            String storysearch = sharedPreference.getString("storysearch", "None").toLowerCase();
+            boolean storysearch_boolean = sharedPreference.getBoolean("storysearch_boolean", false);
+
+            String Category = sharedPreference.getString("Category", "Humor");
+            boolean CategoryBoolean = sharedPreference.getBoolean("CategoryBoolean", false);
+            String story_id = sharedPreference.getString("story_id", "-KapV7mFEkt15bS8yhHD");
+            int storiesfragment = sharedPreference.getInt("storiesfragment", 404);
 
 
-        String storysearch = sharedPreference.getString("storysearch", "None").toLowerCase();
-        boolean storysearch_boolean = sharedPreference.getBoolean("storysearch_boolean", false);
-
-        String Category = sharedPreference.getString("Category", "Humor");
-        boolean CategoryBoolean = sharedPreference.getBoolean("CategoryBoolean", false);
-        String story_id = sharedPreference.getString("story_id", "-KapV7mFEkt15bS8yhHD");
-        int storiesfragment = sharedPreference.getInt("storiesfragment", 404);
-
-
-
+            linearLayoutManager = new LinearLayoutManager(getActivity());
+            storyRecyclerview = (RecyclerView) rootview.findViewById(R.id.story_recycler_view);
+            storyRecyclerview.setHasFixedSize(true);
+            linearLayoutManager.setReverseLayout(true);
+            linearLayoutManager.setStackFromEnd(true);
+            mDatabaseRef = FirebaseDatabase.getInstance().getReference();
+            childRef = mDatabaseRef.child("Posted_Stories");
+            childRef.keepSynced(true);
 
 
-        linearLayoutManager = new LinearLayoutManager(getActivity());
-        storyRecyclerview = (RecyclerView) rootview.findViewById(R.id.story_recycler_view);
-        storyRecyclerview.setHasFixedSize(true);
-        linearLayoutManager.setReverseLayout(true);
-        linearLayoutManager.setStackFromEnd(true);
-        mDatabaseRef = FirebaseDatabase.getInstance().getReference();
-        childRef = mDatabaseRef.child("Posted_Stories");
-        childRef.keepSynced(true);
+            switch (storiesfragment) {
+
+                case 1:
+
+                    Query profRef = childRef.orderByChild("userid").equalTo(storyuserid);
+                    profRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.getValue() == null) {
+
+                                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                                SharedPreferences.Editor edit = sp.edit();
+                                edit.putInt("error", 1);
+                                edit.commit();
 
 
-        switch (storiesfragment) {
+                                Fragment fragment = new EmptyScreenFragment();
+                                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                fragmentTransaction.replace(R.id.main_container, fragment);
 
-            case 1:
-
-                Query profRef = childRef.orderByChild("userid").equalTo(storyuserid);
-                profRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.getValue() == null) {
-
-                            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                            SharedPreferences.Editor edit = sp.edit();
-                            edit.putInt("error", 1);
-                            edit.commit();
-
-
-                            Fragment fragment = new EmptyScreenFragment();
-                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.main_container, fragment);
-                            fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
+                                fragmentTransaction.commit();
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
 
-                    }
-                });
-
-
-
-
-                profRef.keepSynced(true);
-                mStoryAdapter = new StoryAdapter(StoryObject.class, R.layout.story_custom_ui, StoryHolder.class, profRef, getContext());
-                break;
-
-            case 2:
-
-                Query storyRef = childRef.orderByChild("title_lower").startAt(storysearch).endAt(storysearch + "\uf8ff");
-                storyRef.keepSynced(true);
-                mStoryAdapter = new StoryAdapter(StoryObject.class, R.layout.story_custom_ui, StoryHolder.class, storyRef, getContext());
-                break;
-
-            case 3:
-
-                Query catRef = childRef.orderByChild("category").equalTo(Category);
-                catRef.keepSynced(true);
-                mStoryAdapter = new StoryAdapter(StoryObject.class, R.layout.story_custom_ui, StoryHolder.class, catRef, getContext());
-                break;
-
-            case 4:
-
-
-                DatabaseReference noRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
-
-                noRef.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (!dataSnapshot.child("newsfeed").exists()) {
-
-                            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                            SharedPreferences.Editor edit = sp.edit();
-                            edit.putInt("error", 5);
-                            edit.commit();
-
-
-                            Fragment fragment = new EmptyScreenFragment();
-                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.main_container, fragment);
-                            fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
                         }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
+                    });
 
 
-                Query newsfeedRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).child("newsfeed");
-                newsfeedRef.keepSynced(true);
-                mStoryAdapter = new StoryAdapter(StoryObject.class, R.layout.story_custom_ui, StoryHolder.class, newsfeedRef, getContext());
+                    profRef.keepSynced(true);
+                    mStoryAdapter = new StoryAdapter(StoryObject.class, R.layout.story_custom_ui, StoryHolder.class, profRef, getContext());
+                    break;
 
-                break;
+                case 2:
 
-            case 5:
+                    Query storyRef = childRef.orderByChild("title_lower").startAt(storysearch).endAt(storysearch + "\uf8ff");
+                    storyRef.keepSynced(true);
+                    mStoryAdapter = new StoryAdapter(StoryObject.class, R.layout.story_custom_ui, StoryHolder.class, storyRef, getContext());
+                    break;
 
-                Query savedRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).child("saved");
+                case 3:
+
+                    Query catRef = childRef.orderByChild("category").equalTo(Category);
+                    catRef.keepSynced(true);
+                    mStoryAdapter = new StoryAdapter(StoryObject.class, R.layout.story_custom_ui, StoryHolder.class, catRef, getContext());
+                    break;
+
+                case 4:
 
 
-                savedRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.getValue() == null) {
+                    DatabaseReference noRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).child("newsfeed");
 
-                            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                            SharedPreferences.Editor edit = sp.edit();
-                            edit.putInt("error", 4);
-                            edit.commit();
+                    noRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (!dataSnapshot.exists()) {
+
+                                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                                SharedPreferences.Editor edit = sp.edit();
+                                edit.putInt("error", 5);
+                                edit.commit();
 
 
-                            Fragment fragment = new EmptyScreenFragment();
-                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.main_container, fragment);
-                            fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
+                                Fragment fragment = new EmptyScreenFragment();
+                                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                fragmentTransaction.replace(R.id.main_container, fragment);
+
+                                fragmentTransaction.commit();
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
 
-                    }
-                });
-
-
-                savedRef.keepSynced(true);
-                mStoryAdapter = new StoryAdapter(StoryObject.class, R.layout.story_custom_ui, StoryHolder.class, savedRef, getContext());
-                break;
+                        }
+                    });
 
 
-            case 8:
+                    Query newsfeedRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).child("newsfeed");
+                    newsfeedRef.keepSynced(true);
+                    mStoryAdapter = new StoryAdapter(StoryObject.class, R.layout.story_custom_ui, StoryHolder.class, newsfeedRef, getContext());
 
-                Query nStory = childRef.orderByChild("post_id").equalTo(story_id);
-                nStory.keepSynced(true);
-                mStoryAdapter = new StoryAdapter(StoryObject.class, R.layout.story_custom_ui, StoryHolder.class, nStory, getContext());
-                break;
+                    break;
 
-        }
+                case 5:
+
+                    Query savedRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).child("saved");
+
+
+                    savedRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.getValue() == null) {
+
+                                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                                SharedPreferences.Editor edit = sp.edit();
+                                edit.putInt("error", 4);
+                                edit.commit();
+
+
+                                Fragment fragment = new EmptyScreenFragment();
+                                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                fragmentTransaction.replace(R.id.main_container, fragment);
+                                fragmentTransaction.commit();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+
+                    savedRef.keepSynced(true);
+                    mStoryAdapter = new StoryAdapter(StoryObject.class, R.layout.story_custom_ui, StoryHolder.class, savedRef, getContext());
+                    break;
+
+
+                case 8:
+
+                    Query nStory = childRef.orderByChild("post_id").equalTo(story_id);
+                    nStory.keepSynced(true);
+                    mStoryAdapter = new StoryAdapter(StoryObject.class, R.layout.story_custom_ui, StoryHolder.class, nStory, getContext());
+                    break;
+
+            }
 
 
 
@@ -262,10 +256,12 @@ public class StoriesFragment extends Fragment {
 
         }*/
 
-        storyRecyclerview.setLayoutManager(linearLayoutManager);
-        storyRecyclerview.setAdapter(mStoryAdapter);
+            storyRecyclerview.setLayoutManager(linearLayoutManager);
+            storyRecyclerview.setAdapter(mStoryAdapter);
 
+        } catch (Exception e) {
 
+        }
         return rootview;
     }
 
