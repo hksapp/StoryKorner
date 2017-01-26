@@ -36,6 +36,7 @@ public class SearchStoriesUserFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
+
         View rootview = inflater.inflate(R.layout.fragment_search_user_stories, container, false);
 
         SearchView searchView = (SearchView) rootview.findViewById(R.id.searchview);
