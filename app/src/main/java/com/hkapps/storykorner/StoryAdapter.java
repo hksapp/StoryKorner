@@ -952,7 +952,7 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                 @Override
                 public void onClick(View view) {
 
-                   /* Fragment fragment = new CommentFragment();
+                   /* Fragment fragment =
                     FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.replace(R.id.main_container, fragment);

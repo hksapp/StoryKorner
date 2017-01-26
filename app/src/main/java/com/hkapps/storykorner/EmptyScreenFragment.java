@@ -61,17 +61,17 @@ public class EmptyScreenFragment extends Fragment {
                 break;
 
             case 5:
-                errImg.setImageResource(R.drawable.ic_chevron_right_white_24dp);
+                errImg.setImageResource(R.drawable.ic_import_contacts_white_24dp);
                 errText.setText("No Content to Show");
                 break;
 
             case 6:
-                errImg.setImageResource(R.drawable.ic_sentiment_satisfied_white_24dp);
+                errImg.setImageResource(R.drawable.ic_sentiment_very_dissatisfied_white_48dp);
                 errText.setText("No Internet Connection");
                 break;
 
             case 7:
-                errImg.setImageResource(R.drawable.ic_sentiment_satisfied_white_24dp);
+                errImg.setImageResource(R.drawable.ic_sentiment_very_dissatisfied_white_48dp);
                 errText.setText("Your Story will be uploaded as soon as \n your phone connects to Internet");
                 break;
 
