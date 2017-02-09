@@ -609,6 +609,20 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
             });
 
 
+            viewHolder.share.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    Intent sendIntent = new Intent();
+                    String msg = "Hey, check this out: " + "https://ft4am.app.goo.gl/?link=https://StoryKorner-dynamic-linksstoryid=(" + postid + ")&apn=com.hkapps.storykorner";
+                    sendIntent.setAction(Intent.ACTION_SEND);
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, msg);
+                    sendIntent.setType("text/plain");
+                    context.startActivity(sendIntent);
+                }
+            });
+
+
             //LIKE FRAGMENT
 
             viewHolder.likecount.setOnClickListener(new View.OnClickListener() {
@@ -944,6 +958,19 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                 }
             });
 
+
+            viewHolder.share.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    Intent sendIntent = new Intent();
+                    String msg = "Hey, check this out: " + "https://ft4am.app.goo.gl/?link=https://StoryKorner-dynamic-linksstoryid=(" + post_key + ")&apn=com.hkapps.storykorner";
+                    sendIntent.setAction(Intent.ACTION_SEND);
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, msg);
+                    sendIntent.setType("text/plain");
+                    context.startActivity(sendIntent);
+                }
+            });
 
             //COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS COMMENTS
 

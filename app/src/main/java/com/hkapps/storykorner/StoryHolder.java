@@ -25,7 +25,7 @@ public class StoryHolder extends RecyclerView.ViewHolder {
     public TextView likecount;
     public EditText type_comment;
     public ImageButton send_comment;
-    public ImageButton comment, save;
+    public ImageButton comment, save, share;
     public TextView user_cmt;
     public TextView category;
     public LinearLayout backgroundColor;
@@ -56,6 +56,7 @@ public class StoryHolder extends RecyclerView.ViewHolder {
         delete = (ImageView) itemView.findViewById(R.id.delete);
 
         save = (ImageButton) itemView.findViewById(R.id.save);
+        share = (ImageButton) itemView.findViewById(R.id.share);
 
     }
 }
