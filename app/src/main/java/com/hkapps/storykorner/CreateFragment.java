@@ -36,6 +36,8 @@ import java.util.Map;
  */
 public class CreateFragment extends Fragment {
 
+    EditText create_story;
+    EditText create_title;
 
     DatabaseReference post_stories;
 
@@ -68,8 +70,8 @@ public class CreateFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View rootview = inflater.inflate(R.layout.fragment_create, container, false);
 
-        final EditText create_story = (EditText) rootview.findViewById(R.id.create_story);
-        final EditText create_title = (EditText) rootview.findViewById(R.id.create_title);
+        create_story = (EditText) rootview.findViewById(R.id.create_story);
+        create_title = (EditText) rootview.findViewById(R.id.create_title);
 
 
         ///  Button save_story = (Button) rootview.findViewById(R.id.save_story);
@@ -104,7 +106,6 @@ public class CreateFragment extends Fragment {
 
                 }
         );
-
 
 
         publish_story.setOnClickListener(new View.OnClickListener() {
