@@ -3,6 +3,7 @@ package com.hkapps.storykorner;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -12,6 +13,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +50,7 @@ import static android.app.Activity.RESULT_OK;
 public class ProfileFragment extends Fragment {
 
     public static final String MyPREFERENCES = "profile";
-    private static final int GALLERY_INTENT = 2;
+    private static final int GALLERY_INTENT = 4;
     public SharedPreferences sharedPreferences;
     String checkingid = "";
     String checking_name = "";
@@ -56,7 +58,7 @@ public class ProfileFragment extends Fragment {
     private ImageButton prof_image;
     private StorageReference mStorageRef;
     private ProgressDialog mProgressDialog;
-    private DatabaseReference mDatabaseRef, mFollowRef, mStoryCountRef;
+    private DatabaseReference mDatabaseRef, mFollowRef, mStoryCountRef, mRemovePhotoRef;
     private LinearLayout prof_stories, prof_followers, prof_following, prof_saved;
     private Button signout, follow;
 
@@ -139,18 +141,68 @@ public class ProfileFragment extends Fragment {
 
                 signout.setVisibility(View.VISIBLE);
 
-                prof_image.setOnClickListener(new View.OnClickListener() {
+                prof_image.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
+                    public boolean onLongClick(View view) {
+
+
+                        AlertDialog.Builder alert = new AlertDialog.Builder(
+                                getContext());
+                        alert.setTitle("Profile Photo");
+                        alert.setMessage("Change or Remove your profile picture");
+                        alert.setPositiveButton("New Profile Photo", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //do your work here
+                                dialog.dismiss();
+                                Intent intent = new Intent();
+                                intent.setType("image/*");
+                                intent.setAction(Intent.ACTION_GET_CONTENT);
+                                startActivityForResult(Intent.createChooser(intent, "Select Picture"), GALLERY_INTENT);
+
+
+                            }
+                        });
+                        alert.setNegativeButton("Remove Photo", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                mRemovePhotoRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+                                mRemovePhotoRef.child("photolink").removeValue();
+
+                                Fragment fragment = new ProfileFragment();
+                                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                fragmentTransaction.replace(R.id.main_container, fragment);
+                                fragmentTransaction.commit();
+
+
+                                dialog.dismiss();
+
+
+                            }
+                        });
+
+                        alert.show();
+
+
+                        return false;
+                    }
+
+                   /* @Override
                     public void onClick(View view) {
 
                         //Toast.makeText(getContext(), "Select Image less than 2mb", Toast.LENGTH_SHORT).show();
 
                         Intent intent = new Intent();
-                        intent.setType("image/*");
+                        intent.setType("image*//*");
                         intent.setAction(Intent.ACTION_GET_CONTENT);
                         startActivityForResult(Intent.createChooser(intent, "Select Picture"), GALLERY_INTENT);
 
-                    }
+                    }*/
                 });
             }
 
