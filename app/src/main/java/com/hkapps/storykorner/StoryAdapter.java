@@ -618,7 +618,7 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                     sendIntent.setAction(Intent.ACTION_SEND);
                     sendIntent.putExtra(Intent.EXTRA_TEXT, msg);
                     sendIntent.setType("text/plain");
-                    context.startActivity(sendIntent);
+                    context.startActivity(Intent.createChooser(sendIntent, "Share story..."));
                 }
             });
 
