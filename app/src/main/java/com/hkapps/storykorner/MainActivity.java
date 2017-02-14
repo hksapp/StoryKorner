@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
                     // User is signed in
 
 
-                    //To Open Stories Screen
+          /*          //To Open Stories Screen
                     SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                     SharedPreferences.Editor edit = sp.edit();
                     edit.putInt("storiesfragment", 4);
@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
                     fragmentManager = getSupportFragmentManager();
                     transaction = fragmentManager.beginTransaction();
-                    transaction.replace(R.id.main_container, new StoriesFragment()).commit();
+                    transaction.replace(R.id.main_container, new StoriesFragment()).commit();*/
 
                     //To open notification fragment on clicking notification
 
@@ -135,8 +135,15 @@ public class MainActivity extends AppCompatActivity {
         //  startService(new Intent(getApplicationContext(), NotificationListener.class));
 
 
+        //To Open Stories Screen
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor edit = sp.edit();
+        edit.putInt("storiesfragment", 4);
+        edit.commit();
 
-
+        fragmentManager = getSupportFragmentManager();
+        transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.main_container, new StoriesFragment()).commit();
 
 
         mBottomNav = (BottomNavigationView) findViewById(R.id.navigation);
