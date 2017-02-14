@@ -36,14 +36,9 @@ import java.util.Map;
  */
 public class CreateFragment extends Fragment {
 
-    EditText create_story;
-    EditText create_title;
-
     DatabaseReference post_stories;
-
     Spinner spnr;
     String cat;
-
     String[] celebrities = {
             "None",
             "Love & Romance",
@@ -59,11 +54,21 @@ public class CreateFragment extends Fragment {
 
 
     };
+    private EditText create_story;
+    private EditText create_title;
+
 
     public CreateFragment() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putString("cTitle", create_title.getText().toString());
+        outState.putString("cStory", create_story.getText().toString());
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
@@ -72,6 +77,16 @@ public class CreateFragment extends Fragment {
 
         create_story = (EditText) rootview.findViewById(R.id.create_story);
         create_title = (EditText) rootview.findViewById(R.id.create_title);
+        create_story.setId(R.id.create_story);
+        create_title.setId(R.id.create_title);
+
+
+        if (savedInstanceState != null) {
+
+            create_story.setText(savedInstanceState.getString("cStory"));
+            create_title.setText(savedInstanceState.getString("cTitle"));
+
+        }
 
 
         ///  Button save_story = (Button) rootview.findViewById(R.id.save_story);
