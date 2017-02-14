@@ -41,7 +41,17 @@ public class MainActivity extends AppCompatActivity {
     private GoogleApiClient mGoogleApiClient;
 
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
 
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor edit = sp.edit();
+        edit.remove("cStory");
+        edit.remove("cTitle");
+        edit.commit();
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -245,6 +255,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 // Build GoogleApiClient with AppInvite API for receiving deep links
+
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
                     @Override

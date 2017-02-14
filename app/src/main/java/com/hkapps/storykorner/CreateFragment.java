@@ -62,13 +62,7 @@ public class CreateFragment extends Fragment {
         // Required empty public constructor
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
 
-        outState.putString("cTitle", create_title.getText().toString());
-        outState.putString("cStory", create_story.getText().toString());
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
@@ -77,16 +71,10 @@ public class CreateFragment extends Fragment {
 
         create_story = (EditText) rootview.findViewById(R.id.create_story);
         create_title = (EditText) rootview.findViewById(R.id.create_title);
-        create_story.setId(R.id.create_story);
-        create_title.setId(R.id.create_title);
 
 
-        if (savedInstanceState != null) {
 
-            create_story.setText(savedInstanceState.getString("cStory"));
-            create_title.setText(savedInstanceState.getString("cTitle"));
 
-        }
 
 
         ///  Button save_story = (Button) rootview.findViewById(R.id.save_story);
@@ -217,4 +205,26 @@ public class CreateFragment extends Fragment {
     }
 
 
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        SharedPreferences.Editor edit = sp.edit();
+        edit.putString("cTitle", create_title.getText().toString());
+        edit.putString("cStory", create_story.getText().toString());
+        edit.commit();
+
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        SharedPreferences sharedPreference = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        create_story.setText(sharedPreference.getString("cStory", ""));
+        create_title.setText(sharedPreference.getString("cTitle", ""));
+
+    }
 }
