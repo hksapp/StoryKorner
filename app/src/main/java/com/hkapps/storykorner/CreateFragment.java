@@ -39,6 +39,7 @@ public class CreateFragment extends Fragment {
     DatabaseReference post_stories;
     Spinner spnr;
     String cat;
+    int position = 0;
     String[] celebrities = {
             "None",
             "Love & Romance",
@@ -96,7 +97,7 @@ public class CreateFragment extends Fragment {
                     public void onItemSelected(AdapterView<?> arg0, View arg1,
                                                int arg2, long arg3) {
 
-                        int position = spnr.getSelectedItemPosition();
+                        position = spnr.getSelectedItemPosition();
                         cat = celebrities[position];
                         // TODO Auto-generated method stub
                     }
@@ -213,6 +214,8 @@ public class CreateFragment extends Fragment {
         SharedPreferences.Editor edit = sp.edit();
         edit.putString("cTitle", create_title.getText().toString());
         edit.putString("cStory", create_story.getText().toString());
+        edit.putInt("cCatPos", position);
+
         edit.commit();
 
 
@@ -225,6 +228,9 @@ public class CreateFragment extends Fragment {
         SharedPreferences sharedPreference = PreferenceManager.getDefaultSharedPreferences(getActivity());
         create_story.setText(sharedPreference.getString("cStory", ""));
         create_title.setText(sharedPreference.getString("cTitle", ""));
+
+        spnr.setSelection(sharedPreference.getInt("cCatPos", 0));
+
 
     }
 }

@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor edit = sp.edit();
         edit.remove("cStory");
         edit.remove("cTitle");
+        edit.remove("cCatPos");
         edit.commit();
 
     }
