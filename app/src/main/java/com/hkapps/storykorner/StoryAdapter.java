@@ -248,7 +248,7 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                             FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                             fragmentTransaction.replace(R.id.main_container, fragment);
-
+                            fragmentTransaction.addToBackStack(null);
                             fragmentTransaction.commit();
 
 
@@ -300,7 +300,7 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                             FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                             fragmentTransaction.replace(R.id.main_container, fragment);
-
+                            fragmentTransaction.addToBackStack(null);
                             fragmentTransaction.commit();
 
 
@@ -588,7 +588,7 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                     FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.replace(R.id.main_container, fragment);
-
+                    fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
                 }
             });
@@ -641,7 +641,7 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                     FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.replace(R.id.main_container, fragment);
-
+                    fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
 
 
@@ -1000,7 +1000,7 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                     FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.replace(R.id.main_container, fragment);
-
+                    fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
 
 
@@ -1028,7 +1028,7 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                     FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.replace(R.id.main_container, fragment);
-
+                    fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
 
 
@@ -1049,7 +1049,7 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                     FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.replace(R.id.main_container, fragment);
-
+                    fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
 
 
@@ -1194,7 +1194,7 @@ public class StoryAdapter extends FirebaseRecyclerAdapter<StoryObject, StoryHold
                     FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.replace(R.id.main_container, fragment);
-
+                    fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
 
 

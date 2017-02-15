@@ -154,7 +154,9 @@ public class MainActivity extends AppCompatActivity {
 
         fragmentManager = getSupportFragmentManager();
         transaction = fragmentManager.beginTransaction();
+        transaction.addToBackStack(null);
         transaction.replace(R.id.main_container, new StoriesFragment()).commit();
+
 
 
         mBottomNav = (BottomNavigationView) findViewById(R.id.navigation);
@@ -220,6 +222,9 @@ public class MainActivity extends AppCompatActivity {
                         edit.putInt("storiesfragment", 4);
                         edit.commit();
                         fragment = new StoriesFragment();
+
+                        final FragmentTransaction transaction = fragmentManager.beginTransaction();
+                        transaction.replace(R.id.main_container, fragment).commit();
                         break;
 
                     case R.id.menu_create:
@@ -248,6 +253,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 final FragmentTransaction transaction = fragmentManager.beginTransaction();
+
                 transaction.replace(R.id.main_container, fragment).commit();
                 return true;
 
@@ -298,6 +304,7 @@ public class MainActivity extends AppCompatActivity {
                                     Fragment fragment = new StoriesFragment();
                                     FragmentManager fragmentManager = getSupportFragmentManager();
                                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
                                     fragmentTransaction.replace(R.id.main_container, fragment);
 
                                     fragmentTransaction.commit();

@@ -254,7 +254,7 @@ public class NotifyAdapter extends FirebaseRecyclerAdapter<NotifyObject, NotifyH
                     FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.replace(R.id.main_container, fragment);
-
+                    fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
                 }
             });
