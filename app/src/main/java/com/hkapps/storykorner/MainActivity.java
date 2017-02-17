@@ -41,18 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private GoogleApiClient mGoogleApiClient;
 
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
 
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        SharedPreferences.Editor edit = sp.edit();
-        edit.remove("cStory");
-        edit.remove("cTitle");
-        edit.remove("cCatPos");
-        edit.commit();
-
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +50,10 @@ public class MainActivity extends AppCompatActivity {
 
 
         mAuth = FirebaseAuth.getInstance();
+
+
+
+
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -71,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                     // User is signed in
 
 
-          /*          //To Open Stories Screen
+                    //To Open Stories Screen
                     SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                     SharedPreferences.Editor edit = sp.edit();
                     edit.putInt("storiesfragment", 4);
@@ -79,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
                     fragmentManager = getSupportFragmentManager();
                     transaction = fragmentManager.beginTransaction();
-                    transaction.replace(R.id.main_container, new StoriesFragment()).commit();*/
+                    transaction.replace(R.id.main_container, new StoriesFragment()).commit();
 
                     //To open notification fragment on clicking notification
 
@@ -146,16 +139,7 @@ public class MainActivity extends AppCompatActivity {
         //  startService(new Intent(getApplicationContext(), NotificationListener.class));
 
 
-        //To Open Stories Screen
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        SharedPreferences.Editor edit = sp.edit();
-        edit.putInt("storiesfragment", 4);
-        edit.commit();
 
-        fragmentManager = getSupportFragmentManager();
-        transaction = fragmentManager.beginTransaction();
-        transaction.addToBackStack(null);
-        transaction.replace(R.id.main_container, new StoriesFragment()).commit();
 
 
 
@@ -222,9 +206,6 @@ public class MainActivity extends AppCompatActivity {
                         edit.putInt("storiesfragment", 4);
                         edit.commit();
                         fragment = new StoriesFragment();
-
-                        final FragmentTransaction transaction = fragmentManager.beginTransaction();
-                        transaction.replace(R.id.main_container, fragment).commit();
                         break;
 
                     case R.id.menu_create:
@@ -253,7 +234,6 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 final FragmentTransaction transaction = fragmentManager.beginTransaction();
-
                 transaction.replace(R.id.main_container, fragment).commit();
                 return true;
 
@@ -262,7 +242,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 // Build GoogleApiClient with AppInvite API for receiving deep links
-
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
                     @Override
@@ -304,7 +283,6 @@ public class MainActivity extends AppCompatActivity {
                                     Fragment fragment = new StoriesFragment();
                                     FragmentManager fragmentManager = getSupportFragmentManager();
                                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
                                     fragmentTransaction.replace(R.id.main_container, fragment);
 
                                     fragmentTransaction.commit();
