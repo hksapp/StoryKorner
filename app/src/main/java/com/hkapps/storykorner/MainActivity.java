@@ -16,6 +16,9 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.appinvite.AppInvite;
 import com.google.android.gms.appinvite.AppInviteInvitationResult;
 import com.google.android.gms.appinvite.AppInviteReferral;
@@ -39,7 +42,21 @@ public class MainActivity extends AppCompatActivity {
     private FragmentTransaction transaction;
     private DatabaseReference mUserRef;
     private GoogleApiClient mGoogleApiClient;
+    private AdView mAdView;
 
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor edit = sp.edit();
+        edit.remove("cStory");
+        edit.remove("cTitle");
+        edit.remove("cCatPos");
+        edit.commit();
+
+    }
 
 
 
@@ -48,12 +65,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        MobileAds.initialize(getApplicationContext(), "ca-app-pub-4776719075738998~8141250862");
 
         mAuth = FirebaseAuth.getInstance();
 
 
-
-
+        mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -64,15 +83,6 @@ public class MainActivity extends AppCompatActivity {
                     // User is signed in
 
 
-                    //To Open Stories Screen
-                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                    SharedPreferences.Editor edit = sp.edit();
-                    edit.putInt("storiesfragment", 4);
-                    edit.commit();
-
-                    fragmentManager = getSupportFragmentManager();
-                    transaction = fragmentManager.beginTransaction();
-                    transaction.replace(R.id.main_container, new StoriesFragment()).commit();
 
                     //To open notification fragment on clicking notification
 
@@ -139,6 +149,16 @@ public class MainActivity extends AppCompatActivity {
         //  startService(new Intent(getApplicationContext(), NotificationListener.class));
 
 
+//To Open Stories Screen
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor edit = sp.edit();
+        edit.putInt("storiesfragment", 4);
+        edit.commit();
+
+        fragmentManager = getSupportFragmentManager();
+        transaction = fragmentManager.beginTransaction();
+        transaction.addToBackStack(null);
+        transaction.replace(R.id.main_container, new StoriesFragment()).commit();
 
 
 
@@ -234,6 +254,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 final FragmentTransaction transaction = fragmentManager.beginTransaction();
+
                 transaction.replace(R.id.main_container, fragment).commit();
                 return true;
 
