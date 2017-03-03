@@ -55,6 +55,7 @@ public class CreateFragment extends Fragment {
 
 
     };
+    private boolean cFrag = true;
     private EditText create_story;
     private EditText create_title;
 
@@ -115,6 +116,9 @@ public class CreateFragment extends Fragment {
         publish_story.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                cFrag = false;
+
 
                 if (create_title.getText().toString().trim().length() != 0 && create_story.getText().toString().trim().length() != 0) {
 
@@ -180,6 +184,7 @@ public class CreateFragment extends Fragment {
 
                     } else {
 
+
                         getFragmentManager().beginTransaction().replace(R.id.main_container, new StoriesFragment()).commit();
 
                     }
@@ -190,6 +195,8 @@ public class CreateFragment extends Fragment {
                     Toast.makeText(getActivity(), "Nothing to Post...!", Toast.LENGTH_SHORT).show();
 
                 }
+
+
             }
 
 
@@ -209,15 +216,22 @@ public class CreateFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+        if (cFrag) {
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            SharedPreferences.Editor edit = sp.edit();
+            edit.putString("cTitle", create_title.getText().toString());
+            edit.putString("cStory", create_story.getText().toString());
+            edit.putInt("cCatPos", position);
 
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        SharedPreferences.Editor edit = sp.edit();
-        edit.putString("cTitle", create_title.getText().toString());
-        edit.putString("cStory", create_story.getText().toString());
-        edit.putInt("cCatPos", position);
-
-        edit.commit();
-
+            edit.commit();
+        } else {
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            SharedPreferences.Editor edit = sp.edit();
+            edit.remove("cStory");
+            edit.remove("cTitle");
+            edit.remove("cCatPos");
+            edit.commit();
+        }
 
     }
 
