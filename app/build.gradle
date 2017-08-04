@@ -7,9 +7,9 @@ android {
         applicationId "com.hkapps.storykorner"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 4
+        versionCode 5
 
-        versionName "2.1"
+        versionName "2.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
