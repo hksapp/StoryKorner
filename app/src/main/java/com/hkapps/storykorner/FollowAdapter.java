@@ -70,7 +70,9 @@ public class FollowAdapter extends FirebaseRecyclerAdapter<FollowObject, FollowH
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
                         viewHolder.follow_list.setText(dataSnapshot.child("uname").getValue().toString());
-                        Picasso.with(context).load(dataSnapshot.child("photolink").getValue().toString()).fit().centerCrop().into(viewHolder.follow_imgview);
+                        if (dataSnapshot.child("photolink").exists()) {
+                            Picasso.with(context).load(dataSnapshot.child("photolink").getValue().toString()).fit().centerCrop().into(viewHolder.follow_imgview);
+                        }
                     }
 
                     @Override
@@ -231,7 +233,9 @@ public class FollowAdapter extends FirebaseRecyclerAdapter<FollowObject, FollowH
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
                         viewHolder.follow_list.setText(dataSnapshot.child("uname").getValue().toString());
-                        Picasso.with(context).load(dataSnapshot.child("photolink").getValue().toString()).fit().centerCrop().into(viewHolder.follow_imgview);
+                        if (dataSnapshot.child("photolink").exists()) {
+                            Picasso.with(context).load(dataSnapshot.child("photolink").getValue().toString()).fit().centerCrop().into(viewHolder.follow_imgview);
+                        }
                         viewHolder.usermail.setVisibility(View.VISIBLE);
                         viewHolder.usermail.setText("'" + model.getCmt().toString() + "'");
 
