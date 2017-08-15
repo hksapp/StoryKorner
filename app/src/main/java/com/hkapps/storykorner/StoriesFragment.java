@@ -161,18 +161,43 @@ public class StoriesFragment extends Fragment {
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             if (!dataSnapshot.exists()) {
 
+
+                                try {
+
+
                                 SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
                                 SharedPreferences.Editor edit = sp.edit();
-                                edit.putInt("error", 5);
+                                    edit.putString("storyuserid", "mJQpeKMk4BUPZpfK4qYgw91nBdD3");
+                                    edit.putInt("storiesfragment", 1);
+//                                edit.putInt("error", 1);
+
                                 edit.commit();
 
-
-                                Fragment fragment = new EmptyScreenFragment();
+                                    Fragment fragment = new StoriesFragment();
                                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                                 fragmentTransaction.replace(R.id.main_container, fragment);
-
+                                    fragmentTransaction.addToBackStack(null);
                                 fragmentTransaction.commit();
+
+                                } catch (Exception e) {
+                                }
+
+//                                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+//                                SharedPreferences.Editor edit = sp.edit();
+//                                edit.putInt("error", 5);
+//                                edit.commit();
+
+                /*    try {
+//                                Fragment fragment = new EmptyScreenFragment();
+                        Fragment fragment = new SearchFragment();
+
+                        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.replace(R.id.main_container, fragment);
+
+                        fragmentTransaction.commit();
+                    }catch (Exception e){}*/
                             }
                         }
 
