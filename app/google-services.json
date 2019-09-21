@@ -1,0 +1,65 @@
+{
+  "project_info": {
+    "project_number": "580298299684",
+    "firebase_url": "https://storykorner.firebaseio.com",
+    "project_id": "storykorner",
+    "storage_bucket": "storykorner.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:580298299684:android:a7bc9de4f98cf3b8",
+        "android_client_info": {
+          "package_name": "com.hkapps.storykorner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "580298299684-rvof8r5i5uehmtoq8t5ud97ddq2ofd3c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hkapps.storykorner",
+            "certificate_hash": "c541a8680d3733f400d7b11560f79352585d0bd8"
+          }
+        },
+        {
+          "client_id": "580298299684-ijgtps17jm201roibf814858kdnd1c2t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hkapps.storykorner",
+            "certificate_hash": "f0c097d801792673e83a89a18a475a02f50ab193"
+          }
+        },
+        {
+          "client_id": "580298299684-gf0bb5chrm515rqrjo69eat7418a2n3g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hkapps.storykorner",
+            "certificate_hash": "18eed81c6904d01334ad5660f93d44571e121e1d"
+          }
+        },
+        {
+          "client_id": "580298299684-tc4esknc59t2sugei3s4qvo1kvhpi01m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzrAyX-KJEeHbveaZqenQo8u8bpzJqnb0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "580298299684-tc4esknc59t2sugei3s4qvo1kvhpi01m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-4776719075738998~8141250862"
+    }
+  ],
+  "configuration_version": "1"
+}
